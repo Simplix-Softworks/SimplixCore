@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <parent>
+    <artifactId>simplixcore-minecraft</artifactId>
+    <groupId>dev.simplix</groupId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+
+  <artifactId>simplixcore-minecraft-bungeecord</artifactId>
+  <packaging>pom</packaging>
+  <modules>
+    <module>simplixcore-minecraft-bungeecord-slf4j</module>
+    <module>simplixcore-minecraft-bungeecord-plugin</module>
+    <module>simplixcore-minecraft-bungeecord-implementation</module>
+    <module>simplixcore-minecraft-bungeecord-tests</module>
+    <module>simplixcore-minecraft-bungeecord-dynamiclisteners</module>
+    <module>simplixcore-minecraft-bungeecord-dynamiccommands</module>
+    <module>simplixcore-minecraft-bungeecord-jarpatchergui</module>
+  </modules>
+
+  <repositories>
+    <repository>
+      <id>Exceptionflug</id>
+      <url>https://mvn.exceptionflug.de/repository/exceptionflug-public/</url>
+    </repository>
+  </repositories>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.mineacademy</groupId>
+      <artifactId>bungeecord-server</artifactId>
+      <version>1.0.1</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>dev.simplix</groupId>
+      <artifactId>simplixcore-mineacraft-api</artifactId>
+      <version>1.0-SNAPSHOT</version>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
+</project>

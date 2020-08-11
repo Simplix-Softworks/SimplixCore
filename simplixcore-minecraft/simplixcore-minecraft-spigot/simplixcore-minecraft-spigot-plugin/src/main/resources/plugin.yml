@@ -1,0 +1,4 @@
+name: simplixcore-plugin-spigot
+main: dev.simplix.core.minecraft.spigot.plugin.SimplixPlugin
+version: 1.0.0-SNAPSHOT
+author: SimplixSoftworks

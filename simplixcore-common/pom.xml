@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://maven.apache.org/POM/4.0.0"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <artifactId>simplixcore-common</artifactId>
+  <packaging>pom</packaging>
+  <modules>
+    <module>simplixcore-common-api</module>
+    <module>simplixcore-common-implementation</module>
+    <module>simplixcore-common-tests</module>
+  </modules>
+  <groupId>dev.simplix</groupId>
+
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <artifactId>simplixcore</artifactId>
+    <groupId>dev.simplix</groupId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
+  <version>1.0-SNAPSHOT</version>
+
+  <distributionManagement>
+    <repository>
+      <id>mineacademy-private-libraries</id>
+      <url>https://repo.mineacademy.org/repository/private-libraries/</url>
+    </repository>
+    <snapshotRepository>
+      <id>mineacademy-private-libraries</id>
+      <url>https://repo.mineacademy.org/repository/private-libraries/</url>
+    </snapshotRepository>
+  </distributionManagement>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.google.inject</groupId>
+      <artifactId>guice</artifactId>
+      <version>4.2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.reflections</groupId>
+      <artifactId>reflections</artifactId>
+      <version>0.9.10</version>
+    </dependency>
+  </dependencies>
+
+</project>
