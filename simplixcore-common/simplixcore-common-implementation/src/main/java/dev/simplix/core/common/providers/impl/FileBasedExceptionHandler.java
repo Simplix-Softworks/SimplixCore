@@ -4,7 +4,7 @@ import com.google.inject.Inject;
 import de.leonhard.storage.util.FileUtils;
 import dev.simplix.core.common.ApplicationInfo;
 import dev.simplix.core.common.CommonSimplixModule;
-import dev.simplix.core.common.TimeUtil;
+import dev.simplix.core.common.TimeFormatUtil;
 import dev.simplix.core.common.aop.Component;
 import dev.simplix.core.common.providers.ExceptionHandler;
 import dev.simplix.core.common.providers.PluginManager;
@@ -38,10 +38,10 @@ public final class FileBasedExceptionHandler implements ExceptionHandler {
       @NonNull PluginManager pluginManager) {
     this.applicationInfo = applicationInfo;
     // Ensures the file & the parent directory are always existent
-    logFile = new File(applicationInfo.workingDirectory(), "debug.log");
+    this.logFile = new File(applicationInfo.workingDirectory(), "debug.log");
     this.pluginManager = pluginManager;
     try {
-      FileUtils.getAndMake(logFile);
+      FileUtils.getAndMake(this.logFile);
     } catch (final Throwable throwable) {
       System.err.println("Exception while creating debug file!");
       throwable.printStackTrace();
@@ -95,7 +95,7 @@ public final class FileBasedExceptionHandler implements ExceptionHandler {
   @Override
   public void saveError(@Nullable Throwable throwable, @NonNull String... messages) {
     // Something went wrong on startup
-    if (!logFile.exists()) {
+    if (!this.logFile.exists()) {
       return;
     }
     if (throwable == null) {
@@ -103,9 +103,9 @@ public final class FileBasedExceptionHandler implements ExceptionHandler {
     }
 
     final List<String> lines = new ArrayList<>();
-    final String header = applicationInfo.name()
+    final String header = this.applicationInfo.name()
                           + " "
-                          + applicationInfo.version()
+                          + this.applicationInfo.version()
                           + " encountered "
                           + "a(n)" + (throwable.getClass().getSimpleName());
 
@@ -113,11 +113,11 @@ public final class FileBasedExceptionHandler implements ExceptionHandler {
     fill(
         lines,
         "------------------------------------[ "
-        + TimeUtil.formattedDate()
+        + TimeFormatUtil.calculateCurrentDateFormatted()
         + " ]-----------------------------------",
         header,
         "Running Java " + System.getProperty("java.version"),
-        "Plugins: " + pluginManager.enabledPlugins(),
+        "Plugins: " + this.pluginManager.enabledPlugins(),
         "----------------------------------------------------------------------------------------------");
 
     // Write additional data
@@ -163,6 +163,6 @@ public final class FileBasedExceptionHandler implements ExceptionHandler {
     System.out.println(header
                        + "! Please check your error.log and report this issue with the information in that file.");
 
-    write(logFile, lines);
+    write(this.logFile, lines);
   }
 }

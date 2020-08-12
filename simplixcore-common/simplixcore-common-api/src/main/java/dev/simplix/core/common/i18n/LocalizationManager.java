@@ -2,6 +2,7 @@ package dev.simplix.core.common.i18n;
 
 import java.util.Locale;
 import java.util.Set;
+import lombok.NonNull;
 
 public interface LocalizationManager {
 
@@ -24,7 +25,7 @@ public interface LocalizationManager {
    *
    * @param locale The locale
    */
-  void fallbackLocale(Locale locale);
+  void fallbackLocale(@NonNull Locale locale);
 
   /**
    * The locale used when some string isn't localized in a specific language.
@@ -40,7 +41,7 @@ public interface LocalizationManager {
    * @param locale The locale to use
    * @return The localized string or if not present the fallback string
    */
-  String localized(String key, Locale locale);
+  String localized(@NonNull String key, @NonNull Locale locale);
 
   /**
    * Returns all supported keys
@@ -48,7 +49,7 @@ public interface LocalizationManager {
    * @param locale The locale
    * @return Supported keys for that locale
    */
-  Set<String> keys(Locale locale);
+  Set<String> keys(@NonNull Locale locale);
 
   /**
    * Returns all supported locales

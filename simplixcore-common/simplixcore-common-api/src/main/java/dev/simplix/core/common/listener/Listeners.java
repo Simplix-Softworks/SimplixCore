@@ -3,6 +3,7 @@ package dev.simplix.core.common.listener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -16,7 +17,7 @@ public class Listeners {
 
   private final List<Listener> registeredListeners = new ArrayList<>();
 
-  public void register(final Listener listener) {
+  public void register(@NonNull final Listener listener) {
     registeredListeners.add(listener);
   }
 

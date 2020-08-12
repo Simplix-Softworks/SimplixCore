@@ -1,8 +1,6 @@
 package dev.simplix.core.minecraft.bungeecord.jarpatchergui;
 
 import dev.simplix.core.minecraft.bungeecord.slf4j.ServiceProviderPatcher;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -17,28 +15,22 @@ public class MainForm {
   private File file;
 
   public MainForm(JFrame frame) {
-    this.searchButton.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setFileFilter(new FileNameExtensionFilter("Java archive", "jar"));
-        fileChooser.showOpenDialog(frame);
-        MainForm.this.file = fileChooser.getSelectedFile();
-        if (MainForm.this.file == null) {
-          MainForm.this.patchButton.setEnabled(false);
-          MainForm.this.filePathTextField.setText("");
-          return;
-        }
-        MainForm.this.patchButton.setEnabled(true);
-        MainForm.this.filePathTextField.setText(MainForm.this.file.getAbsolutePath());
+    this.searchButton.addActionListener(actionEvent -> {
+      JFileChooser fileChooser = new JFileChooser();
+      fileChooser.setFileFilter(new FileNameExtensionFilter("Java archive", "jar"));
+      fileChooser.showOpenDialog(frame);
+      MainForm.this.file = fileChooser.getSelectedFile();
+      if (MainForm.this.file == null) {
+        MainForm.this.patchButton.setEnabled(false);
+        MainForm.this.filePathTextField.setText("");
+        return;
       }
+      MainForm.this.patchButton.setEnabled(true);
+      MainForm.this.filePathTextField.setText(MainForm.this.file.getAbsolutePath());
     });
-    this.patchButton.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        ServiceProviderPatcher.patchJarUnix(MainForm.this.file);
-        JOptionPane.showMessageDialog(frame, "The file has been patched succesfully.");
-      }
+    this.patchButton.addActionListener(actionEvent -> {
+      ServiceProviderPatcher.patchJarUnix(MainForm.this.file);
+      JOptionPane.showMessageDialog(frame, "The file has been patched succesfully.");
     });
   }
 

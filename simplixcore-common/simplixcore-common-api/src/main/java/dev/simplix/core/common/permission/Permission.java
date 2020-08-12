@@ -13,7 +13,7 @@ public class Permission {
   private final String[] description;
   private PermissionType type = PermissionType.COMMAND;
 
-  public static Permission of(@NonNull final String name, final String... desc) {
+  public static Permission of(@NonNull final String name, @NonNull final String... desc) {
     return new Permission(name, desc);
   }
 }

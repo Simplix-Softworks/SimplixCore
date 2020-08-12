@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -15,7 +16,7 @@ public class LibraryLoader {
 
   private final Gson gson = new GsonBuilder().create();
 
-  public void loadLibraries(File directory) {
+  public void loadLibraries(@NonNull File directory) {
     if (!directory.exists()) {
       directory.mkdirs();
     }

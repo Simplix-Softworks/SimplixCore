@@ -1,4 +1,4 @@
-package dev.simplix.core.common.flatfiles;
+package dev.simplix.core.config.flatfiles;
 
 import de.leonhard.storage.Json;
 import de.leonhard.storage.internal.exceptions.LightningValidationException;
@@ -17,36 +17,36 @@ public abstract class SecureJson extends Json {
 
   private final boolean canWrite;
 
-  protected SecureJson(final Json json) {
+  protected SecureJson(@NonNull final Json json) {
     super(json);
-    canWrite = file.canWrite();
+    this.canWrite = this.file.canWrite();
   }
 
-  protected SecureJson(final String name, final String path) {
+  protected SecureJson(@NonNull final String name, @NonNull final String path) {
     super(name, path);
-    canWrite = file.canWrite();
+    this.canWrite = this.file.canWrite();
   }
 
   protected SecureJson(
-      final String name,
-      final String path,
-      final InputStream inputStream) {
+      @NonNull final String name,
+      @NonNull final String path,
+      @Nullable final InputStream inputStream) {
     super(name, path, inputStream);
-    canWrite = file.canWrite();
+    this.canWrite = this.file.canWrite();
   }
 
   protected SecureJson(
-      final String name,
+      @NonNull final String name,
       @Nullable final String path,
       @Nullable final InputStream inputStream,
       @Nullable final ReloadSettings reloadSettings) {
     super(name, path, inputStream, reloadSettings);
-    canWrite = file.canWrite();
+    this.canWrite = this.file.canWrite();
   }
 
-  protected SecureJson(final File file) {
+  protected SecureJson(@NonNull final File file) {
     super(file);
-    canWrite = file.canWrite();
+    this.canWrite = file.canWrite();
   }
 
   //Used because not all of our subclasses may access Dependency-Injection
@@ -57,15 +57,15 @@ public abstract class SecureJson extends Json {
   // ----------------------------------------------------------------------------------------------------
 
   @Override
-  public final <T> T getOrDefault(final String key, final T def) {
+  public final <T> T getOrDefault(@NonNull final String key, @NonNull final T def) {
     try {
       return super.getOrDefault(key, def);
     } catch (final Throwable throwable) {
       final LightningValidationException lightningValidationException = new LightningValidationException(
           throwable,
           "Exception while getting '" + def.getClass().getSimpleName()
-          + "' from '" + file.getName() + "'",
-          "Directory: '" + FileUtils.getParentDirPath(file) + "'",
+          + "' from '" + this.file.getName() + "'",
+          "Directory: '" + FileUtils.getParentDirPath(this.file) + "'",
           "Have you altered the data?",
           "Additional data: searched: " + def.getClass().getSimpleName()
       );
@@ -75,13 +75,13 @@ public abstract class SecureJson extends Json {
   }
 
   @Override
-  public final <T> T getOrSetDefault(final String key, @NonNull final T def) {
+  public final <T> T getOrSetDefault(@NonNull final String key, @NonNull final T def) {
     try {
       return super.getOrSetDefault(key, def);
     } catch (final Throwable throwable) {
       exceptionHandler().saveError(
           throwable,
-          "Exception while trying searching: '" + key + "' in '" + file
+          "Exception while trying searching: '" + key + "' in '" + this.file
               .getName() + "'",
           "Have you altered the data?",
           "Additional data: searched: " + def.getClass().getSimpleName());
@@ -90,14 +90,14 @@ public abstract class SecureJson extends Json {
   }
 
   @Override
-  public final void set(final String key, @NonNull final Object value) {
+  public final void set(@NonNull final String key, @NonNull final Object value) {
     try {
       super.set(key, value);
     } catch (final Throwable throwable) {
       exceptionHandler().saveError(
           throwable,
-          "Exception while writing to '" + file.getName() + "'",
-          "Directory: '" + FileUtils.getParentDirPath(file) + "'",
+          "Exception while writing to '" + this.file.getName() + "'",
+          "Directory: '" + FileUtils.getParentDirPath(this.file) + "'",
           "Path: '" + key + "'",
           "Value-Type '" + value.getClass().getSimpleName() + "'",
           "Value: '" + value.toString() + "'");

@@ -10,13 +10,14 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import lombok.NonNull;
 
 public final class ObjectResultSetTransformer<T> implements ResultSetTransformer<T> {
 
   private final Class<T> clazz;
   private Constructor<T> constructor;
   private int fields;
-  private List<Field> fieldClasses = new ArrayList<>();
+  private final List<Field> fieldClasses = new ArrayList<>();
   private int[] types;
 
   public ObjectResultSetTransformer(Class<T> clazz) {
@@ -25,8 +26,8 @@ public final class ObjectResultSetTransformer<T> implements ResultSetTransformer
   }
 
   private void init() {
-    Field[] declaredFields = clazz.getDeclaredFields();
-    types = new int[declaredFields.length];
+    Field[] declaredFields = this.clazz.getDeclaredFields();
+    this.types = new int[declaredFields.length];
     List<Class<?>> clazzes = new ArrayList<>();
     int i = 0;
     for (Field field : declaredFields) {
@@ -36,15 +37,15 @@ public final class ObjectResultSetTransformer<T> implements ResultSetTransformer
       }
       Class<?> type = field.getType();
       if (type.equals(UUID.class)) {
-        types[i] = 1;
+        this.types[i] = 1;
       }
       clazzes.add(type);
-      fieldClasses.add(field);
+      this.fieldClasses.add(field);
       i++;
     }
     this.fields = clazzes.size();
     try {
-      constructor = clazz.getDeclaredConstructor(clazzes.toArray(new Class<?>[0]));
+      this.constructor = this.clazz.getDeclaredConstructor(clazzes.toArray(new Class<?>[0]));
     } catch (NoSuchMethodException noSuchMethodException) {
       noSuchMethodException.printStackTrace();
       throw new RuntimeException("Could not find a proper all argument constructor!");
@@ -52,32 +53,32 @@ public final class ObjectResultSetTransformer<T> implements ResultSetTransformer
   }
 
   @Override
-  public T transform(ResultSet resultSet) throws SQLException {
-    Object[] objects = new Object[fields];
+  public T transform(@NonNull ResultSet resultSet) throws SQLException {
+    Object[] objects = new Object[this.fields];
     //transform to uuid
-    for (int i = 0; i < fields; i++) {
-      if (types[i] == 1) {
+    for (int i = 0; i < this.fields; i++) {
+      if (this.types[i] == 1) {
         objects[i] = UUID.fromString(resultSet.getString(i + 1));
       } else {
         objects[i] = resultSet.getObject(i + 1);
       }
     }
     try {
-      return constructor.newInstance(objects);
+      return this.constructor.newInstance(objects);
     } catch (InstantiationException | InvocationTargetException | IllegalAccessException | IllegalArgumentException exception) {
       exception.printStackTrace();
       if (!(exception instanceof IllegalArgumentException)) {
         return null;
       }
 
-      System.out.println("Invalid schema for class '" + clazz.getName() + "'");
+      System.out.println("Invalid schema for class '" + this.clazz.getName() + "'");
 
-      for (int i = 0; i < fields; i++) {
+      for (int i = 0; i < this.fields; i++) {
         Object object = resultSet.getObject(i + 1);
         System.out.println("field " + i + " type = " + (
             object == null
                 ? "null"
-                : object.getClass()) + " registered: " + fieldClasses.get(i));
+                : object.getClass()) + " registered: " + this.fieldClasses.get(i));
       }
     }
     return null;

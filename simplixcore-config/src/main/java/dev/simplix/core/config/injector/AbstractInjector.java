@@ -21,7 +21,7 @@ public abstract class AbstractInjector<C extends Annotation, F extends Annotatio
   protected final Class<C> classAnnotationClass;
   protected final Class<F> fieldAnnotationClass;
 
-  private static void debugRep(final Object replacer) {
+  private static void debugRep(@NonNull final Object replacer) {
     if (!(replacer instanceof Replacer)) {
       return;
     }
@@ -32,9 +32,9 @@ public abstract class AbstractInjector<C extends Annotation, F extends Annotatio
   }
 
   @Override
-  public final void startInjecting(final List<Class<?>> classes) {
+  public final void startInjecting(@NonNull final List<Class<?>> classes) {
     for (Class<?> clazz : classes) {
-      if (isAnnotationPresent(clazz, classAnnotationClass)) {
+      if (isAnnotationPresent(clazz, this.classAnnotationClass)) {
         for (final Field field : clazz.getDeclaredFields()) {
 
           // We only inject static fields
@@ -42,7 +42,7 @@ public abstract class AbstractInjector<C extends Annotation, F extends Annotatio
             continue;
           }
 
-          if (!field.isAnnotationPresent(fieldAnnotationClass)) {
+          if (!field.isAnnotationPresent(this.fieldAnnotationClass)) {
             continue;
           }
 
@@ -52,7 +52,7 @@ public abstract class AbstractInjector<C extends Annotation, F extends Annotatio
               "Class: " + clazz.getName(),
               "Field is final!");
 
-          final F fieldAnnotation = field.getAnnotation(fieldAnnotationClass);
+          final F fieldAnnotation = field.getAnnotation(this.fieldAnnotationClass);
           final String path = pathFromAnnotation(fieldAnnotation);
           Valid.checkBoolean(
               !path.isEmpty(),

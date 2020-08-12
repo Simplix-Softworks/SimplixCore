@@ -1,6 +1,7 @@
 package dev.simplix.core.common.i18n;
 
 import java.io.File;
+import lombok.NonNull;
 
 /**
  * Used to localize strings using language files
@@ -14,7 +15,7 @@ public interface LocalizationManagerFactory {
    * @param translationDirectory The directory where the language files are in
    * @return A new instance of {@link LocalizationManager}
    */
-  LocalizationManager create(File translationDirectory);
+  LocalizationManager create(@NonNull File translationDirectory);
 
   /**
    * Constrcuts a {@link LocalizationManager} based on a resource path containing all translation
@@ -25,6 +26,8 @@ public interface LocalizationManagerFactory {
    *                                      file and the resource location
    * @return A new instance of {@link LocalizationManager}
    */
-  LocalizationManager create(String translationResourcesDirectory, Class<?> refClass);
+  LocalizationManager create(
+      @NonNull String translationResourcesDirectory,
+      @NonNull Class<?> refClass);
 
 }

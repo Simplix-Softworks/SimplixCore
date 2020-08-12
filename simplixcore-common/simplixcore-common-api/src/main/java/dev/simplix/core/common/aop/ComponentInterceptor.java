@@ -1,5 +1,7 @@
 package dev.simplix.core.common.aop;
 
+import lombok.NonNull;
+
 /**
  * A component interceptor intercepts specific components of a given subtype after component
  * scanning.
@@ -8,6 +10,6 @@ package dev.simplix.core.common.aop;
  */
 public interface ComponentInterceptor<T> {
 
-  void intercept(T obj);
+  void intercept(@NonNull T obj);
 
 }

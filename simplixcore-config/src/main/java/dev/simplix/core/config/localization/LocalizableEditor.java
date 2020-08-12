@@ -34,61 +34,61 @@ public final class LocalizableEditor {
   }
 
   public boolean canMultiline() {
-    return localizable.rawValue() instanceof Collection<?>
-           || localizable.rawValue() instanceof String[]
-           || localizable.rawValue() instanceof Replacer;
+    return this.localizable.rawValue() instanceof Collection<?>
+           || this.localizable.rawValue() instanceof String[]
+           || this.localizable.rawValue() instanceof Replacer;
   }
 
-  public void set(final int index, final String string) {
-    value.set(index, string);
+  public void set(final int index, @NonNull final String string) {
+    this.value.set(index, string);
   }
 
-  public void add(final String element) {
+  public void add(@NonNull final String element) {
     Valid.checkBoolean(
         !canMultiline(),
         "Can't add line on non-multi line Localizable");
-    value.add(element);
+    this.value.add(element);
   }
 
   public void save() {
     try {
       save0();
     } catch (final Throwable throwable) {
-      exceptionHandler.saveError(
+      this.exceptionHandler.saveError(
           throwable,
           "LocalizableEditor.save(): Exception while saving Localizable",
-          "Value: " + localizable.value(),
-          "Field: '" + localizable.field().getName() + "'",
-          "Class: '" + localizable.clazz().getName() + "'");
+          "Value: " + this.localizable.value(),
+          "Field: '" + this.localizable.field().getName() + "'",
+          "Class: '" + this.localizable.clazz().getName() + "'");
     }
   }
 
   private void save0() throws IllegalAccessException {
 
-    final Object rawValue = localizable.rawValue();
+    final Object rawValue = this.localizable.rawValue();
 
     if (rawValue == null) {
       return;
     }
 
     if (rawValue instanceof String) {
-      localizable.rawValue(value.get(0));
-      localizable.field().set(null, value.get(0));
-      localization.set(localizable.path(), value.get(0));
+      this.localizable.rawValue(this.value.get(0));
+      this.localizable.field().set(null, this.value.get(0));
+      this.localization.set(this.localizable.path(), this.value.get(0));
     } else if (rawValue instanceof Collection<?>) {
-      localizable.rawValue(value);
-      localizable.field().set(null, value);
-      localization.set(localizable.path(), value);
+      this.localizable.rawValue(this.value);
+      this.localizable.field().set(null, this.value);
+      this.localization.set(this.localizable.path(), this.value);
     } else if (rawValue instanceof String[]) {
       final String[] rawValueAsArray = this.value.toArray(new String[0]);
-      localizable.rawValue(rawValueAsArray);
-      localizable.field().set(null, rawValueAsArray);
-      localization.set(localizable.path(), value);
+      this.localizable.rawValue(rawValueAsArray);
+      this.localizable.field().set(null, rawValueAsArray);
+      this.localization.set(this.localizable.path(), this.value);
     } else if (rawValue instanceof Replacer) {
-      final Replacer replacer = Replacer.of(value);
-      localizable.rawValue(replacer);
-      localizable.field().set(null, replacer);
-      localization.set(localizable.path(), value);
+      final Replacer replacer = Replacer.of(this.value);
+      this.localizable.rawValue(replacer);
+      this.localizable.field().set(null, replacer);
+      this.localization.set(this.localizable.path(), this.value);
     }
   }
 
@@ -106,7 +106,7 @@ public final class LocalizableEditor {
     }
 
     public LocalizableEditor build(@NonNull final Localizable localizable) {
-      return new LocalizableEditor(localization, exceptionHandler, localizable);
+      return new LocalizableEditor(this.localization, this.exceptionHandler, localizable);
     }
   }
 }

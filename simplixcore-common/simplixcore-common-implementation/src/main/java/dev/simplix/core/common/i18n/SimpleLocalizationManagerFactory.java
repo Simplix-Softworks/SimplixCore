@@ -9,6 +9,7 @@ import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.util.*;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
 @Component(value = CommonSimplixModule.class, parent = LocalizationManagerFactory.class)
@@ -40,7 +41,9 @@ public class SimpleLocalizationManagerFactory implements LocalizationManagerFact
   }
 
   @Override
-  public LocalizationManager create(String translationResourcesDirectory, Class<?> classRef) {
+  public LocalizationManager create(
+      @NonNull String translationResourcesDirectory,
+      @NonNull Class<?> classRef) {
     Map<Locale, Properties> propertiesMap = new HashMap<>();
     try {
       File codeSource = new File(classRef
@@ -79,7 +82,7 @@ public class SimpleLocalizationManagerFactory implements LocalizationManagerFact
     return create0(propertiesMap);
   }
 
-  private Properties loadPropertiesFromFile(File file) throws IOException {
+  private Properties loadPropertiesFromFile(@NonNull File file) throws IOException {
     try (
         InputStreamReader streamReader = new InputStreamReader(new BufferedInputStream(
             new FileInputStream(file)), StandardCharsets.UTF_8)) {
@@ -89,14 +92,15 @@ public class SimpleLocalizationManagerFactory implements LocalizationManagerFact
     }
   }
 
-  private Properties loadPropertiesFromReader(BufferedReader bufferedReader) throws IOException {
+  private Properties loadPropertiesFromReader(@NonNull BufferedReader bufferedReader)
+      throws IOException {
     Properties properties = new Properties();
     properties.load(bufferedReader);
     bufferedReader.close();
     return properties;
   }
 
-  private LocalizationManager create0(Map<Locale, Properties> propertiesMap) {
+  private LocalizationManager create0(@NonNull Map<Locale, Properties> propertiesMap) {
     Map<Locale, Map<String, String>> translations = new HashMap<>();
     for (Locale locale : propertiesMap.keySet()) {
       Properties properties = propertiesMap.get(locale);

@@ -2,8 +2,9 @@ package dev.simplix.core.database.sql.function;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import lombok.NonNull;
 
 public interface BatchFiller<T> {
 
-  void fill(PreparedStatement ps, T t) throws SQLException;
+  void fill(@NonNull PreparedStatement preparedStatement, T type) throws SQLException;
 }

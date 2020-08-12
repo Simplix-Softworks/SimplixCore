@@ -8,6 +8,7 @@ import java.io.File;
 import java.util.*;
 import java.util.logging.Logger;
 import lombok.AllArgsConstructor;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.Nullable;
 import org.reflections.Reflections;
@@ -21,7 +22,7 @@ public class SimplixInstaller {
   private final LibraryLoader libraryLoader = new LibraryLoader();
   private Injector bossInjector;
 
-  public void register(Class<?> owner, Module... modules) {
+  public void register(@NonNull Class<?> owner, @NonNull Module... modules) {
     if (!owner.isAnnotationPresent(SimplixApplication.class)) {
       throw new IllegalArgumentException("Owner class must be annotated with @SimplixApplication");
     }
@@ -39,11 +40,11 @@ public class SimplixInstaller {
                 .build(), modules));
   }
 
-  public boolean registered(String appName) {
+  public boolean registered(@NonNull String appName) {
     return this.toInstall.containsKey(appName);
   }
 
-  public Injector injector(Class<?> owner) {
+  public Injector injector(@NonNull Class<?> owner) {
     return this.injectorMap.get(owner);
   }
 
@@ -78,8 +79,8 @@ public class SimplixInstaller {
   }
 
   private boolean installApplication(
-      InstallationContext context,
-      Stack<ApplicationInfo> infoStack) {
+      @NonNull InstallationContext context,
+      @NonNull Stack<ApplicationInfo> infoStack) {
     if (this.injectorMap.containsKey(context.owner)) {
       return true; // Application already installed
     }
@@ -115,11 +116,11 @@ public class SimplixInstaller {
     return true;
   }
 
-  private void downloadDependency(String dependency) {
+  private void downloadDependency(@NonNull String dependency) {
     // TODO
   }
 
-  private void createAppInjector(InstallationContext context) {
+  private void createAppInjector(@NonNull InstallationContext context) {
     Set<Module> modules = new HashSet<>();
     modules.add(binder -> binder.bind(ApplicationInfo.class).toInstance(context.applicationInfo));
     modules.add(createModuleBridge(context));
@@ -137,9 +138,9 @@ public class SimplixInstaller {
   }
 
   private void processAlwaysConstruct(
-      Set<Module> modules,
-      InstallationContext context,
-      Injector injector) {
+      @NonNull Set<Module> modules,
+      @NonNull InstallationContext context,
+      @NonNull Injector injector) {
     for (Class<?> componentClass : context.reflections.getTypesAnnotatedWith(AlwaysConstruct.class)) {
       if (!componentClass.isAnnotationPresent(Component.class)) {
         log.warn(
@@ -154,7 +155,7 @@ public class SimplixInstaller {
     }
   }
 
-  private Module createModuleBridge(InstallationContext context) {
+  private Module createModuleBridge(@NonNull InstallationContext context) {
     return binder -> {
       for (String dependency : context.applicationInfo.dependencies()) {
         Injector injector = this.injectorMap.get(this.toInstall.get(dependency).owner);
@@ -172,7 +173,9 @@ public class SimplixInstaller {
     };
   }
 
-  private void detectComponents(Set<Module> modules, InstallationContext context) {
+  private void detectComponents(
+      @NonNull Set<Module> modules,
+      @NonNull InstallationContext context) {
     for (Class<?> componentClass : context.reflections.getTypesAnnotatedWith(Component.class)) {
       try {
         Component component = componentClass.getAnnotation(Component.class);
@@ -214,8 +217,8 @@ public class SimplixInstaller {
 
   @Nullable
   private AbstractSimplixModule findAbstractSimplixModule(
-      Set<Module> modules,
-      Class<? extends AbstractSimplixModule> clazz) {
+      @NonNull Set<Module> modules,
+      @NonNull Class<? extends AbstractSimplixModule> clazz) {
     for (Module module : modules) {
       if (module.getClass().getName().equals(clazz.getName())) {
         return (AbstractSimplixModule) module;
@@ -224,7 +227,7 @@ public class SimplixInstaller {
     return null;
   }
 
-  private void detectModules(Set<Module> modules, InstallationContext ctx) {
+  private void detectModules(@NonNull Set<Module> modules, @NonNull InstallationContext ctx) {
     for (Class<?> moduleClass : ctx.reflections.getTypesAnnotatedWith(InjectorModule.class)) {
       try {
         InjectorModule module = moduleClass.getAnnotation(InjectorModule.class);
@@ -237,11 +240,11 @@ public class SimplixInstaller {
                  + ctx.applicationInfo.name()
                  + ": Registered module "
                  + moduleClass.getSimpleName());
-      } catch (Throwable t) {
+      } catch (Throwable throwable) {
         log.warn("[Simplix | Bootstrap] Unable to create module "
                  + moduleClass.getName()
                  + " for application "
-                 + ctx.applicationInfo.name(), t);
+                 + ctx.applicationInfo.name(), throwable);
       }
     }
   }

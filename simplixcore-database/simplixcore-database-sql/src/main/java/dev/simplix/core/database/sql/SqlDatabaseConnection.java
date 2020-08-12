@@ -31,7 +31,7 @@ public final class SqlDatabaseConnection {
   private String user;
   private String pass;
   private String port;
-  private ConnectionHandler connectionHandler;
+  private final ConnectionHandler connectionHandler;
   @Setter
   private Consumer<String> statementDebugger;
 
@@ -63,10 +63,10 @@ public final class SqlDatabaseConnection {
   }
 
   public int queryKeyInsert(
-      String select,
-      String insert,
-      PreparedStatementFiller selectFiller,
-      PreparedStatementFiller insertFiller) {
+      @NonNull String select,
+      @NonNull String insert,
+      @NonNull PreparedStatementFiller selectFiller,
+      @NonNull PreparedStatementFiller insertFiller) {
     return queryKeyInsert(
         select,
         insert,
@@ -76,15 +76,15 @@ public final class SqlDatabaseConnection {
         rs -> rs.getInt(1));
   }
 
-  public int keyInsert(String insert, PreparedStatementFiller filler) {
+  public int keyInsert(@NonNull String insert, @NonNull PreparedStatementFiller filler) {
     return keyInsert(insert, filler, rs -> rs.getInt(1));
   }
 
-  public List<String> getEnumValues(String table, String column) {
+  public List<String> getEnumValues(@NonNull String table, @NonNull String column) {
     return query(
         "SELECT column_type FROM information_schema.columns WHERE table_schema = ? AND table_name = ? AND column_name = ?",
         ps -> {
-          ps.setString(1, data);
+          ps.setString(1, this.data);
           ps.setString(2, table);
           ps.setString(3, column);
         },
@@ -119,9 +119,9 @@ public final class SqlDatabaseConnection {
   }
 
   public int keyInsert(
-      String statement,
-      PreparedStatementFiller filler,
-      ResultSetTransformer<Integer> transformer) {
+      @NonNull String statement,
+      @NonNull PreparedStatementFiller filler,
+      @NonNull ResultSetTransformer<Integer> transformer) {
     return rawExecutor0(
         statement,
         (c) -> c.prepareStatement(statement, Statement.RETURN_GENERATED_KEYS),
@@ -155,9 +155,9 @@ public final class SqlDatabaseConnection {
   }
 
   public <T> List<Integer> batchInsert(
-      String statement,
-      Stream<T> stream,
-      BatchFiller<T> batchFiller) {
+      @NonNull String statement,
+      @NonNull Stream<T> stream,
+      @NonNull BatchFiller<T> batchFiller) {
     return batchInsert(statement, ps -> stream.forEach(t -> {
       try {
         batchFiller.fill(ps, t);
@@ -168,15 +168,15 @@ public final class SqlDatabaseConnection {
     }));
   }
 
-  public boolean prepareLazy(String statement, Object... filler) {
+  public boolean prepareLazy(@NonNull String statement, @NonNull Object... filler) {
     return prepare(statement, lazy(filler));
   }
 
-  public boolean prepare(String statement) {
+  public boolean prepare(@NonNull String statement) {
     return prepare(statement, EMPTY_FILLER);
   }
 
-  public boolean prepare(String statement, PreparedStatementFiller filler) {
+  public boolean prepare(@NonNull String statement, PreparedStatementFiller filler) {
     Object o = rawExecutor(statement, filler, PreparedStatement::execute, (ps, rs) -> rs);
     if (o != null) {
       return (boolean) o;
@@ -185,26 +185,26 @@ public final class SqlDatabaseConnection {
   }
 
   public <T, K> T rawExecutor(
-      String statement,
-      PreparedStatementFiller filler,
-      PreparedStatementExecutor<K> executor,
-      PreparedStatementTransformer<T, K> consumer) {
+      @NonNull String statement,
+      @NonNull PreparedStatementFiller filler,
+      @NonNull PreparedStatementExecutor<K> executor,
+      @NonNull PreparedStatementTransformer<T, K> consumer) {
     return rawExecutor(statement, filler, executor, consumer, true);
   }
 
   public <T, K> T rawExecutor0(
-      String statement,
-      PreparedStatementSupplier supplier,
-      PreparedStatementFiller filler,
-      PreparedStatementExecutor<K> executor,
-      PreparedStatementTransformer<T, K> consumer,
+      @NonNull String statement,
+      @NonNull PreparedStatementSupplier supplier,
+      @NonNull PreparedStatementFiller filler,
+      @NonNull PreparedStatementExecutor<K> executor,
+      @NonNull PreparedStatementTransformer<T, K> consumer,
       boolean retry) {
     K k = null;
-    connectionHandler.preConnect();
-    Connection connection = connectionHandler.connection();
+    this.connectionHandler.preConnect();
+    Connection connection = this.connectionHandler.connection();
     QUERIES.add(statement);
-    if (statementDebugger != null) {
-      statementDebugger.accept(statement);
+    if (this.statementDebugger != null) {
+      this.statementDebugger.accept(statement);
     }
     try (PreparedStatement preparedStatement = supplier.get(connection)) {
       filler.fill(preparedStatement);
@@ -222,16 +222,16 @@ public final class SqlDatabaseConnection {
       if (k instanceof Closeable) {
         close((Closeable) k);
       }
-      connectionHandler.finishConnection(connection);
+      this.connectionHandler.finishConnection(connection);
     }
     return null;
   }
 
   public <T, K> T rawExecutor(
-      String statement,
-      PreparedStatementFiller filler,
-      PreparedStatementExecutor<K> executor,
-      PreparedStatementTransformer<T, K> consumer,
+      @NonNull String statement,
+      @NonNull PreparedStatementFiller filler,
+      @NonNull PreparedStatementExecutor<K> executor,
+      @NonNull PreparedStatementTransformer<T, K> consumer,
       boolean retry) {
     return rawExecutor0(
         statement,
@@ -264,9 +264,9 @@ public final class SqlDatabaseConnection {
 
   @Deprecated
   public void consume(
-      String statement,
-      PreparedStatementFiller filler,
-      ResultSetConsumer consumer) {
+      @NonNull String statement,
+      @NonNull PreparedStatementFiller filler,
+      @NonNull ResultSetConsumer consumer) {
     rawResultSet(statement, filler, (preparedStatement, resultSet) -> {
       if (resultSet.next()) {
         consumer.consume(resultSet);
@@ -276,9 +276,9 @@ public final class SqlDatabaseConnection {
   }
 
   public void consumeSingle(
-      String statement,
-      PreparedStatementFiller filler,
-      ResultSetConsumer consumer) {
+      @NonNull String statement,
+      @NonNull PreparedStatementFiller filler,
+      @NonNull ResultSetConsumer consumer) {
     rawResultSet(statement, filler, (preparedStatement, resultSet) -> {
       if (resultSet.next()) {
         consumer.consume(resultSet);
@@ -298,9 +298,9 @@ public final class SqlDatabaseConnection {
   }
 
   public void consumeAll(
-      String statement,
-      PreparedStatementFiller filler,
-      ResultSetConsumer consumer) {
+      @NonNull String statement,
+      @NonNull PreparedStatementFiller filler,
+      @NonNull ResultSetConsumer consumer) {
     rawResultSet(statement, filler, (preparedStatement, resultSet) -> {
       while (resultSet.next()) {
         consumer.consume(resultSet);
@@ -310,10 +310,10 @@ public final class SqlDatabaseConnection {
   }
 
   public <T, C extends Collection<T>> C queryCollection(
-      String statement,
-      PreparedStatementFiller filler,
-      ResultSetTransformer<T> consumer,
-      Supplier<C> supplier) {
+      @NonNull String statement,
+      @NonNull PreparedStatementFiller filler,
+      @NonNull ResultSetTransformer<T> consumer,
+      @NonNull Supplier<C> supplier) {
     C a = supplier.get();
     return rawResultSet(statement, filler, (ps, rs) -> {
       while (rs.next()) {
@@ -325,20 +325,22 @@ public final class SqlDatabaseConnection {
   }
 
   public <T> List<T> queryList(
-      String statement,
-      PreparedStatementFiller filler,
-      ResultSetTransformer<T> consumer) {
+      @NonNull String statement,
+      @NonNull PreparedStatementFiller filler,
+      @NonNull ResultSetTransformer<T> consumer) {
     return queryCollection(statement, filler, consumer, ArrayList::new);
   }
 
-  public List<TableInformation> getTableInformation(String database) {
+  public List<TableInformation> getTableInformation(@NonNull String database) {
     return queryList(
         "SELECT * FROM information_schema.tables WHERE table_schema LIKE ?",
         ps -> ps.setString(1, database),
         TableInformation.getTransformer());
   }
 
-  public List<FieldInformation> getFieldInformation(String database, String table) {
+  public List<FieldInformation> getFieldInformation(
+      @NonNull String database,
+      @NonNull String table) {
     return queryList(
         "SELECT * FROM information_schema.columns WHERE table_schema LIKE ? AND table_name LIKE ?",
         ps -> {
@@ -348,7 +350,7 @@ public final class SqlDatabaseConnection {
         FieldInformation.getTransformer());
   }
 
-  public static PreparedStatementFiller lazy(Object... filler) {
+  public static PreparedStatementFiller lazy(@NonNull Object... filler) {
     return ps -> {
       for (int i = 0; i < filler.length; i++) {
         ps.setString(i + 1, filler[i].toString());
@@ -357,22 +359,25 @@ public final class SqlDatabaseConnection {
   }
 
   public void updateConnection() {
-    connectionHandler.updateConnection();
+    this.connectionHandler.updateConnection();
   }
 
-  public static List<String> parseEnums(String val) {
+  public static List<String> parseEnums(@NonNull String val) {
     String replaceAll = val.replaceAll("enum|'|\\(|\\)", "");
     String[] split = replaceAll.split(",");
     return new ArrayList<>(Arrays.asList(split));
   }
 
-  public static String enumsToString(String table, String col, List<String> a) {
+  public static String enumsToString(
+      @NonNull String table,
+      @NonNull String column,
+      @NonNull List<String> stringList) {
     StringBuilder statement = new StringBuilder("ALTER TABLE "
                                                 + table
                                                 + " MODIFY COLUMN "
-                                                + col
+                                                + column
                                                 + " ENUM(");
-    a.forEach(b -> statement.append("'").append(b).append("',"));
+    stringList.forEach(it -> statement.append("'").append(it).append("',"));
     return statement.substring(0, statement.length() - 1) + ");";
   }
 
@@ -382,20 +387,19 @@ public final class SqlDatabaseConnection {
     }
     try {
       closeable.close();
-    } catch (Exception e) {
-      e.printStackTrace();
+    } catch (Throwable throwable) {
+      throwable.printStackTrace();
     }
   }
 
   public static SqlDatabaseConnection hikari(
-      String host,
-      String user,
-      String pass,
-      String port,
-      String database) {
+      @NonNull String host,
+      @NonNull String user,
+      @NonNull String pass,
+      @NonNull String port,
+      @NonNull String database) {
     return new SqlDatabaseConnection(
-        HikariDataSourceCreator
-            .createSource(host, port, database, user, pass),
+        HikariDataSourceCreator.createSource(host, port, database, user, pass),
         host,
         user,
         pass,

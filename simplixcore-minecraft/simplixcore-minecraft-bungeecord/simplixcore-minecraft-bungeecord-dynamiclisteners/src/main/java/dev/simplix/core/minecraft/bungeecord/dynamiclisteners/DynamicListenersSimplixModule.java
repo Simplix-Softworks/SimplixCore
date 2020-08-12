@@ -13,12 +13,10 @@ public class DynamicListenersSimplixModule extends AbstractSimplixModule {
     this.plugin = plugin;
     registerComponentInterceptor(
         Listener.class,
-        listener -> {
-          ProxyServer
-              .getInstance()
-              .getPluginManager()
-              .registerListener(plugin, listener);
-        });
+        listener -> ProxyServer
+            .getInstance()
+            .getPluginManager()
+            .registerListener(plugin, listener));
   }
 
 }

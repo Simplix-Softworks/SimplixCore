@@ -15,7 +15,7 @@ public final class SettingsInjector extends AbstractSettingsInjector<Setting, Se
   }
 
   @Override
-  public String pathFromAnnotation(Setting fieldAnnotation) {
+  public String pathFromAnnotation(@NonNull Setting fieldAnnotation) {
     return fieldAnnotation.value();
   }
 }

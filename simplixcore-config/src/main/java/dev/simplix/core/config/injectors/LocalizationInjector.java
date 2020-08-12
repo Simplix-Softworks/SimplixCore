@@ -18,10 +18,10 @@ public final class LocalizationInjector extends AbstractSettingsInjector<Localiz
 
   @Override
   protected void onInjected(
-      final Class<?> clazz,
-      final Field field,
-      final String path,
-      final Object raw) {
+      @NonNull final Class<?> clazz,
+      @NonNull final Field field,
+      @NonNull final String path,
+      @NonNull final Object raw) {
     Localizables.register(
         dev.simplix.core.config.localization.Localizable
             .builder()
@@ -34,7 +34,7 @@ public final class LocalizationInjector extends AbstractSettingsInjector<Localiz
   }
 
   @Override
-  public String pathFromAnnotation(final Localizable fieldAnnotation) {
+  public String pathFromAnnotation(@NonNull final Localizable fieldAnnotation) {
     return fieldAnnotation.value();
   }
 }

@@ -42,8 +42,8 @@ public final class SimplixPlugin extends Plugin {
           System.out.println("[Simplix] Patching done. Please restart BungeeCord.");
         }
       }
-    } catch (URISyntaxException e) {
-      e.printStackTrace();
+    } catch (URISyntaxException uriSyntaxException) {
+      uriSyntaxException.printStackTrace();
     }
   }
 

@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import lombok.NonNull;
 
 public class SimpleLocalizationManager implements LocalizationManager {
 
@@ -11,12 +12,12 @@ public class SimpleLocalizationManager implements LocalizationManager {
   private Locale fallbackLocale = Locale.ENGLISH;
   private String fallbackString = "N/A";
 
-  SimpleLocalizationManager(Map<Locale, Map<String, String>> translations) {
+  SimpleLocalizationManager(@NonNull Map<Locale, Map<String, String>> translations) {
     this.translations = translations;
   }
 
   @Override
-  public void fallbackString(String string) {
+  public void fallbackString(@NonNull String string) {
     this.fallbackString = string;
   }
 
@@ -26,7 +27,7 @@ public class SimpleLocalizationManager implements LocalizationManager {
   }
 
   @Override
-  public void fallbackLocale(Locale locale) {
+  public void fallbackLocale(@NonNull Locale locale) {
     this.fallbackLocale = locale;
   }
 
@@ -36,17 +37,17 @@ public class SimpleLocalizationManager implements LocalizationManager {
   }
 
   @Override
-  public String localized(String key, Locale locale) {
-    Map<String, String> trans = translations.get(locale);
+  public String localized(@NonNull String key, @NonNull Locale locale) {
+    Map<String, String> trans = this.translations.get(locale);
     if (trans == null) {
-      trans = translations.get(fallbackLocale());
+      trans = this.translations.get(fallbackLocale());
       if (trans == null) {
         return fallbackString();
       }
     }
     String out = trans.get(key);
     if (out == null) {
-      out = translations.getOrDefault(fallbackLocale(), Collections.emptyMap()).get(key);
+      out = this.translations.getOrDefault(fallbackLocale(), Collections.emptyMap()).get(key);
       if (out == null) {
         return fallbackString();
       }
@@ -55,15 +56,15 @@ public class SimpleLocalizationManager implements LocalizationManager {
   }
 
   @Override
-  public Set<String> keys(Locale locale) {
-    return Collections.unmodifiableSet(translations
+  public Set<String> keys(@NonNull Locale locale) {
+    return Collections.unmodifiableSet(this.translations
         .getOrDefault(locale, Collections.emptyMap())
         .keySet());
   }
 
   @Override
   public Set<Locale> locales() {
-    return Collections.unmodifiableSet(translations.keySet());
+    return Collections.unmodifiableSet(this.translations.keySet());
   }
 
 }

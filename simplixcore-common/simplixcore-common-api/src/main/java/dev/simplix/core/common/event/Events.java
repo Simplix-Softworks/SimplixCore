@@ -5,6 +5,7 @@ import dev.simplix.core.common.listener.Listeners;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -27,7 +28,7 @@ public class Events {
   /**
    * Called from Proxy/Spigot-ListenerImpl
    */
-  public <T extends Event> T call(final T event) {
+  public <T extends Event> T call(@NonNull final T event) {
     for (final Listener listener : Listeners.registeredListeners()) {
       if (listener.type() != event.getClass()) {
         continue;

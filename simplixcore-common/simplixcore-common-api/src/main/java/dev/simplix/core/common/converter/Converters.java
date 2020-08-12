@@ -3,12 +3,14 @@ package dev.simplix.core.common.converter;
 import java.util.*;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.Map.Entry;
+import lombok.NonNull;
 
+@SuppressWarnings("rawtypes")
 public final class Converters {
 
   private static final Map<Map.Entry<Class, Class>, Converter> CONVERTER_MAP = new HashMap<>();
 
-  public static <T> T convert(final Object source, final Class<T> to) {
+  public static <T> T convert(@NonNull final Object source, @NonNull final Class<T> to) {
     Converter converter = getConverter(source.getClass(), to);
     if (converter == null) {
       converter = getMultiConverter(source.getClass(), to);
@@ -22,8 +24,8 @@ public final class Converters {
   }
 
   private static <S, T> Converter<S, T> getMultiConverter(
-      final Class<S> source,
-      final Class<T> to) {
+      @NonNull final Class<S> source,
+      @NonNull final Class<T> to) {
     final List<Converter> converters = new ArrayList<>();
     findConversionRoute(converters, source, to);
     if (converters.size() <= 1) {
@@ -39,9 +41,9 @@ public final class Converters {
   }
 
   private static boolean findConversionRoute(
-      final List<Converter> converters,
-      final Class<?> source,
-      final Class<?> to) {
+      @NonNull final List<Converter> converters,
+      @NonNull final Class<?> source,
+      @NonNull final Class<?> to) {
     for (final Map.Entry<Class, Class> entry : CONVERTER_MAP.keySet()) {
       if (entry.getKey().equals(source)) {
         final List<Converter> list = new ArrayList<>();
@@ -57,9 +59,9 @@ public final class Converters {
   }
 
   private static boolean buildRoute(
-      final List<Converter> converters,
-      final Map.Entry<Class, Class> entry,
-      final Class<?> to) {
+      @NonNull final List<Converter> converters,
+      @NonNull final Map.Entry<Class, Class> entry,
+      @NonNull final Class<?> to) {
     if (entry.getValue().equals(to)) {
       return true;
     }
@@ -75,9 +77,9 @@ public final class Converters {
   }
 
   public static void register(
-      final Class<?> sourceType,
-      final Class targetType,
-      final Converter converter) {
+      @NonNull final Class<?> sourceType,
+      @NonNull final Class targetType,
+      @NonNull final Converter converter) {
     CONVERTER_MAP.put(new AbstractMap.SimpleEntry<>(sourceType, targetType), converter);
   }
 
