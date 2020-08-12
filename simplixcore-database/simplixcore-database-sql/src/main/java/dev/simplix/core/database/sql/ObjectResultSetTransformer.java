@@ -31,11 +31,13 @@ public final class ObjectResultSetTransformer<T> implements ResultSetTransformer
     int i = 0;
     for (Field field : declaredFields) {
       int modifiers = field.getModifiers();
-      if (Modifier.isStatic(modifiers))
+      if (Modifier.isStatic(modifiers)) {
         continue;
+      }
       Class<?> type = field.getType();
-      if (type.equals(UUID.class))
+      if (type.equals(UUID.class)) {
         types[i] = 1;
+      }
       clazzes.add(type);
       fieldClasses.add(field);
       i++;
@@ -53,17 +55,20 @@ public final class ObjectResultSetTransformer<T> implements ResultSetTransformer
   public T transform(ResultSet resultSet) throws SQLException {
     Object[] objects = new Object[fields];
     //transform to uuid
-    for (int i = 0; i < fields; i++)
-      if (types[i] == 1)
+    for (int i = 0; i < fields; i++) {
+      if (types[i] == 1) {
         objects[i] = UUID.fromString(resultSet.getString(i + 1));
-      else
+      } else {
         objects[i] = resultSet.getObject(i + 1);
+      }
+    }
     try {
       return constructor.newInstance(objects);
     } catch (InstantiationException | InvocationTargetException | IllegalAccessException | IllegalArgumentException exception) {
       exception.printStackTrace();
-      if (!(exception instanceof IllegalArgumentException))
+      if (!(exception instanceof IllegalArgumentException)) {
         return null;
+      }
 
       System.out.println("Invalid schema for class '" + clazz.getName() + "'");
 

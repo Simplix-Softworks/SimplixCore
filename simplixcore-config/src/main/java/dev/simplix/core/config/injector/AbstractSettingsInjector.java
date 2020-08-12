@@ -27,17 +27,20 @@ public abstract class AbstractSettingsInjector<C extends Annotation, F extends A
   @Override
   public final <T> T getValueByPath(@NonNull final String path, @NonNull final T def) {
 
-    if (dataStorage instanceof FlatFile)
+    if (dataStorage instanceof FlatFile) {
       ((FlatFile) dataStorage).setPathPrefix(null);
+    }
 
     final LightningSerializable serializable =
         LightningSerializer.findSerializable(def.getClass());
 
-    if (serializable == null)
+    if (serializable == null) {
       return dataStorage.getOrSetDefault(path, def);
+    }
 
-    if (dataStorage.contains(path))
+    if (dataStorage.contains(path)) {
       return (T) dataStorage.getSerializable(path, def.getClass());
+    }
 
     final Object serialized = serializable.serialize(def);
 

@@ -32,12 +32,14 @@ public final class HttpDependencyDownloader implements DependencyDownloader {
   @Override
   public void download(@NonNull URL url, @NonNull File file) throws IOException {
     URLConnection urlConnection = url.openConnection();
-    if (!(urlConnection instanceof HttpURLConnection))
+    if (!(urlConnection instanceof HttpURLConnection)) {
       throw new IllegalArgumentException("Unsupported protocol " + url.getProtocol());
+    }
 
     HttpURLConnection httpURLConnection = (HttpURLConnection) urlConnection;
-    if (file.exists())
+    if (file.exists()) {
       return;
+    }
     file.createNewFile();
     try (FileOutputStream fileOutputStream = new FileOutputStream(file)) {
       fileOutputStream.write(IOUtils.readFully(httpURLConnection.getInputStream(), -1, true));

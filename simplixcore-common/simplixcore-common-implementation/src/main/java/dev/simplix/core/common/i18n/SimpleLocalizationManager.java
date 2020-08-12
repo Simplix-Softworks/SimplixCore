@@ -1,6 +1,9 @@
 package dev.simplix.core.common.i18n;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 
 public class SimpleLocalizationManager implements LocalizationManager {
 
@@ -35,16 +38,16 @@ public class SimpleLocalizationManager implements LocalizationManager {
   @Override
   public String localized(String key, Locale locale) {
     Map<String, String> trans = translations.get(locale);
-    if(trans == null) {
+    if (trans == null) {
       trans = translations.get(fallbackLocale());
-      if(trans == null) {
+      if (trans == null) {
         return fallbackString();
       }
     }
     String out = trans.get(key);
-    if(out == null) {
+    if (out == null) {
       out = translations.getOrDefault(fallbackLocale(), Collections.emptyMap()).get(key);
-      if(out == null) {
+      if (out == null) {
         return fallbackString();
       }
     }
@@ -53,7 +56,9 @@ public class SimpleLocalizationManager implements LocalizationManager {
 
   @Override
   public Set<String> keys(Locale locale) {
-    return Collections.unmodifiableSet(translations.getOrDefault(locale, Collections.emptyMap()).keySet());
+    return Collections.unmodifiableSet(translations
+        .getOrDefault(locale, Collections.emptyMap())
+        .keySet());
   }
 
   @Override

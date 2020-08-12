@@ -1,5 +1,11 @@
 package dev.simplix.core.minecraft.spigot.dynamiclisteners;
 
+import dev.simplix.core.common.aop.Component;
+import dev.simplix.core.common.event.Events;
+import dev.simplix.core.common.providers.ExceptionHandler;
+import dev.simplix.core.minecraft.api.events.ChatEvent;
+import dev.simplix.core.minecraft.api.events.JoinEvent;
+import dev.simplix.core.minecraft.api.events.QuitEvent;
 import java.util.Objects;
 import javax.inject.Inject;
 import lombok.NonNull;
@@ -10,12 +16,6 @@ import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import dev.simplix.core.common.aop.Component;
-import dev.simplix.core.common.event.Events;
-import dev.simplix.core.common.providers.ExceptionHandler;
-import dev.simplix.core.minecraft.api.events.ChatEvent;
-import dev.simplix.core.minecraft.api.events.JoinEvent;
-import dev.simplix.core.minecraft.api.events.QuitEvent;
 
 //@Setting
 @Component(value = DynamicListenersSimplixModule.class)
@@ -40,8 +40,9 @@ public final class SpigotListenerImpl implements Listener {
                 playerPreLoginEvent.getName(),
                 playerPreLoginEvent.getAddress()));
 
-    if (!joinEvent.canceled())
+    if (!joinEvent.canceled()) {
       return;
+    }
 
     playerPreLoginEvent.setLoginResult(Result.KICK_BANNED);
     playerPreLoginEvent.setKickMessage(joinEvent.cancelReason().replace("&", "§"));
@@ -49,8 +50,9 @@ public final class SpigotListenerImpl implements Listener {
 
   @EventHandler
   public void chat(AsyncPlayerChatEvent asyncPlayerChatEvent) {
-    if (asyncPlayerChatEvent.isCancelled())
+    if (asyncPlayerChatEvent.isCancelled()) {
       return;
+    }
     try {
       ChatEvent chatEvent = Events
           .call(
@@ -67,8 +69,9 @@ public final class SpigotListenerImpl implements Listener {
 
   @EventHandler
   public void chat2(PlayerCommandPreprocessEvent playerCommandPreprocessEvent) {
-    if (playerCommandPreprocessEvent.isCancelled() || !LISTEN_FOR_COMMANDS)
+    if (playerCommandPreprocessEvent.isCancelled() || !LISTEN_FOR_COMMANDS) {
       return;
+    }
     try {
       ChatEvent chatEvent = Events.call(ChatEvent
           .create(

@@ -2,6 +2,12 @@ package dev.simplix.core.common.providers.impl;
 
 import com.google.inject.Inject;
 import de.leonhard.storage.util.FileUtils;
+import dev.simplix.core.common.ApplicationInfo;
+import dev.simplix.core.common.CommonSimplixModule;
+import dev.simplix.core.common.TimeUtil;
+import dev.simplix.core.common.aop.Component;
+import dev.simplix.core.common.providers.ExceptionHandler;
+import dev.simplix.core.common.providers.PluginManager;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -18,12 +24,6 @@ import java.util.Collection;
 import java.util.List;
 import lombok.NonNull;
 import org.jetbrains.annotations.Nullable;
-import dev.simplix.core.common.ApplicationInfo;
-import dev.simplix.core.common.CommonSimplixModule;
-import dev.simplix.core.common.TimeUtil;
-import dev.simplix.core.common.aop.Component;
-import dev.simplix.core.common.providers.ExceptionHandler;
-import dev.simplix.core.common.providers.PluginManager;
 
 @Component(value = CommonSimplixModule.class, parent = ExceptionHandler.class)
 public final class FileBasedExceptionHandler implements ExceptionHandler {
@@ -72,8 +72,9 @@ public final class FileBasedExceptionHandler implements ExceptionHandler {
 
       } catch (final ClosedByInterruptException ex) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(to, true))) {
-          for (final String line : lines)
+          for (final String line : lines) {
             bw.append(System.lineSeparator() + line);
+          }
 
         } catch (final IOException e) {
           e.printStackTrace();
@@ -94,10 +95,12 @@ public final class FileBasedExceptionHandler implements ExceptionHandler {
   @Override
   public void saveError(@Nullable Throwable throwable, @NonNull String... messages) {
     // Something went wrong on startup
-    if (!logFile.exists())
+    if (!logFile.exists()) {
       return;
-    if (throwable == null)
+    }
+    if (throwable == null) {
       return;
+    }
 
     final List<String> lines = new ArrayList<>();
     final String header = applicationInfo.name()
@@ -142,8 +145,9 @@ public final class FileBasedExceptionHandler implements ExceptionHandler {
 
           final String trace = el.toString();
 
-          if (count > 6 && trace.startsWith("net.minecraft.server"))
+          if (count > 6 && trace.startsWith("net.minecraft.server")) {
             break;
+          }
 
           fill(lines, "\t at " + el.toString());
         }

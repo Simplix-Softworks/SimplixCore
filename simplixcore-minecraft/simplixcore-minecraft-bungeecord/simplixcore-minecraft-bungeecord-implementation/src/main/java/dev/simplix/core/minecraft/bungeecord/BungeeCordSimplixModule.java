@@ -5,4 +5,5 @@ import dev.simplix.core.common.aop.InjectorModule;
 
 @InjectorModule("SimplixCore")
 public final class BungeeCordSimplixModule extends AbstractSimplixModule {
+
 }

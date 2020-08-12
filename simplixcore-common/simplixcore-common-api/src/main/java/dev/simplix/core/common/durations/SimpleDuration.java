@@ -22,11 +22,13 @@ public final class SimpleDuration extends AbstractDuration {
 
   @Override
   public boolean moreThan(@NonNull final Duration punishDuration) {
-    if (isPermanent())
+    if (isPermanent()) {
       return true;
+    }
 
-    if (punishDuration.isPermanent())
+    if (punishDuration.isPermanent()) {
       return false;
+    }
 
     return toMs() > punishDuration.toMs();
   }
@@ -48,10 +50,12 @@ public final class SimpleDuration extends AbstractDuration {
 
   @Override
   public String toString() {
-    if (isPermanent())
+    if (isPermanent()) {
       return "Permanent";
-    if (isEmpty())
+    }
+    if (isEmpty()) {
       return "Empty";
+    }
     return TimeUtil.formatMenuDate(this.ms);
   }
 

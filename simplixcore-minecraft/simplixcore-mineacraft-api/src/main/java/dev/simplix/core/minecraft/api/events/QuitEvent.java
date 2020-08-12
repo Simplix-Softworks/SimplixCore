@@ -1,9 +1,9 @@
 package dev.simplix.core.minecraft.api.events;
 
+import dev.simplix.core.common.event.AbstractEvent;
 import java.util.UUID;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import dev.simplix.core.common.event.AbstractEvent;
 
 @RequiredArgsConstructor
 public class QuitEvent extends AbstractEvent {

@@ -2,6 +2,8 @@ package dev.simplix.core.config.localization;
 
 import de.leonhard.storage.Yaml;
 import de.leonhard.storage.util.Valid;
+import dev.simplix.core.common.Replacer;
+import dev.simplix.core.common.providers.ExceptionHandler;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -10,8 +12,6 @@ import javax.inject.Named;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.experimental.Accessors;
-import dev.simplix.core.common.Replacer;
-import dev.simplix.core.common.providers.ExceptionHandler;
 
 @Accessors(fluent = true)
 public final class LocalizableEditor {
@@ -67,8 +67,9 @@ public final class LocalizableEditor {
 
     final Object rawValue = localizable.rawValue();
 
-    if (rawValue == null)
+    if (rawValue == null) {
       return;
+    }
 
     if (rawValue instanceof String) {
       localizable.rawValue(value.get(0));

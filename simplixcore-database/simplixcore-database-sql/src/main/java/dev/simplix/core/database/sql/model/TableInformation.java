@@ -1,10 +1,10 @@
 package dev.simplix.core.database.sql.model;
 
+import dev.simplix.core.database.sql.ObjectResultSetTransformer;
+import dev.simplix.core.database.sql.function.ResultSetTransformer;
 import java.math.BigInteger;
 import java.sql.Timestamp;
 import lombok.*;
-import dev.simplix.core.database.sql.ObjectResultSetTransformer;
-import dev.simplix.core.database.sql.function.ResultSetTransformer;
 
 @Data
 @Builder

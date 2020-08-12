@@ -1,6 +1,7 @@
 package dev.simplix.core.config.injector;
 
 import de.leonhard.storage.util.Valid;
+import dev.simplix.core.common.Replacer;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -10,7 +11,6 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
-import dev.simplix.core.common.Replacer;
 
 @Getter
 @Accessors(fluent = true)
@@ -22,25 +22,29 @@ public abstract class AbstractInjector<C extends Annotation, F extends Annotatio
   protected final Class<F> fieldAnnotationClass;
 
   private static void debugRep(final Object replacer) {
-    if (!(replacer instanceof Replacer))
+    if (!(replacer instanceof Replacer)) {
       return;
+    }
     final Replacer rep = (Replacer) replacer;
-    for (final String s : rep.replacedMessage())
+    for (final String s : rep.replacedMessage()) {
       System.out.println(s);
+    }
   }
 
   @Override
   public final void startInjecting(final List<Class<?>> classes) {
-    for (Class<?> clazz : classes)
-      if (isAnnotationPresent(clazz, classAnnotationClass))
+    for (Class<?> clazz : classes) {
+      if (isAnnotationPresent(clazz, classAnnotationClass)) {
         for (final Field field : clazz.getDeclaredFields()) {
 
           // We only inject static fields
-          if (!Modifier.isStatic(field.getModifiers()))
+          if (!Modifier.isStatic(field.getModifiers())) {
             continue;
+          }
 
-          if (!field.isAnnotationPresent(fieldAnnotationClass))
+          if (!field.isAnnotationPresent(fieldAnnotationClass)) {
             continue;
+          }
 
           Valid.checkBoolean(
               !Modifier.isFinal(field.getModifiers()),
@@ -68,6 +72,8 @@ public abstract class AbstractInjector<C extends Annotation, F extends Annotatio
             throwable.printStackTrace();
           }
         }
+      }
+    }
   }
 
   private boolean isAnnotationPresent(

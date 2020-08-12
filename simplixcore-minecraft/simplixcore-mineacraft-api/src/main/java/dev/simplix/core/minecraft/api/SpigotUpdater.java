@@ -1,6 +1,7 @@
 package dev.simplix.core.minecraft.api;
 
 import de.leonhard.storage.util.Valid;
+import dev.simplix.core.common.ApplicationInfo;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -8,7 +9,6 @@ import java.net.UnknownHostException;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import lombok.Getter;
-import dev.simplix.core.common.ApplicationInfo;
 
 /**
  * A simple class performing an update check for Spigot free and premium resources
@@ -70,13 +70,15 @@ public class SpigotUpdater implements Runnable {
    */
   @Override
   public void run() {
-    if (resourceId == -1)
+    if (resourceId == -1) {
       return;
+    }
 
     final String currentVersion = applicationInfo.version();
 
-    if (!canUpdateFrom(currentVersion))
+    if (!canUpdateFrom(currentVersion)) {
       return;
+    }
 
     try {
       HttpURLConnection connection = (HttpURLConnection) new URL(
@@ -89,8 +91,9 @@ public class SpigotUpdater implements Runnable {
         newVersion = line;
       }
 
-      if (newVersion.isEmpty())
+      if (newVersion.isEmpty()) {
         return;
+      }
 
       if (isNewerVersion(currentVersion, newVersion) && canUpdateTo(newVersion)) {
         newVersionAvailable = true;
@@ -122,8 +125,9 @@ public class SpigotUpdater implements Runnable {
           output.close();
 
           System.out.println(getDownloadMessage());
-        } else
+        } else {
           System.out.println(getNotifyMessage());
+        }
       }
 
     } catch (final UnknownHostException ex) {
@@ -180,8 +184,9 @@ public class SpigotUpdater implements Runnable {
    * @return
    */
   private boolean isNewerVersion(final String current, final String remote) {
-    if (remote.contains("-LEGACY"))
+    if (remote.contains("-LEGACY")) {
       return false;
+    }
 
     String[] currParts = removeTagsInNumber(current).split("\\.");
     String[] remoteParts = removeTagsInNumber(remote).split("\\.");
@@ -192,23 +197,27 @@ public class SpigotUpdater implements Runnable {
           ? currParts.length
           : remoteParts.length];
 
-      for (int i = 0; i < (olderIsLonger ? currParts.length : remoteParts.length); i++)
+      for (int i = 0; i < (olderIsLonger ? currParts.length : remoteParts.length); i++) {
         modifiedParts[i] = olderIsLonger
             ? remoteParts.length > i ? remoteParts[i] : "0"
             : currParts.length > i ? currParts[i] : "0";
+      }
 
-      if (olderIsLonger)
+      if (olderIsLonger) {
         remoteParts = modifiedParts;
-      else
+      } else {
         currParts = modifiedParts;
+      }
     }
 
     for (int i = 0; i < currParts.length; i++) {
-      if (Integer.parseInt(currParts[i]) > Integer.parseInt(remoteParts[i]))
+      if (Integer.parseInt(currParts[i]) > Integer.parseInt(remoteParts[i])) {
         return false;
+      }
 
-      if (Integer.parseInt(remoteParts[i]) > Integer.parseInt(currParts[i]))
+      if (Integer.parseInt(remoteParts[i]) > Integer.parseInt(currParts[i])) {
         return true;
+      }
     }
 
     return false;

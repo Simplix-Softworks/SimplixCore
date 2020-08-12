@@ -10,9 +10,13 @@ import java.lang.annotation.Target;
 public @interface SimplixApplication {
 
   String name();
+
   String version();
+
   String[] authors();
+
   String[] dependencies() default {};
+
   String workingDirectory() default ".";
 
 }

@@ -1,7 +1,6 @@
 package dev.simplix.core.common.event;
 
 import lombok.Getter;
-import lombok.Setter;
 import lombok.experimental.Accessors;
 
 @Getter

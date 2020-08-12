@@ -92,25 +92,26 @@ public class TimeUtil {
       }
 
       // attempt to match the unit time
-      if (sub.startsWith("tick"))
+      if (sub.startsWith("tick")) {
         isTicks = true;
-      else if (sub.toLowerCase().startsWith("second") || sub.startsWith("s"))
+      } else if (sub.toLowerCase().startsWith("second") || sub.startsWith("s")) {
         unit = 1;
-      else if (sub.toLowerCase().startsWith("minute") || sub.startsWith("m"))
+      } else if (sub.toLowerCase().startsWith("minute") || sub.startsWith("m")) {
         unit = 60;
-      else if (sub.toLowerCase().startsWith("hour") || sub.startsWith("H"))
+      } else if (sub.toLowerCase().startsWith("hour") || sub.startsWith("H")) {
         unit = 3600;
-      else if (sub.toLowerCase().startsWith("day") || sub.startsWith("d"))
+      } else if (sub.toLowerCase().startsWith("day") || sub.startsWith("d")) {
         unit = 86400;
-      else if (sub.toLowerCase().startsWith("week"))
+      } else if (sub.toLowerCase().startsWith("week")) {
         unit = 604800;
-      else if (sub.toLowerCase().startsWith("month") || sub.startsWith("M"))
+      } else if (sub.toLowerCase().startsWith("month") || sub.startsWith("M")) {
         unit = 2629743;
-      else //Invalid-format
-        if (sub.toLowerCase().startsWith("year") || sub.startsWith("y"))
+      } else //Invalid-format
+        if (sub.toLowerCase().startsWith("year") || sub.startsWith("y")) {
           unit = 31556926;
-        else
+        } else {
           return Long.MIN_VALUE;
+        }
 
       seconds += multiplier * (isTicks ? 1 : unit * 20);
     }
@@ -190,8 +191,9 @@ public class TimeUtil {
   }
 
   public String formatMenuDate(long duration) {
-    if (duration == -1 || duration == 0)
+    if (duration == -1 || duration == 0) {
       return "&cPermanent";
+    }
 
     long years = TimeUnit.MILLISECONDS.toDays(duration) / 365;
     duration -= TimeUnit.DAYS.toMillis(years) * 365;
@@ -201,17 +203,21 @@ public class TimeUtil {
     duration -= TimeUnit.DAYS.toMillis(days);
     long hours = TimeUnit.MILLISECONDS.toHours(duration);
 
-    if (years < 0)
+    if (years < 0) {
       years = 0;
+    }
 
-    if (month < 0)
+    if (month < 0) {
       month = 0;
+    }
 
-    if (days < 0)
+    if (days < 0) {
       days = 0;
+    }
 
-    if (hours < 0)
+    if (hours < 0) {
       hours = 0;
+    }
 
     String preResult = " {years} year(s) {month} month {days} day(s) {hours} hour(s)"
         .replace("{years}", years + "")
@@ -228,8 +234,9 @@ public class TimeUtil {
     //shortening
 
     //we don't need years & hours
-    if (years != 0 && hours != 0)
+    if (years != 0 && hours != 0) {
       preResult = preResult.replace(hours + " hours", "");
+    }
 
     return preResult.startsWith(" ") ? preResult.substring(1) : preResult;
   }

@@ -5,10 +5,10 @@ import de.leonhard.storage.internal.exceptions.LightningValidationException;
 import de.leonhard.storage.internal.settings.ReloadSettings;
 import de.leonhard.storage.shaded.jetbrains.annotations.Nullable;
 import de.leonhard.storage.util.FileUtils;
+import dev.simplix.core.common.providers.ExceptionHandler;
 import java.io.File;
 import java.io.InputStream;
 import lombok.NonNull;
-import dev.simplix.core.common.providers.ExceptionHandler;
 
 /**
  * A class designed to make it as easy as possible to handle exceptions while handling JSON-Files

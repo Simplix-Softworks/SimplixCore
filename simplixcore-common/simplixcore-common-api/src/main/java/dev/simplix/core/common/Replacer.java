@@ -69,7 +69,7 @@ public final class Replacer {
     this.replacements.clear();
 
     //Even: Value
-    for (int i = 0; i < associativeArray.length; i++)
+    for (int i = 0; i < associativeArray.length; i++) {
       if (i % 2 == 0) {
         //Odd: Key
         final val raw = associativeArray[i];
@@ -78,8 +78,10 @@ public final class Replacer {
             "Expected String at " + raw + ", got " + raw.getClass()
                 .getSimpleName());
         this.variables.add((String) raw);
-      } else
+      } else {
         this.replacements.add(associativeArray[i]);
+      }
+    }
     return this;
   }
 
@@ -98,11 +100,13 @@ public final class Replacer {
     for (int i = 0; i < this.variables.size(); i++) {
       String found = this.variables.get(i);
       { // Auto insert brackets
-        if (!found.startsWith("{"))
+        if (!found.startsWith("{")) {
           found = "{" + found;
+        }
 
-        if (!found.endsWith("}"))
+        if (!found.endsWith("}")) {
           found = found + "}";
+        }
       }
       final Object rep = i <= this.replacements.size() ? this.replacements.get(i) : null;
 

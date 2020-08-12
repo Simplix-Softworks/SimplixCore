@@ -1,5 +1,6 @@
 package dev.simplix.core.config.localization;
 
+import dev.simplix.core.common.Replacer;
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -7,7 +8,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NonNull;
 import lombok.experimental.Accessors;
-import dev.simplix.core.common.Replacer;
 
 @Data
 @Builder
@@ -22,8 +22,9 @@ public class Localizable {
 
   public List<String> variables() {
     // Implicit null check
-    if (!(rawValue instanceof Replacer))
+    if (!(rawValue instanceof Replacer)) {
       return new ArrayList<>();
+    }
 
     final Replacer replacer = (Replacer) rawValue;
 
@@ -35,20 +36,25 @@ public class Localizable {
 
   @SuppressWarnings("unchecked")
   public List<String> value() {
-    if (rawValue == null)
+    if (rawValue == null) {
       return new ArrayList<>();
+    }
 
-    if (rawValue instanceof String)
+    if (rawValue instanceof String) {
       return Collections.singletonList((String) rawValue);
+    }
 
-    if (rawValue instanceof Collection<?>)
+    if (rawValue instanceof Collection<?>) {
       return new ArrayList<>((Collection<String>) rawValue);
+    }
 
-    if (rawValue instanceof String[])
+    if (rawValue instanceof String[]) {
       return Arrays.asList(((String[]) rawValue));
+    }
 
-    if (rawValue instanceof Replacer)
+    if (rawValue instanceof Replacer) {
       return Arrays.asList(((Replacer) rawValue).replacedMessage());
+    }
 
     return new ArrayList<>();
   }

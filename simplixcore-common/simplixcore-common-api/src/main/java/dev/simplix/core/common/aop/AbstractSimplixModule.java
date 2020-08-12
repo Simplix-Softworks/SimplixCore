@@ -18,10 +18,11 @@ public abstract class AbstractSimplixModule implements Module {
   public void configure(Binder binder) {
     components.keySet().forEach(compDef -> {
       Class clazz = components.get(compDef);
-      if (!compDef.parent().equals(Object.class))
+      if (!compDef.parent().equals(Object.class)) {
         binder.bind(compDef.parent()).to(clazz).in(Scopes.SINGLETON);
-      else
+      } else {
         binder.bind(clazz).in(Scopes.SINGLETON);
+      }
     });
   }
 
@@ -29,17 +30,19 @@ public abstract class AbstractSimplixModule implements Module {
     components.keySet().forEach(compDef -> {
       Class<?> clazz = components.get(compDef);
       ComponentInterceptor componentInterceptor = findAssignable(clazz);
-      if (componentInterceptor != null)
-        if (compDef.parent().equals(Object.class))
+      if (componentInterceptor != null) {
+        if (compDef.parent().equals(Object.class)) {
           componentInterceptor.intercept(injector.getInstance(clazz));
-        else
+        } else {
           componentInterceptor.intercept(injector.getInstance(compDef.parent()));
+        }
+      }
     });
   }
 
   private ComponentInterceptor findAssignable(Class<?> clazz) {
-    for(Class<?> c : interceptorMap.keySet()) {
-      if(c.isAssignableFrom(clazz)) {
+    for (Class<?> c : interceptorMap.keySet()) {
+      if (c.isAssignableFrom(clazz)) {
         return interceptorMap.get(c);
       }
     }

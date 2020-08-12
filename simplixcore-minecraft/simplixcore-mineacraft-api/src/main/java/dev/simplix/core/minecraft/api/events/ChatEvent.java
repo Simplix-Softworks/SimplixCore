@@ -1,10 +1,10 @@
 package dev.simplix.core.minecraft.api.events;
 
+import dev.simplix.core.common.event.AbstractEvent;
 import java.net.InetAddress;
 import java.util.UUID;
 import lombok.*;
 import lombok.experimental.Accessors;
-import dev.simplix.core.common.event.AbstractEvent;
 
 @Getter
 @Setter

@@ -7,24 +7,28 @@ public interface LocalizationManager {
 
   /**
    * The string used when some string isn't localized in any language.
+   *
    * @param string The fallback string
    */
   void fallbackString(String string);
 
   /**
    * The string used when some string isn't localized in any language.
+   *
    * @return The fallback string
    */
   String fallbackString();
 
   /**
    * The locale used when some string isn't localized in a specific language.
+   *
    * @param locale The locale
    */
   void fallbackLocale(Locale locale);
 
   /**
    * The locale used when some string isn't localized in a specific language.
+   *
    * @return The locale
    */
   Locale fallbackLocale();
@@ -48,6 +52,7 @@ public interface LocalizationManager {
 
   /**
    * Returns all supported locales
+   *
    * @return Supported locales
    */
   Set<Locale> locales();

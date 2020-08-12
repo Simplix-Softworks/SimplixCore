@@ -1,6 +1,9 @@
 package dev.simplix.core.database.sql;
 
 import dev.simplix.core.database.sql.function.*;
+import dev.simplix.core.database.sql.handler.ConnectionHandler;
+import dev.simplix.core.database.sql.handlers.HikariConnectionHandler;
+import dev.simplix.core.database.sql.model.FieldInformation;
 import dev.simplix.core.database.sql.model.TableInformation;
 import java.io.Closeable;
 import java.sql.*;
@@ -14,10 +17,6 @@ import lombok.NonNull;
 import lombok.Setter;
 import lombok.ToString;
 import org.jetbrains.annotations.Nullable;
-import dev.simplix.core.database.sql.function.*;
-import dev.simplix.core.database.sql.handler.ConnectionHandler;
-import dev.simplix.core.database.sql.handlers.HikariConnectionHandler;
-import dev.simplix.core.database.sql.model.FieldInformation;
 
 @ToString(of = "connectionHandler")
 @Getter
@@ -111,10 +110,11 @@ public final class SqlDatabaseConnection {
       ResultSetTransformer<Integer> selectTransformer,
       ResultSetTransformer<Integer> insertTransformer) {
     return rawResultSet(selectStatement, selectFiller, (ps, rs) -> {
-      if (rs.next())
+      if (rs.next()) {
         return selectTransformer.transform(rs);
-      else
+      } else {
         return keyInsert(insertStatement, insertFiller, insertTransformer);
+      }
     });
   }
 
@@ -129,8 +129,9 @@ public final class SqlDatabaseConnection {
         PreparedStatement::execute,
         (ps, ig) -> {
           ResultSet rs = ps.getGeneratedKeys();
-          if (rs.next())
+          if (rs.next()) {
             return transformer.transform(rs);
+          }
           throw new RuntimeException("Could not get keys!");
         },
         true);
@@ -145,8 +146,9 @@ public final class SqlDatabaseConnection {
         (ps, ig) -> {
           ResultSet rs = ps.getGeneratedKeys();
           List<Integer> ints = new ArrayList<>();
-          while (rs.next())
+          while (rs.next()) {
             ints.add(rs.getInt(1));
+          }
           return ints;
         },
         true);
@@ -176,8 +178,9 @@ public final class SqlDatabaseConnection {
 
   public boolean prepare(String statement, PreparedStatementFiller filler) {
     Object o = rawExecutor(statement, filler, PreparedStatement::execute, (ps, rs) -> rs);
-    if (o != null)
+    if (o != null) {
       return (boolean) o;
+    }
     return false;
   }
 
@@ -200,8 +203,9 @@ public final class SqlDatabaseConnection {
     connectionHandler.preConnect();
     Connection connection = connectionHandler.connection();
     QUERIES.add(statement);
-    if (statementDebugger != null)
+    if (statementDebugger != null) {
       statementDebugger.accept(statement);
+    }
     try (PreparedStatement preparedStatement = supplier.get(connection)) {
       filler.fill(preparedStatement);
       k = executor.execute(preparedStatement);
@@ -211,11 +215,13 @@ public final class SqlDatabaseConnection {
       if (retry) {
         updateConnection();
         return rawExecutor0(statement, supplier, filler, executor, consumer, false);
-      } else
+      } else {
         e.printStackTrace();
+      }
     } finally {
-      if (k instanceof Closeable)
+      if (k instanceof Closeable) {
         close((Closeable) k);
+      }
       connectionHandler.finishConnection(connection);
     }
     return null;
@@ -248,10 +254,11 @@ public final class SqlDatabaseConnection {
       PreparedStatementFiller filler,
       ResultSetTransformer<T> transFormer) {
     return rawResultSet(statement, filler, (ps, rs) -> {
-      if (rs.next())
+      if (rs.next()) {
         return transFormer.transform(rs);
-      else
+      } else {
         return null;
+      }
     });
   }
 
@@ -261,8 +268,9 @@ public final class SqlDatabaseConnection {
       PreparedStatementFiller filler,
       ResultSetConsumer consumer) {
     rawResultSet(statement, filler, (preparedStatement, resultSet) -> {
-      if (resultSet.next())
+      if (resultSet.next()) {
         consumer.consume(resultSet);
+      }
       return null;
     });
   }
@@ -272,8 +280,9 @@ public final class SqlDatabaseConnection {
       PreparedStatementFiller filler,
       ResultSetConsumer consumer) {
     rawResultSet(statement, filler, (preparedStatement, resultSet) -> {
-      if (resultSet.next())
+      if (resultSet.next()) {
         consumer.consume(resultSet);
+      }
       return null;
     });
   }
@@ -293,8 +302,9 @@ public final class SqlDatabaseConnection {
       PreparedStatementFiller filler,
       ResultSetConsumer consumer) {
     rawResultSet(statement, filler, (preparedStatement, resultSet) -> {
-      while (resultSet.next())
+      while (resultSet.next()) {
         consumer.consume(resultSet);
+      }
       return null;
     });
   }
@@ -340,8 +350,9 @@ public final class SqlDatabaseConnection {
 
   public static PreparedStatementFiller lazy(Object... filler) {
     return ps -> {
-      for (int i = 0; i < filler.length; i++)
+      for (int i = 0; i < filler.length; i++) {
         ps.setString(i + 1, filler[i].toString());
+      }
     };
   }
 
@@ -366,8 +377,9 @@ public final class SqlDatabaseConnection {
   }
 
   public static void close(@Nullable AutoCloseable closeable) {
-    if (closeable == null)
+    if (closeable == null) {
       return;
+    }
     try {
       closeable.close();
     } catch (Exception e) {

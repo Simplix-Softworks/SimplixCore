@@ -5,4 +5,5 @@ import dev.simplix.core.common.aop.InjectorModule;
 
 @InjectorModule("SimplixCore")
 public class ConfigSimplixModule extends AbstractSimplixModule {
+
 }
