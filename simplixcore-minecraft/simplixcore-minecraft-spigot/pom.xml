@@ -20,6 +20,7 @@
     <module>simplixcore-minecraft-spigot-implementation</module>
     <module>simplixcore-minecraft-spigot-tests</module>
     <module>simplixcore-minecraft-spigot-plugin</module>
+    <module>simplixcore-minecraft-spigot-quickstart</module>
   </modules>
 
   <repositories>

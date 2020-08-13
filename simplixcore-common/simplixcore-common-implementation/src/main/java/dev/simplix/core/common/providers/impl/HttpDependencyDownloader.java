@@ -1,5 +1,6 @@
 package dev.simplix.core.common.providers.impl;
 
+import com.google.common.io.ByteStreams;
 import dev.simplix.core.common.CommonSimplixModule;
 import dev.simplix.core.common.aop.Component;
 import dev.simplix.core.common.providers.DependencyDownloader;
@@ -12,7 +13,6 @@ import java.net.URL;
 import java.net.URLConnection;
 import javax.inject.Inject;
 import lombok.NonNull;
-import sun.misc.IOUtils;
 
 @Component(value = CommonSimplixModule.class, parent = DependencyDownloader.class)
 public final class HttpDependencyDownloader implements DependencyDownloader {
@@ -42,7 +42,7 @@ public final class HttpDependencyDownloader implements DependencyDownloader {
     }
     file.createNewFile();
     try (FileOutputStream fileOutputStream = new FileOutputStream(file)) {
-      fileOutputStream.write(IOUtils.readFully(httpURLConnection.getInputStream(), -1, true));
+      fileOutputStream.write(ByteStreams.toByteArray(httpURLConnection.getInputStream()));
       fileOutputStream.flush();
     }
   }

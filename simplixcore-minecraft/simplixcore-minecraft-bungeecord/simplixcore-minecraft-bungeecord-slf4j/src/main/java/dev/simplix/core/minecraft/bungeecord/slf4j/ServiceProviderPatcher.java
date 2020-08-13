@@ -1,5 +1,6 @@
 package dev.simplix.core.minecraft.bungeecord.slf4j;
 
+import com.google.common.io.ByteStreams;
 import io.netty.util.internal.PlatformDependent;
 import java.io.File;
 import java.io.IOException;
@@ -16,7 +17,6 @@ import java.util.Map;
 import java.util.Set;
 import net.md_5.bungee.api.ProxyServer;
 import org.slf4j.spi.SLF4JServiceProvider;
-import sun.misc.IOUtils;
 
 public final class ServiceProviderPatcher {
 
@@ -105,7 +105,7 @@ public final class ServiceProviderPatcher {
       Files.createDirectories(path.getParent());
       Files.write(
           path,
-          IOUtils.readFully(resourceStream, -1, true));
+          ByteStreams.toByteArray(resourceStream));
     }
   }
 
@@ -117,7 +117,7 @@ public final class ServiceProviderPatcher {
       return true;
     }
     try (InputStream inputStream = stream) {
-      String binding = new String(IOUtils.readFully(inputStream, -1, true), StandardCharsets.UTF_8);
+      String binding = new String(ByteStreams.toByteArray(inputStream), StandardCharsets.UTF_8);
       return !binding.equals(BungeeLoggerServiceProvider.class.getName());
     } catch (IOException e) {
       e.printStackTrace();
