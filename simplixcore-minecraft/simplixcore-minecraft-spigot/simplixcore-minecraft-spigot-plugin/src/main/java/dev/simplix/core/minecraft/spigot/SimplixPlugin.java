@@ -35,8 +35,8 @@ public final class SimplixPlugin extends JavaPlugin {
         } catch (InterruptedException e) {
         }
       }
+      SimplixInstaller.instance().install();
     });
-    SimplixInstaller.instance().install();
   }
 
   @Nullable
