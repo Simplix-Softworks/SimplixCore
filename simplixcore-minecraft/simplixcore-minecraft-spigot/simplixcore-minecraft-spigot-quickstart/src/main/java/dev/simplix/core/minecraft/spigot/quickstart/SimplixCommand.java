@@ -22,24 +22,25 @@ final class SimplixCommand extends Command {
 
   @Override
   public boolean execute(CommandSender commandSender, String commandLabel, String[] strings) {
-    if (commandSender.hasPermission("simplix.install")) {
-      if (strings.length == 0) {
-        commandSender.sendMessage("Use command \"simplix install\" to install SimplixCore.");
-      } else {
-        if (strings[0].equalsIgnoreCase("install")) {
-          commandSender.sendMessage("Going to install SimplixCore to your Spigot server!");
-          try {
-            download(new URL(this.downloadAddress), new File("./plugins/SimplixCore-Spigot.jar"));
-            commandSender.sendMessage("Installation done. Please restart your Spigot server.");
-          } catch (Exception exception) {
-            commandSender.sendMessage(
-                "§cError while downloading SimplixCore! Check console for details.");
-            exception.printStackTrace();
-          }
-        }
-      }
+    if (!commandSender.hasPermission("simplix.install")) {
       return false;
     }
+    if (strings.length == 0) {
+      commandSender.sendMessage("Use command \"simplix install\" to install SimplixCore.");
+    } else {
+      if (strings[0].equalsIgnoreCase("install")) {
+        commandSender.sendMessage("Going to install SimplixCore to your Spigot server!");
+        try {
+          download(new URL(this.downloadAddress), new File("./plugins/SimplixCore-Spigot.jar"));
+          commandSender.sendMessage("Installation done. Please restart your Spigot server.");
+        } catch (Exception exception) {
+          commandSender.sendMessage(
+              "§cException while downloading SimplixCore! Check console for details.");
+          exception.printStackTrace();
+        }
+      }
+    }
+    return false;
   }
 
   private void download(@NonNull URL url, @NonNull File file) throws IOException {
