@@ -201,6 +201,8 @@ public class SimplixInstaller {
                  + componentClass.getName());
       } catch (Throwable t) {
         if (t instanceof TypeNotPresentException) {
+          /* Suppress some dependency problems here since some endusers would go crazy when they see
+              exceptions like this in normal production... */
           log.debug("[Simplix | Bootstrap] "
                     + context.applicationInfo.name()
                     + ": Cannot register "

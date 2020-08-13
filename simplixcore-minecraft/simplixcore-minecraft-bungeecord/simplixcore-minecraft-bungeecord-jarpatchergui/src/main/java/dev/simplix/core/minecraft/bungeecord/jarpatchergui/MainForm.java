@@ -36,8 +36,15 @@ public class MainForm {
     this.patchButton.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
-        ServiceProviderPatcher.patchJarUnix(MainForm.this.file);
-        JOptionPane.showMessageDialog(frame, "The file has been patched succesfully.");
+        try {
+          ServiceProviderPatcher.patchJarUnix(MainForm.this.file);
+          JOptionPane.showMessageDialog(frame, "The file has been patched succesfully.");
+        } catch (Exception exception) {
+          JOptionPane.showMessageDialog(frame, "There was an error while patching the file.\n"
+                                               + "Please make sure the file isn't accessed by any other process.\n\n"
+                                               + exception.toString(),
+              "Error", JOptionPane.ERROR_MESSAGE);
+        }
       }
     });
   }
