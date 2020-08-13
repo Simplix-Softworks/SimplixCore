@@ -1,6 +1,10 @@
 package dev.simplix.core.minecraft.spigot.quickstart;
 
+import java.lang.reflect.Field;
+import lombok.NonNull;
 import org.bukkit.Bukkit;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandMap;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -8,7 +12,6 @@ import org.bukkit.plugin.java.JavaPlugin;
  * SimplixCore.
  *
  * <B>Please note that you have to add the command "simplix" in your plugin.yml</B>
- *
  */
 public final class SimplixQuickStart {
 
@@ -43,11 +46,24 @@ public final class SimplixQuickStart {
         + "] "
         + plugin.getDescription().getName()
         + " will now halt.");
-    plugin.getCommand("simplix").setExecutor(new SimplixCommandExecutor(SIMPLIX_DOWNLOAD_URL));
+
+    registerCommand(new SimplixCommand(SIMPLIX_DOWNLOAD_URL));
   }
 
   private static void log(String s) {
     Bukkit.getLogger().severe(s);
+  }
+
+  public static void registerCommand(@NonNull final Command command) {
+    try {
+      final Field commandMapField = Bukkit.getServer().getClass().getDeclaredField("commandMap");
+      commandMapField.setAccessible(true);
+
+      final CommandMap commandMap = (CommandMap) commandMapField.get(Bukkit.getServer());
+      commandMap.register(command.getLabel(), command);
+    } catch (final Throwable throwable) {
+      throwable.printStackTrace();
+    }
   }
 
 }

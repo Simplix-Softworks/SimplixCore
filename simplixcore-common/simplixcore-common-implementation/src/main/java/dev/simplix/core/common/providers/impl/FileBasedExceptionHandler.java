@@ -58,8 +58,8 @@ public final class FileBasedExceptionHandler implements ExceptionHandler {
             bw.append(System.lineSeparator() + line);
           }
 
-        } catch (final IOException e) {
-          e.printStackTrace();
+        } catch (final IOException ioException) {
+          ioException.printStackTrace();
         }
       }
 
@@ -129,7 +129,7 @@ public final class FileBasedExceptionHandler implements ExceptionHandler {
             break;
           }
 
-          lines.addAll(Arrays.asList("\t at " + el.toString()));
+          lines.addAll(Collections.singletonList("\t at " + el.toString()));
         }
       } while ((throwable = throwable.getCause()) != null);
     }

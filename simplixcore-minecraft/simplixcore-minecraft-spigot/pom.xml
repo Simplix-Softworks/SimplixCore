@@ -17,6 +17,7 @@
 
   <modules>
     <module>simplixcore-minecraft-spigot-dynamiclisteners</module>
+    <module>simplixcore-minecraft-spigot-dynamicsommands</module>
     <module>simplixcore-minecraft-spigot-implementation</module>
     <module>simplixcore-minecraft-spigot-tests</module>
     <module>simplixcore-minecraft-spigot-plugin</module>

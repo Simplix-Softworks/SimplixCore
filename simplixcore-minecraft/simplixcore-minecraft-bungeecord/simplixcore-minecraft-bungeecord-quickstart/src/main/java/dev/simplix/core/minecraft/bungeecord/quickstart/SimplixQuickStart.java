@@ -46,8 +46,8 @@ public final class SimplixQuickStart {
         .registerCommand(plugin, new SimplixCommand(SIMPLIX_DOWNLOAD_URL));
   }
 
-  private static void log(String s) {
-    ProxyServer.getInstance().getLogger().severe(s);
+  private static void log(String message) {
+    ProxyServer.getInstance().getLogger().severe(message);
   }
 
 }
