@@ -18,10 +18,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import lombok.NonNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -48,30 +45,15 @@ public final class FileBasedExceptionHandler implements ExceptionHandler {
     }
   }
 
-  private static void fill(List<String> list, String... messages) {
-    list.addAll(Arrays.asList(messages));
-  }
-
   private static void write(File file, Collection<String> lines) {
-    write(file, lines, StandardOpenOption.APPEND);
-  }
-
-  /**
-   * Write the given lines to file
-   *
-   * @param to
-   * @param lines
-   * @param options
-   */
-  private static void write(File to, Collection<String> lines, StandardOpenOption... options) {
     try {
-      final Path path = Paths.get(to.toURI());
+      final Path path = Paths.get(file.toURI());
 
       try {
-        Files.write(path, lines, StandardCharsets.UTF_8, options);
+        Files.write(path, lines, StandardCharsets.UTF_8, StandardOpenOption.APPEND);
 
       } catch (final ClosedByInterruptException ex) {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(to, true))) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(file, true))) {
           for (final String line : lines) {
             bw.append(System.lineSeparator() + line);
           }
@@ -81,10 +63,9 @@ public final class FileBasedExceptionHandler implements ExceptionHandler {
         }
       }
 
-    } catch (final Exception ex) {
-      System.out.println("Failed to write to " + to);
-
-      ex.printStackTrace(); // do not throw our exception since it would cause an infinite loop if there is a problem due to error writing
+    } catch (final Exception exception) {
+      System.out.println("Failed to write to " + file);
+      exception.printStackTrace();
     }
   }
 
@@ -110,33 +91,32 @@ public final class FileBasedExceptionHandler implements ExceptionHandler {
                           + "a(n)" + (throwable.getClass().getSimpleName());
 
     // Write out header and server info
-    fill(
-        lines,
+    lines.addAll(Arrays.asList(
         "------------------------------------[ "
         + TimeFormatUtil.calculateCurrentDateFormatted()
         + " ]-----------------------------------",
         header,
         "Running Java " + System.getProperty("java.version"),
         "Plugins: " + this.pluginManager.enabledPlugins(),
-        "----------------------------------------------------------------------------------------------");
+        "----------------------------------------------------------------------------------------------"));
 
     // Write additional data
     if (messages != null && String.join("", messages).isEmpty()) {
-      fill(lines, "\nMore Information: ");
-      fill(lines, messages);
+      lines.addAll(Collections.singletonList("\nMore Information: "));
+      lines.addAll(Arrays.asList(messages));
     }
 
     { // Write the stack trace
 
       do {
         // Write the error header
-        fill(
-            lines,
+        String[] messages1 = new String[]{
             throwable.getClass().getSimpleName() + " " +
             (
                 throwable.getMessage() == null
                     ? "(Unknown cause)"
-                    : throwable.getMessage()));
+                    : throwable.getMessage())};
+        lines.addAll(Arrays.asList(messages1));
 
         int count = 0;
 
@@ -149,15 +129,14 @@ public final class FileBasedExceptionHandler implements ExceptionHandler {
             break;
           }
 
-          fill(lines, "\t at " + el.toString());
+          lines.addAll(Arrays.asList("\t at " + el.toString()));
         }
       } while ((throwable = throwable.getCause()) != null);
     }
 
-    fill(
-        lines,
+    lines.addAll(Arrays.asList(
         "----------------------------------------------------------------------------------------------",
-        System.lineSeparator());
+        System.lineSeparator()));
 
     // Log to the console
     System.out.println(header
