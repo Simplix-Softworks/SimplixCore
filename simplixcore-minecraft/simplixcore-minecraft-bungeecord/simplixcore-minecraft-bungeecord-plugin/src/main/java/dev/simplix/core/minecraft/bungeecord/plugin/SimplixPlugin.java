@@ -47,8 +47,8 @@ public final class SimplixPlugin extends Plugin {
         } catch (InterruptedException e) {
         }
       }
+      SimplixInstaller.instance().install();
     });
-    SimplixInstaller.instance().install();
   }
 
   private String waitForRegistration() {
