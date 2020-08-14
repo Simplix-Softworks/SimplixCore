@@ -28,16 +28,17 @@ final class SimplixCommand extends Command {
     if (strings.length == 0) {
       commandSender.sendMessage("Use command \"simplix install\" to install SimplixCore.");
     } else {
-      if (strings[0].equalsIgnoreCase("install")) {
-        commandSender.sendMessage("Going to install SimplixCore to your Spigot server!");
-        try {
-          download(new URL(this.downloadAddress), new File("./plugins/SimplixCore-Spigot.jar"));
-          commandSender.sendMessage("Installation done. Please restart your Spigot server.");
-        } catch (Exception exception) {
-          commandSender.sendMessage(
-              "§cException while downloading SimplixCore! Check console for details.");
-          exception.printStackTrace();
-        }
+      if (!strings[0].equalsIgnoreCase("install")) {
+        return false;
+      }
+      commandSender.sendMessage("Going to install SimplixCore to your Spigot server!");
+      try {
+        download(new URL(this.downloadAddress), new File("./plugins/SimplixCore-Spigot.jar"));
+        commandSender.sendMessage("Installation done. Please restart your Spigot server.");
+      } catch (Exception exception) {
+        commandSender.sendMessage(
+            "§cException while downloading SimplixCore! Check console for details.");
+        exception.printStackTrace();
       }
     }
     return false;
