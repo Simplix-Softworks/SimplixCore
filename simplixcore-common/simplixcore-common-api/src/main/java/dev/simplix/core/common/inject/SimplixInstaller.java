@@ -38,6 +38,11 @@ public class SimplixInstaller {
                 .workingDirectory(new File(application.workingDirectory()))
                 .dependencies(application.dependencies())
                 .build(), modules));
+    if(bossInjector != null) {
+      // YOU ARE TOO LATE
+      log.info("[Simplix | Bootstrap] Late install "+application.name()+"...");
+      installApplication(this.toInstall.get(application.name()), new Stack<>());
+    }
   }
 
   public boolean registered(@NonNull String appName) {
