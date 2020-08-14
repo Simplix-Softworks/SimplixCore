@@ -11,7 +11,7 @@ import lombok.experimental.Accessors;
 @Builder
 @Data
 public final class ApplicationInfo {
-
+  
   private final String name;
   @Builder.Default()
   private final String version;
