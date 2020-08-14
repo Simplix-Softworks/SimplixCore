@@ -16,17 +16,19 @@
       <id>spigot-repo</id>
       <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots</url>
     </repository>
+    <repository>
+      <id>github-rjenkinsjr</id>
+      <url>https://raw.github.com/rjenkinsjr/maven2/repo</url>
+    </repository>
   </repositories>
 
   <dependencies>
-    <dependency>
-      <groupId>org.spigotmc</groupId>
-      <artifactId>spigot-api</artifactId>
-      <version>1.8.8-R0.1-SNAPSHOT</version>
-      <scope>provided</scope>
-    </dependency>
-
     <!-- Implementation of our API -->
+    <dependency>
+      <groupId>dev.simplix</groupId>
+      <artifactId>simplixcore-common-api</artifactId>
+      <version>1.0.0-SNAPSHOT</version>
+    </dependency>
     <dependency>
       <groupId>dev.simplix</groupId>
       <artifactId>simplixcore-common-implementation</artifactId>
@@ -68,23 +70,29 @@
       <version>1.0-SNAPSHOT</version>
     </dependency>
 
-    <!-- Simple logging facade for java -->
+    <!-- Simple logging face for java -->
+    <dependency>
+      <groupId>info.ronjenkins</groupId>
+      <artifactId>slf4bukkit</artifactId>
+      <version>1.0.0</version>
+    </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
-      <version>1.8.0-alpha2</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.logging.log4j</groupId>
-      <artifactId>log4j-slf4j18-impl</artifactId>
-      <version>2.13.3</version>
-      <scope>compile</scope>
+      <version>1.7.19</version>
     </dependency>
   </dependencies>
 
+
   <build>
     <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <finalName>SimplixCore-Spigot</finalName>
+        </configuration>
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
