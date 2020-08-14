@@ -3,7 +3,6 @@ package dev.simplix.core.minecraft.bungeecord.plugin;
 import dev.simplix.core.common.aop.ScanComponents;
 import dev.simplix.core.common.aop.SimplixApplication;
 import dev.simplix.core.common.inject.SimplixInstaller;
-import dev.simplix.core.minecraft.bungeecord.slf4j.ServiceProviderPatcher;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
 
@@ -12,18 +11,6 @@ import net.md_5.bungee.api.plugin.Plugin;
     "JavaFactoryDev"}, workingDirectory = "plugins/SimplixCore")
 @ScanComponents("dev.simplix.core")
 public final class SimplixPlugin extends Plugin {
-
-  @Override
-  public void onLoad() {
-    if (ServiceProviderPatcher.needsPatching()) {
-      ProxyServer.getInstance().getLogger().warning("SimplixCore needs BungeeCord jar patching or "
-                                                    + "some platform independent logging stuff from "
-                                                    + "simplix will not work. To enable full logging, "
-                                                    + "execute our slf4j-jarpatcher to patch your "
-                                                    + "BungeeCord.jar file. See https://simplixsoft.com/jarpatcher "
-                                                    + "for further information.");
-    }
-  }
 
   @Override
   public void onEnable() {

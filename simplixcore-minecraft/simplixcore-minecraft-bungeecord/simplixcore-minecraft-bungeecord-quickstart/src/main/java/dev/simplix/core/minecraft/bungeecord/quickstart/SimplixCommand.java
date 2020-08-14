@@ -1,7 +1,6 @@
 package dev.simplix.core.minecraft.bungeecord.quickstart;
 
 import com.google.common.io.ByteStreams;
-import dev.simplix.core.minecraft.bungeecord.slf4j.ServiceProviderPatcher;
 import io.netty.util.internal.PlatformDependent;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -59,7 +58,7 @@ final class SimplixCommand extends Command {
               .getCodeSource()
               .getLocation()
               .toURI());
-          ServiceProviderPatcher.patchJarUnix(bungeeJar);
+//          ServiceProviderPatcher.patchJarUnix(bungeeJar);
           commandSender.sendMessage("Patching done. Please restart your BungeeCord server!");
         } catch (Exception exception) {
           commandSender.sendMessage("There was an exception while patching your jar file. Please "

@@ -18,7 +18,6 @@
     <module>simplixcore-minecraft-bungeecord-tests</module>
     <module>simplixcore-minecraft-bungeecord-dynamiclisteners</module>
     <module>simplixcore-minecraft-bungeecord-dynamiccommands</module>
-    <module>simplixcore-minecraft-bungeecord-jarpatchergui</module>
     <module>simplixcore-minecraft-bungeecord-quickstart</module>
   </modules>
 

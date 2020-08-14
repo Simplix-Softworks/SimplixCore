@@ -1,21 +1,22 @@
 package dev.simplix.core.minecraft.bungeecord.slf4j;
 
-import java.lang.reflect.Constructor;
 import net.md_5.bungee.api.ProxyServer;
 import org.slf4j.ILoggerFactory;
 import org.slf4j.Logger;
-import org.slf4j.jul.JDK14LoggerAdapter;
+import org.slf4j.impl.JDK14LoggerAdapter;
+
+import java.lang.reflect.Constructor;
 
 public final class BungeeLoggerFactory implements ILoggerFactory {
 
   private final JDK14LoggerAdapter bungeeLoggerAdapter;
 
-  BungeeLoggerFactory() {
+  public BungeeLoggerFactory() {
     this.bungeeLoggerAdapter = createLoggerAdapter(ProxyServer.getInstance().getLogger());
     ProxyServer
         .getInstance()
         .getLogger()
-        .info("[Simplix] Slf4j logging configured for BungeeCord during early startup!");
+        .info("[Simplix] Slf4j logging configured for BungeeCord");
   }
 
   private JDK14LoggerAdapter createLoggerAdapter(java.util.logging.Logger logger) {
