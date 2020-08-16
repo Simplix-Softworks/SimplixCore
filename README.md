@@ -22,3 +22,4 @@ preferable to writing your own utilities. The final paragraph bears repeating:
 
 ### [Getting started](https://gitlab.julianstaudt.de/simplix-softworks/SimplixCore/-/wikis/home)
 
+### Downloading the latest build using Jenkins
