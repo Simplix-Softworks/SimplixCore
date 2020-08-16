@@ -2,11 +2,11 @@ SimplixCore
 
 
 SimplixCore is a framework for java development. It includes a 
-set of core Java libraries such as google-guava & LightningStorage.
+set of core Java libraries such as google-guava & LightningStorage.  It also contains a streamlined 
+Depenendency Injection framework using google guice,
+an easy to use localization, configuration, a database framework aswell as a set of utilities 
+and a dynamic library loader.
 It is widely used on most Java & Kotlin projects within SimplixSoftworks.
-
-SimplixCore has some coreutilities as well. It contains a streamlined Depenendency Injection framework using google guice,
-an easy to use localzation, configuration & database framework aswell as a set of utilities.
 
 ### I Could've Invented That
 Effective Java item 47, "Know and use the libraries," is ou
