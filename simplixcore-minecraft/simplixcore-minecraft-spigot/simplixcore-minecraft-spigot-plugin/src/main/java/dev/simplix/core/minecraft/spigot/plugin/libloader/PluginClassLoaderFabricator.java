@@ -101,28 +101,4 @@ public final class PluginClassLoaderFabricator implements Function<File, ClassLo
     }
   }
 
-  static class WrappedClassLoader extends ClassLoader {
-
-    WrappedClassLoader(ClassLoader classLoader) {
-      super(classLoader);
-    }
-
-    @Override
-    protected Class<?> findClass(String name) throws ClassNotFoundException {
-      if(name.equals("dev.simplix.core.minecraft.spigot.fake.FakeJavaPlugin")) {
-        throw new ClassNotFoundException(name);
-      }
-      return super.findClass(name);
-    }
-
-    @Override
-    public Class<?> loadClass(String name) throws ClassNotFoundException {
-      if(name.equals("dev.simplix.core.minecraft.spigot.fake.FakeJavaPlugin")) {
-        throw new ClassNotFoundException(name);
-      }
-      return super.loadClass(name);
-    }
-
-  }
-
 }
