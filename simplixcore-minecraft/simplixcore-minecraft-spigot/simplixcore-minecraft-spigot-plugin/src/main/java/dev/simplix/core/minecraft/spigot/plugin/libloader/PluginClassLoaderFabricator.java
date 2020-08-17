@@ -1,7 +1,6 @@
 package dev.simplix.core.minecraft.spigot.plugin.libloader;
 
 import com.google.common.io.ByteStreams;
-import dev.simplix.core.common.libloader.LibraryClassLoader;
 import dev.simplix.core.minecraft.spigot.plugin.SimplixPlugin;
 import java.io.File;
 import java.lang.reflect.Constructor;
@@ -45,13 +44,12 @@ public final class PluginClassLoaderFabricator implements Function<File, ClassLo
       constructor.setAccessible(true);
 
       SimplixPlugin plugin = JavaPlugin.getPlugin(SimplixPlugin.class);
+      PluginDescriptionFile pluginDescriptionFile = new PluginDescriptionFile(
+          SimplixPlugin.class.getResourceAsStream("/fakeplugin.yml"));
       Object loader = constructor.newInstance(
           plugin.getPluginLoader(),
           plugin.getClass().getClassLoader(),
-          new PluginDescriptionFile(
-              "Dummy",
-              "1.0",
-              "dev.simplix.core.minecraft.spigot.fake.FakeJavaPlugin"),
+          pluginDescriptionFile,
           plugin.getDataFolder(),
           file);
 
@@ -89,7 +87,7 @@ public final class PluginClassLoaderFabricator implements Function<File, ClassLo
     env.put("create", "true");
     try (FileSystem system = FileSystems.newFileSystem(uri, env)) {
       Path path = system.getPath("dev/simplix/core/minecraft/spigot/fake/FakeJavaPlugin.class");
-      if(Files.exists(path)) {
+      if (Files.exists(path)) {
         return;
       }
       Files.createDirectories(path.getParent());
