@@ -11,7 +11,7 @@ import lombok.experimental.Accessors;
 @Builder
 @Data
 public final class ApplicationInfo {
-  
+
   private final String name;
   @Builder.Default()
   private final String version;
@@ -19,7 +19,7 @@ public final class ApplicationInfo {
   @Builder.Default()
   private File workingDirectory = new File(".");
   @Builder.Default()
-  private final String[] dependencies = new String[0];
+  private String[] dependencies = new String[0];
 
   public ApplicationInfo(
       @NonNull String name,

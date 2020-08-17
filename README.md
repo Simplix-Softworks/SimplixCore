@@ -9,8 +9,7 @@ and a dynamic library loader.
 It is widely used on most Java & Kotlin projects within SimplixSoftworks.
 
 ### I Could've Invented That
-Effective Java item 47, "Know and use the libraries," is ou
-r favorite explanation of why using libraries is, by and large,
+Effective Java item 47, "Know and use the libraries," is our favorite explanation of why using libraries is, by and large,
 preferable to writing your own utilities. The final paragraph bears repeating:
 
 > To summarize, don’t reinvent the wheel. If you need to do something that seems like it should be reasonably common,

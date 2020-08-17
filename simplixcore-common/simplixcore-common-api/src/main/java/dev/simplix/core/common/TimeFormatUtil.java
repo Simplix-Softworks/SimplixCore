@@ -25,6 +25,10 @@ public class TimeFormatUtil {
     return DEFAULT_DATA_FORMAT.format(time);
   }
 
+  public String calculateDateFormatted(@NonNull DateFormat dateFormat, final long time) {
+    return dateFormat.format(time);
+  }
+
   public long parseToMilliseconds(@NonNull String humanReadable) {
     long ticks = 0L;
 
