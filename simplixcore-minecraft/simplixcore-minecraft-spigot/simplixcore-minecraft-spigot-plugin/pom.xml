@@ -20,6 +20,7 @@
       <id>github-rjenkinsjr</id>
       <url>https://raw.github.com/rjenkinsjr/maven2/repo</url>
     </repository>
+
   </repositories>
 
   <dependencies>
@@ -46,6 +47,13 @@
     <dependency>
       <groupId>dev.simplix</groupId>
       <artifactId>simplixcore-minecraft-spigot-dynamiclisteners</artifactId>
+      <version>1.0-SNAPSHOT</version>
+    </dependency>
+
+    <!-- Auto register our commands -->
+    <dependency>
+      <groupId>dev.simplix</groupId>
+      <artifactId>simplixcore-minecraft-spigot-dynamiccommands</artifactId>
       <version>1.0-SNAPSHOT</version>
     </dependency>
 

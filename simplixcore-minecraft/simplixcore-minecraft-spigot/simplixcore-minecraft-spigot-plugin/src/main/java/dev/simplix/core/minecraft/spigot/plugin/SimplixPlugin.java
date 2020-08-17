@@ -3,7 +3,10 @@ package dev.simplix.core.minecraft.spigot.plugin;
 import dev.simplix.core.common.aop.ScanComponents;
 import dev.simplix.core.common.aop.SimplixApplication;
 import dev.simplix.core.common.inject.SimplixInstaller;
+import dev.simplix.core.common.libloader.LibraryLoader;
 import dev.simplix.core.minecraft.spigot.dynamiclisteners.DynamicListenersSimplixModule;
+import java.io.File;
+import lombok.extern.slf4j.Slf4j;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -13,11 +16,22 @@ import org.jetbrains.annotations.Nullable;
     "Exceptionflug",
     "JavaFactoryDev"}, workingDirectory = "plugins/SimplixCore")
 @ScanComponents("dev.simplix.core")
+@Slf4j
 public final class SimplixPlugin extends JavaPlugin {
 
   @Override
+  public void onLoad() {
+    System.setProperty(
+        "dev.simplix.core.libloader.ClassLoaderFabricator",
+        "dev.simplix.core.minecraft.spigot.plugin.libloader.PluginClassLoaderFabricator");
+    new LibraryLoader().loadLibraries(new File("libraries"));
+  }
+
+  @Override
   public void onEnable() {
-    SimplixInstaller.instance().register(SimplixPlugin.class, new DynamicListenersSimplixModule(this));
+    SimplixInstaller
+        .instance()
+        .register(SimplixPlugin.class, new DynamicListenersSimplixModule(this));
 
     Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
       long started = System.currentTimeMillis();

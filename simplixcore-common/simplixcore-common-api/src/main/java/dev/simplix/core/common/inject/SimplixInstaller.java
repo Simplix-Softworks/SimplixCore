@@ -3,9 +3,9 @@ package dev.simplix.core.common.inject;
 import com.google.inject.*;
 import dev.simplix.core.common.ApplicationInfo;
 import dev.simplix.core.common.aop.*;
-import dev.simplix.core.common.libloader.LibraryLoader;
 import java.io.File;
 import java.util.*;
+import java.util.function.Supplier;
 import java.util.logging.Logger;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
@@ -19,7 +19,6 @@ public class SimplixInstaller {
   private static final SimplixInstaller INSTANCE = new SimplixInstaller();
   private final Map<Class<?>, Injector> injectorMap = new HashMap<>();
   private final Map<String, InstallationContext> toInstall = new HashMap<>();
-  private final LibraryLoader libraryLoader = new LibraryLoader();
   private Injector bossInjector;
 
   public void register(@NonNull Class<?> owner, @NonNull Module... modules) {
@@ -37,12 +36,31 @@ public class SimplixInstaller {
                 .authors(application.authors())
                 .workingDirectory(new File(application.workingDirectory()))
                 .dependencies(application.dependencies())
-                .build(), modules));
-    if(bossInjector != null) {
+                .build(), detectReferencedModules(owner, modules, application.name())));
+    if (bossInjector != null) {
       // YOU ARE TOO LATE
-      log.info("[Simplix | Bootstrap] Late install "+application.name()+"...");
+      log.info("[Simplix | Bootstrap] Late install " + application.name() + "...");
       installApplication(this.toInstall.get(application.name()), new Stack<>());
     }
+  }
+
+  private Module[] detectReferencedModules(Class<?> owner, Module[] modules, String appName) {
+    if (!owner.isAnnotationPresent(RequireModules.class)) {
+      return modules;
+    }
+    RequireModules requireModules = owner.getAnnotation(RequireModules.class);
+    Set<Module> out = new HashSet<>();
+    out.addAll(Arrays.asList(modules));
+    try {
+      Supplier<AbstractSimplixModule[]> supplier = requireModules.value().newInstance();
+      out.addAll(Arrays.asList(supplier.get()));
+    } catch (InstantiationException | IllegalAccessException e) {
+      log.error("[Simplix | Bootstrap] "
+                + appName
+                + ": Cannot construct module supplier. Please make sure the default constructor is accessible. "
+                + requireModules.value().getName(), e);
+    }
+    return out.toArray(new Module[0]);
   }
 
   public boolean registered(@NonNull String appName) {
@@ -68,8 +86,6 @@ public class SimplixInstaller {
       throw new IllegalStateException("Already installed");
     }
     this.bossInjector = Guice.createInjector();
-
-    this.libraryLoader.loadLibraries(new File("libraries"));
 
     for (String name : this.toInstall.keySet()) {
       InstallationContext context = this.toInstall.get(name);
@@ -132,14 +148,26 @@ public class SimplixInstaller {
     modules.addAll(Arrays.asList(context.modules));
     detectModules(modules, context);
     detectComponents(modules, context);
-    Injector injector = this.bossInjector.createChildInjector(modules);
-    this.injectorMap.put(context.owner, injector);
-    modules.forEach(module -> {
-      if (module instanceof AbstractSimplixModule) {
-        ((AbstractSimplixModule) module).intercept(injector);
-      }
-    });
-    processAlwaysConstruct(modules, context, injector);
+    try {
+      Injector injector = this.bossInjector.createChildInjector(modules);
+      this.injectorMap.put(context.owner, injector);
+      modules.forEach(module -> {
+        if (module instanceof AbstractSimplixModule) {
+          ((AbstractSimplixModule) module).intercept(injector);
+        }
+      });
+      processAlwaysConstruct(modules, context, injector);
+      log.info("[Simplix | Bootstrap] Installed application "
+               + context.applicationInfo.name()
+               + " "
+               + context.applicationInfo.version()
+               + " by "
+               + Arrays
+                   .toString(context.applicationInfo.authors()));
+    } catch (CreationException exception) {
+      log.error("[Simplix | Bootstrap] Cannot create injector for application "
+                + context.applicationInfo.name(), exception);
+    }
   }
 
   private void processAlwaysConstruct(
@@ -162,15 +190,20 @@ public class SimplixInstaller {
 
   private Module createModuleBridge(@NonNull InstallationContext context) {
     return binder -> {
+      Set<Key<?>> bound = new HashSet<>();
       for (String dependency : context.applicationInfo.dependencies()) {
         Injector injector = this.injectorMap.get(this.toInstall.get(dependency).owner);
-        Map<Key<?>, Binding<?>> bindings = injector.getAllBindings();
+        Map<Key<?>, Binding<?>> bindings = injector.getBindings();
         for (Key key : bindings.keySet()) {
           Class rawType = key.getTypeLiteral().getRawType();
           if (rawType.equals(ApplicationInfo.class) || rawType.equals(Stage.class)
               || rawType.equals(Logger.class) || rawType.equals(Injector.class)) {
             continue;
           }
+          if(bound.contains(key)) {
+            continue;
+          }
+          bound.add(key);
           Provider<?> provider = bindings.get(key).getProvider();
           binder.bind(key).toProvider(provider);
         }
