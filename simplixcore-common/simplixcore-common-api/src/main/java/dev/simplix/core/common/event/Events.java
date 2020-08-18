@@ -25,9 +25,6 @@ public class Events {
     return Collections.unmodifiableList(knownEvents);
   }
 
-  /**
-   * Called from Proxy/Spigot-ListenerImpl
-   */
   public <T extends Event> T call(@NonNull final T event) {
     for (final Listener listener : Listeners.registeredListeners()) {
       if (listener.type() != event.getClass()) {

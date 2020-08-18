@@ -61,9 +61,6 @@ public final class Replacer {
     return this;
   }
 
-  /**
-   * Attempts to replace key:value pairs automatically
-   */
   public final Replacer replaceAll(@NonNull final Object... associativeArray) {
     this.variables.clear();
     this.replacements.clear();

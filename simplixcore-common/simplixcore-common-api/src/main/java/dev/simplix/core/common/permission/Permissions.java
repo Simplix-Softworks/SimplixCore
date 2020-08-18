@@ -17,7 +17,7 @@ import lombok.val;
 /**
  * Manager class for your {@link Permission}
  * <p>
- * With this class you can store & registered permissions
+ * With this class you can store and registered permissions
  */
 @ContextAware
 @UtilityClass

@@ -11,7 +11,7 @@ import lombok.experimental.UtilityClass;
 public class Durations {
 
   /**
-   * Returns an empty punish-duration. Normally indicates that the String that should be parsed had
+   * @return Returns an empty punish-duration. Normally indicates that the String that should be parsed had
    * the wrong format.
    */
   public Duration empty() {
