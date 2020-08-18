@@ -8,6 +8,8 @@ an easy to use localization, configuration, a database framework aswell as a set
 and a dynamic library loader.
 It is widely used on most Java & Kotlin projects within SimplixSoftworks.
 
+For Spigot & BungeeCord the SimplixCore works as a plugin. You don't have to shade any parts of the SimplixCore (it's also very discouraged to do so on Spigot/BungeeCord!) By using the SimplixCore as a plugin you can also add extra libraries for the SimplixCore, that can be used for your own plugin aswell.
+
 ### I Could've Invented That
 Effective Java item 47, "Know and use the libraries," is our favorite explanation of why using libraries is, by and large,
 preferable to writing your own utilities. The final paragraph bears repeating:
