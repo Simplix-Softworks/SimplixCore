@@ -3,14 +3,25 @@ package dev.simplix.core.minecraft.bungeecord.plugin;
 import dev.simplix.core.common.aop.ScanComponents;
 import dev.simplix.core.common.aop.SimplixApplication;
 import dev.simplix.core.common.inject.SimplixInstaller;
+import dev.simplix.core.common.libloader.LibraryLoader;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
+
+import java.io.File;
 
 @SimplixApplication(name = "SimplixCore", version = "1.0", authors = {
     "Exceptionflug",
     "JavaFactoryDev"}, workingDirectory = "plugins/SimplixCore")
 @ScanComponents("dev.simplix.core")
 public final class SimplixPlugin extends Plugin {
+
+  @Override
+  public void onLoad() {
+    System.setProperty(
+            "dev.simplix.core.libloader.ClassLoaderFabricator",
+            "dev.simplix.core.minecraft.bungeecord.plugin.libloader.PluginClassLoaderFabricator");
+    new LibraryLoader().loadLibraries(new File("libraries"));
+  }
 
   @Override
   public void onEnable() {
