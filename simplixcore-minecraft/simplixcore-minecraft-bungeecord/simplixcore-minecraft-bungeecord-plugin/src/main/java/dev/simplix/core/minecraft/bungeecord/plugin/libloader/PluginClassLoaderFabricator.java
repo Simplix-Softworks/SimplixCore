@@ -26,7 +26,8 @@ public class PluginClassLoaderFabricator implements Function<File, ClassLoader> 
     @Override
     public ClassLoader apply(File file) {
         try {
-            Class<?> classLoaderClass = Class.forName("net.md_5.bungee.api.plugin.PluginClassLoader");
+            Class<?> classLoaderClass = Class.forName("net.md_5.bungee.api.plugin.PluginClassloader",
+                    false, ClassLoader.getSystemClassLoader());
             Constructor<?> constructor = classLoaderClass.getDeclaredConstructor(
                     ProxyServer.class,
                     PluginDescription.class,
@@ -47,7 +48,7 @@ public class PluginClassLoaderFabricator implements Function<File, ClassLoader> 
             Object loader = constructor.newInstance(
                     ProxyServer.getInstance(),
                     pluginDescription,
-                    new URL[] {file.toURI().toURL()});
+                    new URL[]{file.toURI().toURL()});
 
             Field loadersField = classLoaderClass.getDeclaredField("allLoaders");
             loadersField.setAccessible(true);
