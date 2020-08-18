@@ -19,17 +19,6 @@
   </parent>
   <version>1.0-SNAPSHOT</version>
 
-  <distributionManagement>
-    <repository>
-      <id>mineacademy-private-libraries</id>
-      <url>https://repo.mineacademy.org/repository/private-libraries/</url>
-    </repository>
-    <snapshotRepository>
-      <id>mineacademy-private-libraries</id>
-      <url>https://repo.mineacademy.org/repository/private-libraries/</url>
-    </snapshotRepository>
-  </distributionManagement>
-
   <dependencies>
     <dependency>
       <groupId>com.google.inject</groupId>
