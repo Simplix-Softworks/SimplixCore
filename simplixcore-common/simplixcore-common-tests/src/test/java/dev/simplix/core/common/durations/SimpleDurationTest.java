@@ -6,10 +6,10 @@ import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-class SimpleDurationTest {
+public class SimpleDurationTest {
 
   @Test
-  void moreThan() {
+  public void moreThan() {
     Assertions.assertTrue(
         Durations
             .of(11L, TimeUnit.MINUTES)
@@ -17,7 +17,7 @@ class SimpleDurationTest {
   }
 
   @Test
-  void lessThan() {
+  public void lessThan() {
     Assertions.assertTrue(
         Durations
             .of(10L, TimeUnit.MINUTES)
@@ -25,20 +25,20 @@ class SimpleDurationTest {
   }
 
   @Test
-  void isEmpty() {
+  public void isEmpty() {
     Assertions.assertTrue(Durations.empty().isEmpty());
     Assertions.assertTrue(Durations.of(Long.MIN_VALUE).isEmpty());
   }
 
   @Test
-  void isPermanent() {
+  public void isPermanent() {
     Assertions.assertTrue(Durations.permanent().isPermanent());
     Assertions.assertTrue(Durations.of(-1).isPermanent());
     Assertions.assertTrue(Durations.of(-1, TimeUnit.DAYS).isPermanent());
   }
 
   @Test
-  void testToString() {
+  public void testToString() {
     // Permanent-case
     Assertions.assertEquals("Permanent", Durations.permanent().toString());
     // Empty
@@ -49,7 +49,7 @@ class SimpleDurationTest {
   }
 
   @Test
-  void toMs() {
+  public void toMs() {
     final Duration testDuration = Durations.of(10L, TimeUnit.MILLISECONDS);
     Assertions.assertEquals(testDuration.toMs(), 10);
   }
