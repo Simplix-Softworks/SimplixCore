@@ -14,15 +14,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public abstract class AbstractSimplixModule implements Module {
 
-  private final Map<Component, Class<?>> components = new HashMap<>();
+  private final Map<Class, Component> components = new HashMap<>();
   private final Map<Class<?>, ComponentInterceptor> interceptorMap = new HashMap<>();
 
   @Override
   public void configure(Binder binder) {
-    components.keySet().forEach(compDef -> {
-      Class clazz = components.get(compDef);
-      if (!compDef.parent().equals(Object.class)) {
-        binder.bind(compDef.parent()).to(clazz).in(Scopes.SINGLETON);
+    this.components.keySet().forEach(clazz -> {
+      Component component = this.components.get(clazz);
+      if (!component.parent().equals(Object.class)) {
+        binder.bind(component.parent()).to(clazz).in(Scopes.SINGLETON);
       } else {
         binder.bind(clazz).in(Scopes.SINGLETON);
       }
@@ -30,35 +30,35 @@ public abstract class AbstractSimplixModule implements Module {
   }
 
   public void intercept(Injector injector) {
-    components.keySet().forEach(compDef -> {
-      Class<?> clazz = components.get(compDef);
+    this.components.keySet().forEach(clazz -> {
+      Component component = this.components.get(clazz);
       ComponentInterceptor componentInterceptor = findAssignable(clazz);
       if (componentInterceptor != null) {
-        if (compDef.parent().equals(Object.class)) {
+        if (component.parent().equals(Object.class)) {
           componentInterceptor.intercept(injector.getInstance(clazz));
         } else {
-          componentInterceptor.intercept(injector.getInstance(compDef.parent()));
+          componentInterceptor.intercept(injector.getInstance(component.parent()));
         }
       }
     });
   }
 
   private ComponentInterceptor findAssignable(Class<?> clazz) {
-    for (Class<?> c : interceptorMap.keySet()) {
+    for (Class<?> c : this.interceptorMap.keySet()) {
       if (c.isAssignableFrom(clazz)) {
-        return interceptorMap.get(c);
+        return this.interceptorMap.get(c);
       }
     }
     return null;
   }
 
-  public Map<Component, Class<?>> components() {
-    return components;
+  public Map<Class, Component> components() {
+    return this.components;
   }
 
   public <T> void registerComponentInterceptor(
       Class<T> clazz,
       ComponentInterceptor<T> interceptor) {
-    interceptorMap.put(clazz, interceptor);
+    this.interceptorMap.put(clazz, interceptor);
   }
 }

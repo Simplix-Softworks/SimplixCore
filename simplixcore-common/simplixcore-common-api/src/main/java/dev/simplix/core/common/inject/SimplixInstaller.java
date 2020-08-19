@@ -201,10 +201,10 @@ public class SimplixInstaller {
       if (inputStream == null) {
         return;
       }
-      Dependencies dependencies = gson.fromJson(new InputStreamReader(
+      Dependencies dependencies = this.gson.fromJson(new InputStreamReader(
           inputStream,
           StandardCharsets.UTF_8), Dependencies.class);
-      if (dependencyLoader == null) {
+      if (this.dependencyLoader == null) {
         initDependencyLoader();
       }
       List<Repository> repositories = Arrays.asList(dependencies.repositories());
@@ -214,7 +214,7 @@ public class SimplixInstaller {
                  + ": Load dependency "
                  + dependency
                  + " from repository...");
-        if (!dependencyLoader.load(dependency, repositories)) {
+        if (!this.dependencyLoader.load(dependency, repositories)) {
           log.error("[Simplix | Bootstrap] "
                     + context.applicationInfo.name() + ": Unable to load dependency " + dependency);
         }
@@ -239,7 +239,7 @@ public class SimplixInstaller {
           "dev.simplix.core.common.deploader.ArtifactDependencyLoader");
 
       Class<?> clazz = Class.forName(depLoaderClass);
-      dependencyLoader = (DependencyLoader) clazz.newInstance();
+      this.dependencyLoader = (DependencyLoader) clazz.newInstance();
     } catch (Exception exception) {
       throw new RuntimeException("Unable to initialize dependency loader", exception);
     }
@@ -336,7 +336,7 @@ public class SimplixInstaller {
                    + modules);
           continue;
         }
-        simplixModule.components().put(component, componentClass);
+        simplixModule.components().put(componentClass, component);
         log.info("[Simplix | Bootstrap] "
                  + context.applicationInfo.name()
                  + ": Detected "
