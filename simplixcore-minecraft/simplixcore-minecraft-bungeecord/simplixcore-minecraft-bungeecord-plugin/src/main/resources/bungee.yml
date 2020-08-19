@@ -1,4 +1,4 @@
-name: simplixcore
+name: SimplixCore
 main: dev.simplix.core.minecraft.bungeecord.plugin.SimplixPlugin
 version: 1.0.0-SNAPSHOT
 author: SimplixSoftworks
