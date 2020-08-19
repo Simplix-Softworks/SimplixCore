@@ -1,8 +1,7 @@
 package dev.simplix.core.common.permission;
 
 import de.leonhard.storage.util.FileUtils;
-import dev.simplix.core.common.ApplicationInfo;
-import dev.simplix.core.common.aop.ContextAware;
+
 import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -19,11 +18,10 @@ import lombok.val;
  * <p>
  * With this class you can store and registered permissions
  */
-@ContextAware
 @UtilityClass
 public class Permissions {
 
-  private ApplicationInfo APPLICATION_CONTEXT;
+  private static ApplicationInfo applicationInfo;
 
   private final List<Permission> registeredPermissions = new ArrayList<>();
 
@@ -56,14 +54,14 @@ public class Permissions {
 
   public void writeToFile() {
     final File dataFile = FileUtils.getAndMake(
-        APPLICATION_CONTEXT.name() + ".perms",
-        APPLICATION_CONTEXT.workingDirectory().getAbsolutePath());
+        applicationInfo.name() + ".perms",
+        applicationInfo.workingDirectory().getAbsolutePath());
 
     final List<String> out = new ArrayList<>(Arrays.asList(
         "# "
-        + APPLICATION_CONTEXT.name()
+        + applicationInfo.name()
         + " v."
-        + APPLICATION_CONTEXT.version(),
+        + applicationInfo.version(),
         "# This file lists all permissions we use.",
         "# You can also view them using our menu system.",
         "# ",

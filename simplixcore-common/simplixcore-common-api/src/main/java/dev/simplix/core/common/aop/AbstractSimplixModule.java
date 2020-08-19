@@ -8,6 +8,9 @@ import java.util.HashMap;
 import java.util.Map;
 import lombok.NoArgsConstructor;
 
+/**
+ * A {@link Module} which allows the registration of {@link ComponentInterceptor}s.
+ */
 @NoArgsConstructor
 public abstract class AbstractSimplixModule implements Module {
 
