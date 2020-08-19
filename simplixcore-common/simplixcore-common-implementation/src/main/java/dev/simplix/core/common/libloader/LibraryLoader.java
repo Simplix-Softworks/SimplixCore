@@ -23,41 +23,42 @@ public class LibraryLoader {
     }
 
     for (File file : directory.listFiles((dir, name) -> name.endsWith(".jar"))) {
-      try {
-        ClassLoader classLoader = createClassLoader(file);
-        if (classLoader == null) {
-          continue;
-        }
-        InputStream stream = classLoader.getResourceAsStream("library.json");
-        if (stream == null) {
-          log.warn("[Simplix | LibLoader] "
-                   + file.getName()
-                   + " does not contain a library.json file!");
-          continue;
-        }
-        try (
-            InputStreamReader inputStreamReader = new InputStreamReader(
-                stream,
-                StandardCharsets.UTF_8)) {
-          LibraryDescription libraryDescription = this.gson.fromJson(
-              inputStreamReader,
-              LibraryDescription.class);
-          try {
-            Class<?> mainClass = classLoader.loadClass(libraryDescription.mainClass());
-            if (mainClass.isAnnotationPresent(SimplixApplication.class)) {
-              SimplixInstaller.instance().register(mainClass);
-              log.info("[Simplix | LibLoader] "
-                       + libraryDescription.name()
-                       + " was registered as a SimplixApplication");
-            }
-            log.info("[Simplix | LibLoader] Loaded library " + file.getName());
-          } catch (ClassNotFoundException exception) {
-            throw new RuntimeException("Cannot find library main class", exception);
-          }
-        }
-      } catch (Exception ex) {
-        log.info("[Simplix | LibLoader] Unable to load library " + file.getName(), ex);
+      loadLibrary(file);
+    }
+  }
+
+  public void loadLibrary(File file) {
+    try {
+      ClassLoader classLoader = createClassLoader(file);
+      if (classLoader == null) {
+        return;
       }
+      log.info("[Simplix | LibLoader] Loaded library " + file.getName());
+      InputStream stream = classLoader.getResourceAsStream("library.json");
+      if (stream == null) {
+        return;
+      }
+      try (
+          InputStreamReader inputStreamReader = new InputStreamReader(
+              stream,
+              StandardCharsets.UTF_8)) {
+        LibraryDescription libraryDescription = this.gson.fromJson(
+            inputStreamReader,
+            LibraryDescription.class);
+        try {
+          Class<?> mainClass = classLoader.loadClass(libraryDescription.mainClass());
+          if (mainClass.isAnnotationPresent(SimplixApplication.class)) {
+            SimplixInstaller.instance().register(mainClass);
+            log.info("[Simplix | LibLoader] "
+                     + libraryDescription.name()
+                     + " was registered as a SimplixApplication");
+          }
+        } catch (ClassNotFoundException exception) {
+          throw new RuntimeException("Cannot find library main class", exception);
+        }
+      }
+    } catch (Exception ex) {
+      log.info("[Simplix | LibLoader] Unable to load library " + file.getName(), ex);
     }
   }
 

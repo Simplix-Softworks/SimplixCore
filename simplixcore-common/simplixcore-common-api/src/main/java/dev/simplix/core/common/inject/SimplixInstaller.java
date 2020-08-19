@@ -1,9 +1,20 @@
 package dev.simplix.core.common.inject;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonParseException;
 import com.google.inject.*;
 import dev.simplix.core.common.ApplicationInfo;
 import dev.simplix.core.common.aop.*;
+import dev.simplix.core.common.deploader.Dependencies;
+import dev.simplix.core.common.deploader.Dependency;
+import dev.simplix.core.common.deploader.DependencyLoader;
+import dev.simplix.core.common.deploader.Repository;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
@@ -24,7 +35,9 @@ public class SimplixInstaller {
   private static final SimplixInstaller INSTANCE = new SimplixInstaller();
   private final Map<Class<?>, Injector> injectorMap = new HashMap<>();
   private final Map<String, InstallationContext> toInstall = new HashMap<>();
+  private final Gson gson = new GsonBuilder().create();
   private Injector bossInjector;
+  private DependencyLoader dependencyLoader;
 
   /**
    * This will register a class annotated with {@link SimplixApplication}.
@@ -149,6 +162,7 @@ public class SimplixInstaller {
     if (this.injectorMap.containsKey(context.owner)) {
       return true; // Application already installed
     }
+    processRemoteDependencies(context);
     for (String dependency : context.applicationInfo.dependencies()) {
       InstallationContext depContext = this.toInstall.get(dependency);
       if (depContext == null) {
@@ -157,7 +171,6 @@ public class SimplixInstaller {
                  + " of application "
                  + context.applicationInfo.name()
                  + " not found.");
-        downloadDependency(dependency);
         return false;
       }
       if (infoStack.contains(depContext.applicationInfo)) {
@@ -181,8 +194,55 @@ public class SimplixInstaller {
     return true;
   }
 
-  private void downloadDependency(@NonNull String dependency) {
-    // TODO
+  private void processRemoteDependencies(InstallationContext context) {
+    InputStream inputStream = null;
+    try {
+      inputStream = context.owner.getResourceAsStream("/dependencies.json");
+      if (inputStream == null) {
+        return;
+      }
+      Dependencies dependencies = gson.fromJson(new InputStreamReader(
+          inputStream,
+          StandardCharsets.UTF_8), Dependencies.class);
+      if (dependencyLoader == null) {
+        initDependencyLoader();
+      }
+      List<Repository> repositories = Arrays.asList(dependencies.repositories());
+      for (Dependency dependency : dependencies.dependencies()) {
+        log.info("[Simplix | Bootstrap] "
+                 + context.applicationInfo.name()
+                 + ": Load dependency "
+                 + dependency
+                 + " from repository...");
+        if (!dependencyLoader.load(dependency, repositories)) {
+          log.error("[Simplix | Bootstrap] "
+                    + context.applicationInfo.name() + ": Unable to load dependency " + dependency);
+        }
+      }
+    } catch (JsonParseException exception) {
+      log.error("[Simplix | Bootstrap] "
+                + context.applicationInfo.name() + ": Cannot parse dependencies.json", exception);
+    } finally {
+      if (inputStream != null) {
+        try {
+          inputStream.close();
+        } catch (IOException stfu) {
+        }
+      }
+    }
+  }
+
+  private void initDependencyLoader() {
+    try {
+      String depLoaderClass = System.getProperty(
+          "dev.simplix.core.common.deploader.DependencyLoader",
+          "dev.simplix.core.common.deploader.ArtifactDependencyLoader");
+
+      Class<?> clazz = Class.forName(depLoaderClass);
+      dependencyLoader = (DependencyLoader) clazz.newInstance();
+    } catch (Exception exception) {
+      throw new RuntimeException("Unable to initialize dependency loader", exception);
+    }
   }
 
   private void createAppInjector(@NonNull InstallationContext context) {
