@@ -4,12 +4,12 @@ import java.io.File;
 import lombok.NonNull;
 
 /**
- * Used to localize strings using language files
+ * Used to create {@link LocalizationManager}s using language files
  */
 public interface LocalizationManagerFactory {
 
   /**
-   * Constrcuts a {@link LocalizationManager} based on a directory containing all translation
+   * Constructs a {@link LocalizationManager} based on a directory containing all translation
    * files.
    *
    * @param translationDirectory The directory where the language files are in
@@ -18,7 +18,7 @@ public interface LocalizationManagerFactory {
   LocalizationManager create(@NonNull File translationDirectory);
 
   /**
-   * Constrcuts a {@link LocalizationManager} based on a resource path containing all translation
+   * Constructs a {@link LocalizationManager} based on a resource path containing all translation
    * files.
    *
    * @param translationResourcesDirectory The resource path the language files are in

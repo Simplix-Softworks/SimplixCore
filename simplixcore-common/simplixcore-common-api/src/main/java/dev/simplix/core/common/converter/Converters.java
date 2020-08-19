@@ -5,11 +5,23 @@ import java.util.AbstractMap.SimpleEntry;
 import java.util.Map.Entry;
 import lombok.NonNull;
 
+/**
+ * Central registration class for {@link Converter}s.
+ */
 @SuppressWarnings("rawtypes")
 public final class Converters {
 
   private static final Map<Map.Entry<Class, Class>, Converter> CONVERTER_MAP = new HashMap<>();
 
+  private Converters(){}
+
+  /**
+   * Converts a source object to a given type.
+   * @param source The source object to convert
+   * @param to The target type class
+   * @param <T> The target type
+   * @return An object instance of the target type
+   */
   public static <T> T convert(@NonNull final Object source, @NonNull final Class<T> to) {
     Converter converter = getConverter(source.getClass(), to);
     if (converter == null) {
@@ -76,6 +88,12 @@ public final class Converters {
     return false;
   }
 
+  /**
+   * Registers a {@link Converter} for a given type conversion.
+   * @param sourceType The source type
+   * @param targetType The target type
+   * @param converter The convert instance
+   */
   public static void register(
       @NonNull final Class<?> sourceType,
       @NonNull final Class targetType,
@@ -83,6 +101,14 @@ public final class Converters {
     CONVERTER_MAP.put(new AbstractMap.SimpleEntry<>(sourceType, targetType), converter);
   }
 
+  /**
+   * Returns a registered converter
+   * @param sourceType The source type class
+   * @param targetType The target type class
+   * @param <S> The source type
+   * @param <T> The target type
+   * @return The converter instance or null if no such converter exists
+   */
   public static <S, T> Converter<S, T> getConverter(
       final Class<S> sourceType,
       final Class<T> targetType) {

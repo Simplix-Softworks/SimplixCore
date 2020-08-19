@@ -3,16 +3,23 @@ package dev.simplix.core.common.inject;
 import com.google.inject.*;
 import dev.simplix.core.common.ApplicationInfo;
 import dev.simplix.core.common.aop.*;
+
 import java.io.File;
 import java.util.*;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
+
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.Nullable;
 import org.reflections.Reflections;
 
+/**
+ * This class is used to install the Guice injectors for all registered {@link SimplixApplication}s. A {@link SimplixApplication}
+ * needs to be registered using {@link SimplixInstaller#register(Class, Module...)} in order to use dependency injection
+ * in your software project.
+ */
 @Slf4j
 public class SimplixInstaller {
 
@@ -21,6 +28,13 @@ public class SimplixInstaller {
   private final Map<String, InstallationContext> toInstall = new HashMap<>();
   private Injector bossInjector;
 
+  /**
+   * This will register a class annotated with {@link SimplixApplication}.
+   *
+   * @param owner   The main class of the application
+   * @param modules Pre-constructed modules which shall be available in the injection context
+   * @throws IllegalArgumentException when the owner class is not annotated with {@link SimplixApplication}
+   */
   public void register(@NonNull Class<?> owner, @NonNull Module... modules) {
     if (!owner.isAnnotationPresent(SimplixApplication.class)) {
       throw new IllegalArgumentException("Owner class must be annotated with @SimplixApplication");
@@ -28,15 +42,15 @@ public class SimplixInstaller {
     SimplixApplication application = owner.getAnnotation(SimplixApplication.class);
     Set<String> basePackages = determineBasePackages(owner);
     this.toInstall.put(
-        application.name(),
-        new InstallationContext(owner, new Reflections(basePackages, owner.getClassLoader()),
-            ApplicationInfo.builder()
-                .name(application.name())
-                .version(application.version())
-                .authors(application.authors())
-                .workingDirectory(new File(application.workingDirectory()))
-                .dependencies(application.dependencies())
-                .build(), detectReferencedModules(owner, modules, application.name())));
+            application.name(),
+            new InstallationContext(owner, new Reflections(basePackages, owner.getClassLoader()),
+                    ApplicationInfo.builder()
+                            .name(application.name())
+                            .version(application.version())
+                            .authors(application.authors())
+                            .workingDirectory(new File(application.workingDirectory()))
+                            .dependencies(application.dependencies())
+                            .build(), detectReferencedModules(owner, modules, application.name())));
     if (bossInjector != null) {
       // YOU ARE TOO LATE
       log.info("[Simplix | Bootstrap] Late install " + application.name() + "...");
@@ -56,17 +70,29 @@ public class SimplixInstaller {
       out.addAll(Arrays.asList(supplier.get()));
     } catch (InstantiationException | IllegalAccessException e) {
       log.error("[Simplix | Bootstrap] "
-                + appName
-                + ": Cannot construct module supplier. Please make sure the default constructor is accessible. "
-                + requireModules.value().getName(), e);
+              + appName
+              + ": Cannot construct module supplier. Please make sure the default constructor is accessible. "
+              + requireModules.value().getName(), e);
     }
     return out.toArray(new Module[0]);
   }
 
+  /**
+   * Checks if a specified application by its name is registered for installation.
+   *
+   * @param appName The application name
+   * @return true if there is an application registered with that name
+   */
   public boolean registered(@NonNull String appName) {
     return this.toInstall.containsKey(appName);
   }
 
+  /**
+   * Returns the application injector of an application by its main class
+   *
+   * @param owner The main class of the application
+   * @return The injector of that application
+   */
   public Injector injector(@NonNull Class<?> owner) {
     return this.injectorMap.get(owner);
   }
@@ -81,6 +107,27 @@ public class SimplixInstaller {
     return basePackages;
   }
 
+  /**
+   * This starts installation of all registered applications. This will do:
+   * <ul>
+   *     <li>Create a boss {@link Injector}</li>
+   *     <li>Install all applications in correct order:</li>
+   *     <ul>
+   *         <li>Bind the {@link ApplicationInfo} to a new anonymous {@link Module}</li>
+   *         <li>Create an anonymous {@link Module} which links bindings from dependent modules to the future app injector</li>
+   *         <li>Scanning for {@link Module}s in all defined base packages</li>
+   *         <li>Scanning for {@link Component}s in all defined base packages</li>
+   *         <li>Create the actual application child {@link Injector}</li>
+   *         <li>Processing {@link ComponentInterceptor}s for all previously detected components</li>
+   *         <li>Process {@link AlwaysConstruct} for detected components</li>
+   *     </ul>
+   * </ul>
+   * It is still possible to register new applications after installation, however multiple depending applications
+   * need to be registered in correct order since every registered application will be installed right away and will not
+   * wait for any registration of dependencies.
+   *
+   * @throws IllegalStateException If installation was already done
+   */
   public void install() {
     if (this.bossInjector != null) {
       throw new IllegalStateException("Already installed");
@@ -94,14 +141,14 @@ public class SimplixInstaller {
       }
       if (!installApplication(context, new Stack<>())) {
         log.warn("[Simplix | Bootstrap] Failed to load application "
-                 + context.applicationInfo.name());
+                + context.applicationInfo.name());
       }
     }
   }
 
   private boolean installApplication(
-      @NonNull InstallationContext context,
-      @NonNull Stack<ApplicationInfo> infoStack) {
+          @NonNull InstallationContext context,
+          @NonNull Stack<ApplicationInfo> infoStack) {
     if (this.injectorMap.containsKey(context.owner)) {
       return true; // Application already installed
     }
@@ -109,10 +156,10 @@ public class SimplixInstaller {
       InstallationContext depContext = this.toInstall.get(dependency);
       if (depContext == null) {
         log.warn("[Simplix | Bootstrap] Dependency "
-                 + dependency
-                 + " of application "
-                 + context.applicationInfo.name()
-                 + " not found.");
+                + dependency
+                + " of application "
+                + context.applicationInfo.name()
+                + " not found.");
         downloadDependency(dependency);
         return false;
       }
@@ -158,27 +205,27 @@ public class SimplixInstaller {
       });
       processAlwaysConstruct(modules, context, injector);
       log.info("[Simplix | Bootstrap] Installed application "
-               + context.applicationInfo.name()
-               + " "
-               + context.applicationInfo.version()
-               + " by "
-               + Arrays
-                   .toString(context.applicationInfo.authors()));
+              + context.applicationInfo.name()
+              + " "
+              + context.applicationInfo.version()
+              + " by "
+              + Arrays
+              .toString(context.applicationInfo.authors()));
     } catch (CreationException exception) {
       log.error("[Simplix | Bootstrap] Cannot create injector for application "
-                + context.applicationInfo.name(), exception);
+              + context.applicationInfo.name(), exception);
     }
   }
 
   private void processAlwaysConstruct(
-      @NonNull Set<Module> modules,
-      @NonNull InstallationContext context,
-      @NonNull Injector injector) {
+          @NonNull Set<Module> modules,
+          @NonNull InstallationContext context,
+          @NonNull Injector injector) {
     for (Class<?> componentClass : context.reflections.getTypesAnnotatedWith(AlwaysConstruct.class)) {
       if (!componentClass.isAnnotationPresent(Component.class)) {
         log.warn(
-            "[Simplix | Bootstrap] @AlwaysConstruct can only be used in combination with @Component: "
-            + componentClass.getName());
+                "[Simplix | Bootstrap] @AlwaysConstruct can only be used in combination with @Component: "
+                        + componentClass.getName());
         return;
       }
       Component component = componentClass.getAnnotation(Component.class);
@@ -197,10 +244,10 @@ public class SimplixInstaller {
         for (Key key : bindings.keySet()) {
           Class rawType = key.getTypeLiteral().getRawType();
           if (rawType.equals(ApplicationInfo.class) || rawType.equals(Stage.class)
-              || rawType.equals(Logger.class) || rawType.equals(Injector.class)) {
+                  || rawType.equals(Logger.class) || rawType.equals(Injector.class)) {
             continue;
           }
-          if(bound.contains(key)) {
+          if (bound.contains(key)) {
             continue;
           }
           bound.add(key);
@@ -212,53 +259,53 @@ public class SimplixInstaller {
   }
 
   private void detectComponents(
-      @NonNull Set<Module> modules,
-      @NonNull InstallationContext context) {
+          @NonNull Set<Module> modules,
+          @NonNull InstallationContext context) {
     for (Class<?> componentClass : context.reflections.getTypesAnnotatedWith(Component.class)) {
       try {
         Component component = componentClass.getAnnotation(Component.class);
         AbstractSimplixModule simplixModule = findAbstractSimplixModule(modules, component.value());
         if (simplixModule == null) {
           log.warn("[Simplix | Bootstrap] "
-                   + context.applicationInfo.name()
-                   + ": Component "
-                   + componentClass.getName()
-                   + " referenced module "
-                   + component.value().getName()
-                   + " which is not available in this context.");
+                  + context.applicationInfo.name()
+                  + ": Component "
+                  + componentClass.getName()
+                  + " referenced module "
+                  + component.value().getName()
+                  + " which is not available in this context.");
           log.warn("[Simplix | Bootstrap] "
-                   + context.applicationInfo.name()
-                   + ": Available modules in this context: "
-                   + modules);
+                  + context.applicationInfo.name()
+                  + ": Available modules in this context: "
+                  + modules);
           continue;
         }
         simplixModule.components().put(component, componentClass);
         log.info("[Simplix | Bootstrap] "
-                 + context.applicationInfo.name()
-                 + ": Detected "
-                 + componentClass.getName());
+                + context.applicationInfo.name()
+                + ": Detected "
+                + componentClass.getName());
       } catch (Throwable t) {
         if (t instanceof TypeNotPresentException) {
           /* Suppress some dependency problems here since some endusers would go crazy when they see
               exceptions like this in normal production... */
           log.debug("[Simplix | Bootstrap] "
-                    + context.applicationInfo.name()
-                    + ": Cannot register "
-                    + componentClass.getName(), t);
+                  + context.applicationInfo.name()
+                  + ": Cannot register "
+                  + componentClass.getName(), t);
           continue;
         }
         log.warn("[Simplix | Bootstrap] "
-                 + context.applicationInfo.name()
-                 + ": Cannot register "
-                 + componentClass.getName(), t);
+                + context.applicationInfo.name()
+                + ": Cannot register "
+                + componentClass.getName(), t);
       }
     }
   }
 
   @Nullable
   private AbstractSimplixModule findAbstractSimplixModule(
-      @NonNull Set<Module> modules,
-      @NonNull Class<? extends AbstractSimplixModule> clazz) {
+          @NonNull Set<Module> modules,
+          @NonNull Class<? extends AbstractSimplixModule> clazz) {
     for (Module module : modules) {
       if (module.getClass().getName().equals(clazz.getName())) {
         return (AbstractSimplixModule) module;
@@ -277,14 +324,14 @@ public class SimplixInstaller {
         Object instance = moduleClass.newInstance();
         modules.add((Module) instance);
         log.info("[Simplix | Bootstrap] "
-                 + ctx.applicationInfo.name()
-                 + ": Registered module "
-                 + moduleClass.getSimpleName());
+                + ctx.applicationInfo.name()
+                + ": Registered module "
+                + moduleClass.getSimpleName());
       } catch (Throwable throwable) {
         log.warn("[Simplix | Bootstrap] Unable to create module "
-                 + moduleClass.getName()
-                 + " for application "
-                 + ctx.applicationInfo.name(), throwable);
+                + moduleClass.getName()
+                + " for application "
+                + ctx.applicationInfo.name(), throwable);
       }
     }
   }
