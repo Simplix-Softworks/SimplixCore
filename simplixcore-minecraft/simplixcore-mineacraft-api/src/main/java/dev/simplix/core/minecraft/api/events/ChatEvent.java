@@ -18,9 +18,9 @@ public final class ChatEvent extends AbstractEvent {
   private String message;
 
   public static ChatEvent create(
-      final UUID targetUUID,
-      final InetAddress targetAddress,
-      final String message) {
+      @NonNull final UUID targetUUID,
+      @NonNull final InetAddress targetAddress,
+      @NonNull final String message) {
     return new ChatEvent(targetUUID, targetAddress, message);
   }
 }

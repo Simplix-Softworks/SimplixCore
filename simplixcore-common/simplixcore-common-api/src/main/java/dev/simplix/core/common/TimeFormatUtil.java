@@ -29,6 +29,12 @@ public class TimeFormatUtil {
     return dateFormat.format(time);
   }
 
+  /**
+   * Method to parse an String like "10 days 20 hours" to an duration in milliseconds
+   *
+   * @return Returns the duration in milliseconds or {@link Long#MIN_VALUE} if the #humanReadable
+   * had an unparsable format
+   */
   public long parseToMilliseconds(@NonNull String humanReadable) {
     long ticks = 0L;
 

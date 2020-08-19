@@ -10,7 +10,8 @@ import lombok.experimental.Accessors;
 import lombok.val;
 
 /**
- * This is a utility class for handy message replacements. Placeholders begin with { and are anding with }
+ * This is a utility class for handy message replacements. Placeholders begin with { and are ending
+ * with }
  * <br>
  * <b>Example:</b>
  * <br> {viewer}
@@ -85,6 +86,9 @@ public final class Replacer {
     return this;
   }
 
+  /**
+   * Method to replace the registered Replacers.
+   */
   public String[] replacedMessage() {
     Valid.checkBoolean(
         this.replacements.size() == this.variables.size(),
@@ -116,6 +120,10 @@ public final class Replacer {
     return message.split(DELIMITER);
   }
 
+  /**
+   * Same as {@link #replacedMessage()} but joined using {@link String#join(CharSequence,
+   * CharSequence...)} and the {@link #DELIMITER}
+   */
   public String replacedMessageJoined() {
     return String.join(DELIMITER, replacedMessage());
   }

@@ -1,7 +1,6 @@
 package dev.simplix.core.config.injector;
 
 import de.leonhard.storage.util.Valid;
-import dev.simplix.core.common.Replacer;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -20,16 +19,6 @@ public abstract class AbstractInjector<C extends Annotation, F extends Annotatio
 
   protected final Class<C> classAnnotationClass;
   protected final Class<F> fieldAnnotationClass;
-
-  private static void debugRep(@NonNull final Object replacer) {
-    if (!(replacer instanceof Replacer)) {
-      return;
-    }
-    final Replacer rep = (Replacer) replacer;
-    for (final String s : rep.replacedMessage()) {
-      System.out.println(s);
-    }
-  }
 
   @Override
   public final void startInjecting(@NonNull final List<Class<?>> classes) {
