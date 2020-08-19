@@ -10,7 +10,10 @@ import lombok.experimental.Accessors;
 import lombok.val;
 
 /**
- * Platform independent version of the Replacer
+ * This is a utility class for handy message replacements. Placeholders begin with { and are anding with }
+ * <br>
+ * <b>Example:</b>
+ * <br> {viewer}
  */
 @Getter
 @Accessors(fluent = true)
