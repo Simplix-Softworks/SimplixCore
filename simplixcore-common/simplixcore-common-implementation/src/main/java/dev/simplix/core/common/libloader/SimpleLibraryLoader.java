@@ -32,6 +32,9 @@ public class SimpleLibraryLoader implements LibraryLoader {
 
   public void loadLibrary(File file) {
     try {
+      if(files.contains(file)) {
+        return;
+      }
       ClassLoader classLoader = createClassLoader(file);
       if (classLoader == null) {
         return;
