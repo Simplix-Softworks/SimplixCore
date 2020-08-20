@@ -6,6 +6,10 @@ import java.util.UUID;
 import lombok.*;
 import lombok.experimental.Accessors;
 
+/**
+ * Represents an event when a player is chatting. On Bukkit it will always be triggered
+ * asynchronously.
+ */
 @Getter
 @Setter
 @Accessors(fluent = true)
