@@ -24,7 +24,7 @@ public final class SimplixPlugin extends JavaPlugin {
     System.setProperty(
         "dev.simplix.core.libloader.ClassLoaderFabricator",
         "dev.simplix.core.minecraft.spigot.plugin.libloader.PluginClassLoaderFabricator");
-    new LibraryLoader().loadLibraries(new File("libraries"));
+    SimplixInstaller.instance().libraryLoader().loadLibraries(new File("libraries"));
   }
 
   @Override
