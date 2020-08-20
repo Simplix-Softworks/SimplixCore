@@ -15,6 +15,7 @@ preferable to writing your own utilities. The final paragraph bears repeating:
 >on your abilities as a programmer. Economies of scale dictate that library code receives far 
 > more attention than most developers could afford to devote to the same functionality.
 
-### [Getting started](https://gitlab.julianstaudt.de/simplix-softworks/SimplixCore/-/wikis/home)
+### [Wiki](https://github.com/Simplix-Softworks/SimplixCore/wiki)
+- ### [Getting started](https://github.com/Simplix-Softworks/SimplixCore/wiki/Getting-started)
 
 ### Downloading the latest build using Jenkins
