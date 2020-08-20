@@ -2,10 +2,13 @@ package dev.simplix.core.minecraft.spigot.plugin;
 
 import dev.simplix.core.common.aop.ScanComponents;
 import dev.simplix.core.common.aop.SimplixApplication;
+import dev.simplix.core.common.deploader.ArtifactDependencyLoader;
 import dev.simplix.core.common.inject.SimplixInstaller;
 import dev.simplix.core.common.libloader.LibraryLoader;
 import dev.simplix.core.minecraft.spigot.dynamiclisteners.DynamicListenersSimplixModule;
 import java.io.File;
+
+import dev.simplix.core.minecraft.spigot.plugin.deploader.PluginTypeHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
@@ -24,6 +27,7 @@ public final class SimplixPlugin extends JavaPlugin {
     System.setProperty(
         "dev.simplix.core.libloader.ClassLoaderFabricator",
         "dev.simplix.core.minecraft.spigot.plugin.libloader.PluginClassLoaderFabricator");
+    ArtifactDependencyLoader.registerTypeHandler("plugin", new PluginTypeHandler());
     SimplixInstaller.instance().libraryLoader().loadLibraries(new File("libraries"));
   }
 
