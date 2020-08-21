@@ -259,7 +259,7 @@ public class SimplixInstaller {
       log.error(SIMPLIX_BOOTSTRAP
                 + context.applicationInfo.name() + ": Cannot parse dependencies.json", exception);
     } finally {
-      if (inputStream == null) {
+      if (inputStream != null) {
         try {
           inputStream.close();
         } catch (IOException ignored) {
@@ -270,7 +270,7 @@ public class SimplixInstaller {
         try {
           reader.close();
         } catch (IOException ignored) {
-          
+
         }
       }
     }
