@@ -229,14 +229,17 @@ public class SimplixInstaller {
 
   private void processRemoteDependencies(InstallationContext context) {
     InputStream inputStream = null;
+    InputStreamReader reader = null;
     try {
       inputStream = context.owner.getResourceAsStream("/dependencies.json");
       if (inputStream == null) {
         return;
       }
-      Dependencies dependencies = this.gson.fromJson(new InputStreamReader(
+
+      reader = new InputStreamReader(
           inputStream,
-          StandardCharsets.UTF_8), Dependencies.class);
+          StandardCharsets.UTF_8);
+      Dependencies dependencies = this.gson.fromJson(reader, Dependencies.class);
       if (this.dependencyLoader == null) {
         initDependencyLoader();
       }
@@ -256,10 +259,18 @@ public class SimplixInstaller {
       log.error(SIMPLIX_BOOTSTRAP
                 + context.applicationInfo.name() + ": Cannot parse dependencies.json", exception);
     } finally {
-      if (inputStream != null) {
+      if (inputStream == null) {
         try {
           inputStream.close();
-        } catch (IOException stfu) {
+        } catch (IOException ignored) {
+        }
+      }
+
+      if (reader != null) {
+        try {
+          reader.close();
+        } catch (IOException ignored) {
+          
         }
       }
     }
