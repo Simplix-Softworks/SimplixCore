@@ -37,13 +37,14 @@ public final class ArtifactDependencyLoader implements DependencyLoader {
     TYPE_HANDLER.put("library", new LibraryTypeHandler());
   }
 
-  public static void registerTypeHandler(String type, BiConsumer<Dependency, File> handler) {
+  public static void registerTypeHandler(@NonNull String type,@NonNull BiConsumer<Dependency, File> handler) {
     TYPE_HANDLER.put(type, handler);
   }
 
   @Override
   public boolean load(
-      Dependency dependency, Iterable<Repository> repositories) {
+      @NonNull Dependency dependency,
+      @NonNull Iterable<Repository> repositories) {
     BiConsumer<Dependency, File> handler = TYPE_HANDLER.get(dependency.type());
     if (handler == null) {
       log.error("[Simplix | DependencyLoader] Unknown type "
@@ -88,7 +89,7 @@ public final class ArtifactDependencyLoader implements DependencyLoader {
     return false;
   }
 
-  private List<RemoteRepository> createRemoteRepositories(Iterable<Repository> repositories) {
+  private List<RemoteRepository> createRemoteRepositories(@NonNull Iterable<Repository> repositories) {
     List<RemoteRepository> out = new ArrayList<>();
     for (Repository repository : repositories) {
       out.add(new RemoteRepository.Builder(repository.id(), "default", repository.url()).build());
@@ -104,7 +105,7 @@ public final class ArtifactDependencyLoader implements DependencyLoader {
     return locator.getService(RepositorySystem.class);
   }
 
-  private RepositorySystemSession newSession(RepositorySystem system, File localRepository) {
+  private RepositorySystemSession newSession(@NonNull RepositorySystem system,@NonNull File localRepository) {
     DefaultRepositorySystemSession session = MavenRepositorySystemUtils.newSession();
     LocalRepository localRepo = new LocalRepository(localRepository.toString());
     session.setLocalRepositoryManager(system.newLocalRepositoryManager(session, localRepo));

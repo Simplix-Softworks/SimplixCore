@@ -5,6 +5,7 @@ import dev.simplix.core.common.aop.AbstractSimplixModule;
 import dev.simplix.core.common.aop.InjectorModule;
 import dev.simplix.core.common.listener.Listener;
 import dev.simplix.core.common.listener.Listeners;
+import lombok.NonNull;
 
 @InjectorModule("SimplixCore")
 public final class CommonSimplixModule extends AbstractSimplixModule {
@@ -14,7 +15,7 @@ public final class CommonSimplixModule extends AbstractSimplixModule {
   }
 
   @Override
-  public void configure(Binder binder) {
+  public void configure(@NonNull Binder binder) {
     super.configure(binder);
   }
 
