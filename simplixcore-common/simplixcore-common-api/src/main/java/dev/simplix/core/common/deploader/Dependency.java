@@ -2,11 +2,13 @@ package dev.simplix.core.common.deploader;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NonNull;
 import lombok.experimental.Accessors;
 
 @Data
 @EqualsAndHashCode
 @Accessors(fluent = true)
+@NonNull
 public class Dependency {
 
   private String groupId;
@@ -16,6 +18,6 @@ public class Dependency {
 
   @Override
   public String toString() {
-    return groupId + ':' + artifactId + ':' + version;
+    return this.groupId + ':' + this.artifactId + ':' + this.version;
   }
 }

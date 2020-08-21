@@ -18,6 +18,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
+
+import dev.simplix.core.common.libloader.LibraryLoader;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -38,6 +40,7 @@ public class SimplixInstaller {
   private final Gson gson = new GsonBuilder().create();
   private Injector bossInjector;
   private DependencyLoader dependencyLoader;
+  private LibraryLoader libraryLoader;
 
   /**
    * This will register a class annotated with {@link SimplixApplication}.
@@ -107,6 +110,36 @@ public class SimplixInstaller {
    */
   public Injector injector(@NonNull Class<?> owner) {
     return this.injectorMap.get(owner);
+  }
+
+  /**
+   * @return The dependency loader
+   */
+  public DependencyLoader dependencyLoader() {
+    if(dependencyLoader == null) {
+      initDependencyLoader();
+    }
+    return dependencyLoader;
+  }
+
+  public LibraryLoader libraryLoader() {
+    if(libraryLoader == null) {
+      initLibraryLoader();
+    }
+    return libraryLoader;
+  }
+
+  private void initLibraryLoader() {
+    try {
+      String libLoaderClass = System.getProperty(
+              "dev.simplix.core.common.libloader.LibraryLoader",
+              "dev.simplix.core.common.libloader.SimpleLibraryLoader");
+
+      Class<?> clazz = Class.forName(libLoaderClass);
+      this.libraryLoader = (LibraryLoader) clazz.newInstance();
+    } catch (Exception exception) {
+      throw new RuntimeException("Unable to initialize library loader", exception);
+    }
   }
 
   private Set<String> determineBasePackages(Class<?> owner) {

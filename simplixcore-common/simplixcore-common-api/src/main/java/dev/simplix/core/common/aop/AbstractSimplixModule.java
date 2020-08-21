@@ -7,11 +7,13 @@ import com.google.inject.Scopes;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 /**
  * A {@link Module} which allows the registration of {@link ComponentInterceptor}s.
  */
 @NoArgsConstructor
+@SuppressWarnings({"rawtypes", "unchecked"})
 public abstract class AbstractSimplixModule implements Module {
 
   private final Map<Class, Component> components = new HashMap<>();
@@ -29,7 +31,7 @@ public abstract class AbstractSimplixModule implements Module {
     });
   }
 
-  public void intercept(Injector injector) {
+  public void intercept(@NonNull Injector injector) {
     this.components.keySet().forEach(clazz -> {
       Component component = this.components.get(clazz);
       ComponentInterceptor componentInterceptor = findAssignable(clazz);
@@ -43,7 +45,7 @@ public abstract class AbstractSimplixModule implements Module {
     });
   }
 
-  private ComponentInterceptor findAssignable(Class<?> clazz) {
+  private ComponentInterceptor findAssignable(@NonNull Class<?> clazz) {
     for (Class<?> c : this.interceptorMap.keySet()) {
       if (c.isAssignableFrom(clazz)) {
         return this.interceptorMap.get(c);

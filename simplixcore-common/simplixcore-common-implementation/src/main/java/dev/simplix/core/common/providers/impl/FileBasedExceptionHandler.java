@@ -83,7 +83,6 @@ public final class FileBasedExceptionHandler implements ExceptionHandler {
       return;
     }
 
-    final List<String> lines = new ArrayList<>();
     final String header = this.applicationInfo.name()
                           + " "
                           + this.applicationInfo.version()
@@ -91,7 +90,7 @@ public final class FileBasedExceptionHandler implements ExceptionHandler {
                           + "a(n)" + (throwable.getClass().getSimpleName());
 
     // Write out header and server info
-    lines.addAll(Arrays.asList(
+    final List<String> lines = new ArrayList<>(Arrays.asList(
         "------------------------------------[ "
         + TimeFormatUtil.calculateCurrentDateFormatted()
         + " ]-----------------------------------",

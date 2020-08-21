@@ -3,7 +3,7 @@ package dev.simplix.core.minecraft.bungeecord.plugin;
 import dev.simplix.core.common.aop.ScanComponents;
 import dev.simplix.core.common.aop.SimplixApplication;
 import dev.simplix.core.common.inject.SimplixInstaller;
-import dev.simplix.core.common.libloader.LibraryLoader;
+import dev.simplix.core.common.libloader.SimpleLibraryLoader;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
 
@@ -20,7 +20,7 @@ public final class SimplixPlugin extends Plugin {
     System.setProperty(
             "dev.simplix.core.libloader.ClassLoaderFabricator",
             "dev.simplix.core.minecraft.bungeecord.plugin.libloader.PluginClassLoaderFabricator");
-    new LibraryLoader().loadLibraries(new File("libraries"));
+    SimplixInstaller.instance().libraryLoader().loadLibraries(new File("libraries"));
   }
 
   @Override

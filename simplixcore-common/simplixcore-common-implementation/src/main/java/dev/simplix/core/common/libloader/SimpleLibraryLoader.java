@@ -8,14 +8,17 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.function.Function;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class LibraryLoader {
+public class SimpleLibraryLoader implements LibraryLoader {
 
   private final Gson gson = new GsonBuilder().create();
+  private final Set<File> files = new HashSet<>();
 
   public void loadLibraries(@NonNull File directory) {
     if (!directory.exists()) {
@@ -29,11 +32,15 @@ public class LibraryLoader {
 
   public void loadLibrary(File file) {
     try {
+      if(files.contains(file)) {
+        return;
+      }
       ClassLoader classLoader = createClassLoader(file);
       if (classLoader == null) {
         return;
       }
       log.info("[Simplix | LibLoader] Loaded library " + file.getName());
+      files.add(file);
       InputStream stream = classLoader.getResourceAsStream("library.json");
       if (stream == null) {
         return;
@@ -60,6 +67,11 @@ public class LibraryLoader {
     } catch (Exception ex) {
       log.info("[Simplix | LibLoader] Unable to load library " + file.getName(), ex);
     }
+  }
+
+  @Override
+  public Set<File> loadedLibraries() {
+    return files;
   }
 
   private ClassLoader createClassLoader(File file) throws ReflectiveOperationException {
