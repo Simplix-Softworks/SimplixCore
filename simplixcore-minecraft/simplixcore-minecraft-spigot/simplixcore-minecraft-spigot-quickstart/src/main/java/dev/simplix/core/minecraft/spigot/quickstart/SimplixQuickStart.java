@@ -1,6 +1,7 @@
 package dev.simplix.core.minecraft.spigot.quickstart;
 
 import java.lang.reflect.Field;
+import java.util.logging.Level;
 import lombok.NonNull;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -62,7 +63,7 @@ public final class SimplixQuickStart {
       final CommandMap commandMap = (CommandMap) commandMapField.get(Bukkit.getServer());
       commandMap.register(command.getLabel(), command);
     } catch (final Throwable throwable) {
-      throwable.printStackTrace();
+      Bukkit.getLogger().log(Level.SEVERE, "Unable to register command "+command.getName(), throwable);
     }
   }
 

@@ -1,13 +1,13 @@
 package dev.simplix.core.minecraft.bungeecord.quickstart;
 
 import com.google.common.io.ByteStreams;
-import io.netty.util.internal.PlatformDependent;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.logging.Level;
 import lombok.NonNull;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
@@ -43,27 +43,10 @@ final class SimplixCommand extends Command {
         } catch (Exception exception) {
           commandSender.sendMessage(
               "§cException while downloading SimplixCore! Check console for details.");
-          exception.printStackTrace();
-        }
-      } else if (strings[0].equalsIgnoreCase("patch")) {
-        if (PlatformDependent.isWindows()) {
-          commandSender.sendMessage("§cThis feature is not supported on Windows. Please use our " +
-                                    "graphical jar patcher: https://simplixsoft.com/jarpatcher");
-          return;
-        }
-        commandSender.sendMessage("Going to patch your BungeeCord.jar!");
-        try {
-          File bungeeJar = new File(ProxyServer.class
-              .getProtectionDomain()
-              .getCodeSource()
-              .getLocation()
-              .toURI());
-//          ServiceProviderPatcher.patchJarUnix(bungeeJar);
-          commandSender.sendMessage("Patching done. Please restart your BungeeCord server!");
-        } catch (Exception exception) {
-          commandSender.sendMessage("There was an exception while patching your jar file. Please "
-                                    + "check console for details.");
-          exception.printStackTrace();
+          ProxyServer
+              .getInstance()
+              .getLogger()
+              .log(Level.SEVERE, "Exception while downloading SimplixCore", exception);
         }
       }
     }

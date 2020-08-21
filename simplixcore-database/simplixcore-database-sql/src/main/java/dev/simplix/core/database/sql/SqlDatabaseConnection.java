@@ -163,7 +163,7 @@ public final class SqlDatabaseConnection {
         batchFiller.fill(ps, t);
         ps.addBatch();
       } catch (SQLException e) {
-        e.printStackTrace();
+        throw new RuntimeException(e);
       }
     }));
   }
@@ -211,12 +211,11 @@ public final class SqlDatabaseConnection {
       k = executor.execute(preparedStatement);
       return consumer.transform(preparedStatement, k);
     } catch (SQLException e) {
-      e.printStackTrace();
       if (retry) {
         updateConnection();
         return rawExecutor0(statement, supplier, filler, executor, consumer, false);
       } else {
-        e.printStackTrace();
+        throw new RuntimeException(e);
       }
     } finally {
       if (k instanceof Closeable) {
@@ -224,7 +223,6 @@ public final class SqlDatabaseConnection {
       }
       this.connectionHandler.finishConnection(connection);
     }
-    return null;
   }
 
   public <T, K> T rawExecutor(
@@ -388,7 +386,6 @@ public final class SqlDatabaseConnection {
     try {
       closeable.close();
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
     }
   }
 

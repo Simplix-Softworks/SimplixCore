@@ -8,9 +8,11 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
+@Slf4j
 final class SimplixCommand extends Command {
 
   private final String downloadAddress;
@@ -38,7 +40,7 @@ final class SimplixCommand extends Command {
       } catch (Exception exception) {
         commandSender.sendMessage(
             "§cException while downloading SimplixCore! Check console for details.");
-        exception.printStackTrace();
+        log.error("Exception while downloading SimplixCore", exception);
       }
     }
     return false;

@@ -11,7 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public final class ObjectResultSetTransformer<T> implements ResultSetTransformer<T> {
 
   private final Class<T> clazz;
@@ -47,8 +49,7 @@ public final class ObjectResultSetTransformer<T> implements ResultSetTransformer
     try {
       this.constructor = this.clazz.getDeclaredConstructor(clazzes.toArray(new Class<?>[0]));
     } catch (NoSuchMethodException noSuchMethodException) {
-      noSuchMethodException.printStackTrace();
-      throw new RuntimeException("Could not find a proper all argument constructor!");
+      throw new RuntimeException("Could not find a proper all argument constructor!", noSuchMethodException);
     }
   }
 
@@ -66,7 +67,7 @@ public final class ObjectResultSetTransformer<T> implements ResultSetTransformer
     try {
       return this.constructor.newInstance(objects);
     } catch (InstantiationException | InvocationTargetException | IllegalAccessException | IllegalArgumentException exception) {
-      exception.printStackTrace();
+      log.error("Error while transforming", exception);
       if (!(exception instanceof IllegalArgumentException)) {
         return null;
       }

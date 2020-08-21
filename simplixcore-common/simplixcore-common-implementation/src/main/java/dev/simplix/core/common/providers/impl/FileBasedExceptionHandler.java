@@ -20,9 +20,11 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.*;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.Nullable;
 
 @Component(value = CommonSimplixModule.class, parent = ExceptionHandler.class)
+@Slf4j
 public final class FileBasedExceptionHandler implements ExceptionHandler {
 
   private final ApplicationInfo applicationInfo;
@@ -40,8 +42,7 @@ public final class FileBasedExceptionHandler implements ExceptionHandler {
     try {
       FileUtils.getAndMake(this.logFile);
     } catch (final Throwable throwable) {
-      System.err.println("Exception while creating debug file!");
-      throwable.printStackTrace();
+      log.error("Exception occurred while creating debug file", throwable);
     }
   }
 
@@ -59,13 +60,12 @@ public final class FileBasedExceptionHandler implements ExceptionHandler {
           }
 
         } catch (final IOException ioException) {
-          ioException.printStackTrace();
+          log.error("Exception occurred", ioException);
         }
       }
 
     } catch (final Exception exception) {
-      System.out.println("Failed to write to " + file);
-      exception.printStackTrace();
+      log.error("Exception occurred while writing to "+file, exception);
     }
   }
 
