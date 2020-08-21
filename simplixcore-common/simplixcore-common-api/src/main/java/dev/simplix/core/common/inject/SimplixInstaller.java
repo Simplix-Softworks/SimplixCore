@@ -10,6 +10,7 @@ import dev.simplix.core.common.deploader.Dependencies;
 import dev.simplix.core.common.deploader.Dependency;
 import dev.simplix.core.common.deploader.DependencyLoader;
 import dev.simplix.core.common.deploader.Repository;
+import dev.simplix.core.common.libloader.LibraryLoader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,8 +19,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
-
-import dev.simplix.core.common.libloader.LibraryLoader;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -34,6 +33,7 @@ import org.reflections.Reflections;
 @Slf4j
 public class SimplixInstaller {
 
+  private static final String SIMPLIX_BOOTSTRAP = "[Simplix | Bootstrap] ";
   private static final SimplixInstaller INSTANCE = new SimplixInstaller();
   private final Map<Class<?>, Injector> injectorMap = new HashMap<>();
   private final Map<String, InstallationContext> toInstall = new HashMap<>();
@@ -68,7 +68,7 @@ public class SimplixInstaller {
                 .build(), detectReferencedModules(owner, modules, application.name())));
     if (this.bossInjector != null) {
       // YOU ARE TOO LATE
-      log.info("[Simplix | Bootstrap] Late install " + application.name() + "...");
+      log.info(SIMPLIX_BOOTSTRAP + "Late install " + application.name() + "...");
       installApplication(this.toInstall.get(application.name()), new Stack<>());
     }
   }
@@ -84,7 +84,7 @@ public class SimplixInstaller {
       Supplier<AbstractSimplixModule[]> supplier = requireModules.value().newInstance();
       out.addAll(Arrays.asList(supplier.get()));
     } catch (InstantiationException | IllegalAccessException e) {
-      log.error("[Simplix | Bootstrap] "
+      log.error(SIMPLIX_BOOTSTRAP
                 + appName
                 + ": Cannot construct module supplier. Please make sure the default constructor is accessible. "
                 + requireModules.value().getName(), e);
@@ -116,24 +116,24 @@ public class SimplixInstaller {
    * @return The dependency loader
    */
   public DependencyLoader dependencyLoader() {
-    if(dependencyLoader == null) {
+    if (this.dependencyLoader == null) {
       initDependencyLoader();
     }
-    return dependencyLoader;
+    return this.dependencyLoader;
   }
 
   public LibraryLoader libraryLoader() {
-    if(libraryLoader == null) {
+    if (this.libraryLoader == null) {
       initLibraryLoader();
     }
-    return libraryLoader;
+    return this.libraryLoader;
   }
 
   private void initLibraryLoader() {
     try {
       String libLoaderClass = System.getProperty(
-              "dev.simplix.core.common.libloader.LibraryLoader",
-              "dev.simplix.core.common.libloader.SimpleLibraryLoader");
+          "dev.simplix.core.common.libloader.LibraryLoader",
+          "dev.simplix.core.common.libloader.SimpleLibraryLoader");
 
       Class<?> clazz = Class.forName(libLoaderClass);
       this.libraryLoader = (LibraryLoader) clazz.newInstance();
@@ -183,7 +183,7 @@ public class SimplixInstaller {
         continue;
       }
       if (!installApplication(context, new Stack<>())) {
-        log.warn("[Simplix | Bootstrap] Failed to load application "
+        log.warn(SIMPLIX_BOOTSTRAP + "Failed to load application "
                  + context.applicationInfo.name());
       }
     }
@@ -199,7 +199,7 @@ public class SimplixInstaller {
     for (String dependency : context.applicationInfo.dependencies()) {
       InstallationContext depContext = this.toInstall.get(dependency);
       if (depContext == null) {
-        log.warn("[Simplix | Bootstrap] Dependency "
+        log.warn(SIMPLIX_BOOTSTRAP + "Dependency "
                  + dependency
                  + " of application "
                  + context.applicationInfo.name()
@@ -212,14 +212,14 @@ public class SimplixInstaller {
           builder.append(info.name()).append(" -> ");
         }
         builder.append(context.applicationInfo.name()).append(" -> ").append(dependency);
-        log.warn("[Simplix | Bootstrap] Circular dependencies detected: " + builder);
+        log.warn(SIMPLIX_BOOTSTRAP + "Circular dependencies detected: " + builder);
         return false;
       }
       infoStack.push(context.applicationInfo);
       boolean dependStatus = installApplication(depContext, infoStack);
       infoStack.pop();
       if (!dependStatus) {
-        log.warn("[Simplix | Bootstrap] Dependency " + dependency + " failed to load");
+        log.warn(SIMPLIX_BOOTSTRAP + "Dependency " + dependency + " failed to load");
         return false;
       }
     }
@@ -242,18 +242,18 @@ public class SimplixInstaller {
       }
       List<Repository> repositories = Arrays.asList(dependencies.repositories());
       for (Dependency dependency : dependencies.dependencies()) {
-        log.info("[Simplix | Bootstrap] "
+        log.info(SIMPLIX_BOOTSTRAP
                  + context.applicationInfo.name()
                  + ": Load dependency "
                  + dependency
                  + " from repository...");
         if (!this.dependencyLoader.load(dependency, repositories)) {
-          log.error("[Simplix | Bootstrap] "
+          log.error(SIMPLIX_BOOTSTRAP
                     + context.applicationInfo.name() + ": Unable to load dependency " + dependency);
         }
       }
     } catch (JsonParseException exception) {
-      log.error("[Simplix | Bootstrap] "
+      log.error(SIMPLIX_BOOTSTRAP
                 + context.applicationInfo.name() + ": Cannot parse dependencies.json", exception);
     } finally {
       if (inputStream != null) {
@@ -294,7 +294,7 @@ public class SimplixInstaller {
         }
       });
       processAlwaysConstruct(modules, context, injector);
-      log.info("[Simplix | Bootstrap] Installed application "
+      log.info(SIMPLIX_BOOTSTRAP + "Installed application "
                + context.applicationInfo.name()
                + " "
                + context.applicationInfo.version()
@@ -302,7 +302,7 @@ public class SimplixInstaller {
                + Arrays
                    .toString(context.applicationInfo.authors()));
     } catch (CreationException exception) {
-      log.error("[Simplix | Bootstrap] Cannot create injector for application "
+      log.error(SIMPLIX_BOOTSTRAP + "Cannot create injector for application "
                 + context.applicationInfo.name(), exception);
     }
   }
@@ -314,7 +314,7 @@ public class SimplixInstaller {
     for (Class<?> componentClass : context.reflections.getTypesAnnotatedWith(AlwaysConstruct.class)) {
       if (!componentClass.isAnnotationPresent(Component.class)) {
         log.warn(
-            "[Simplix | Bootstrap] @AlwaysConstruct can only be used in combination with @Component: "
+            SIMPLIX_BOOTSTRAP + "@AlwaysConstruct can only be used in combination with @Component: "
             + componentClass.getName());
         return;
       }
@@ -356,21 +356,21 @@ public class SimplixInstaller {
         Component component = componentClass.getAnnotation(Component.class);
         AbstractSimplixModule simplixModule = findAbstractSimplixModule(modules, component.value());
         if (simplixModule == null) {
-          log.warn("[Simplix | Bootstrap] "
+          log.warn(SIMPLIX_BOOTSTRAP
                    + context.applicationInfo.name()
                    + ": Component "
                    + componentClass.getName()
                    + " referenced module "
                    + component.value().getName()
                    + " which is not available in this context.");
-          log.warn("[Simplix | Bootstrap] "
+          log.warn(SIMPLIX_BOOTSTRAP
                    + context.applicationInfo.name()
                    + ": Available modules in this context: "
                    + modules);
           continue;
         }
         simplixModule.components().put(componentClass, component);
-        log.info("[Simplix | Bootstrap] "
+        log.info(SIMPLIX_BOOTSTRAP
                  + context.applicationInfo.name()
                  + ": Detected "
                  + componentClass.getName());
@@ -378,13 +378,13 @@ public class SimplixInstaller {
         if (t instanceof TypeNotPresentException) {
           /* Suppress some dependency problems here since some endusers would go crazy when they see
               exceptions like this in normal production... */
-          log.debug("[Simplix | Bootstrap] "
+          log.debug(SIMPLIX_BOOTSTRAP
                     + context.applicationInfo.name()
                     + ": Cannot register "
                     + componentClass.getName(), t);
           continue;
         }
-        log.warn("[Simplix | Bootstrap] "
+        log.warn(SIMPLIX_BOOTSTRAP
                  + context.applicationInfo.name()
                  + ": Cannot register "
                  + componentClass.getName(), t);
@@ -413,12 +413,12 @@ public class SimplixInstaller {
         }
         Object instance = moduleClass.newInstance();
         modules.add((Module) instance);
-        log.info("[Simplix | Bootstrap] "
+        log.info(SIMPLIX_BOOTSTRAP
                  + ctx.applicationInfo.name()
                  + ": Registered module "
                  + moduleClass.getSimpleName());
       } catch (Throwable throwable) {
-        log.warn("[Simplix | Bootstrap] Unable to create module "
+        log.warn(SIMPLIX_BOOTSTRAP + "Unable to create module "
                  + moduleClass.getName()
                  + " for application "
                  + ctx.applicationInfo.name(), throwable);
