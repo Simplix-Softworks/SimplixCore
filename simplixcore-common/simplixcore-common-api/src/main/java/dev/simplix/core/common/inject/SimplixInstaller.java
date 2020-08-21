@@ -397,7 +397,7 @@ public class SimplixInstaller {
       @NonNull Set<Module> modules,
       @NonNull Class<? extends AbstractSimplixModule> clazz) {
     for (Module module : modules) {
-      if (module.getClass().getName().equals(clazz.getName())) {
+      if (module.getClass().equals(clazz)) {
         return (AbstractSimplixModule) module;
       }
     }

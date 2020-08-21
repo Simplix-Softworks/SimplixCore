@@ -8,7 +8,9 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
+import java.util.stream.Stream;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
@@ -58,21 +60,22 @@ public class SimpleLocalizationManagerFactory implements LocalizationManagerFact
           FileSystem fileSystem = FileSystems.newFileSystem(
               codeSource.toURI(),
               Collections.emptyMap())) {
-        Files.list(fileSystem.getPath(translationResourcesDirectory))
-            .filter(path -> path.getFileName().endsWith(".properties"))
-            .forEach(path -> {
-              Locale locale = new Locale(path.getFileName().toString().substring(
-                  0,
-                  path.getFileName().toString().length() - 11));
-              try {
-                Properties properties = loadPropertiesFromReader(Files.newBufferedReader(
-                    path,
-                    StandardCharsets.UTF_8));
-                propertiesMap.put(locale, properties);
-              } catch (IOException ex) {
-                log.warn("[Simplix] Cannot load language file " + path + " from resource: ", ex);
-              }
-            });
+        try (Stream<Path> listFiles = Files.list(fileSystem.getPath(translationResourcesDirectory))) {
+          listFiles.filter(path -> path.getFileName().endsWith(".properties"))
+              .forEach(path -> {
+                Locale locale = new Locale(path.getFileName().toString().substring(
+                    0,
+                    path.getFileName().toString().length() - 11));
+                try {
+                  Properties properties = loadPropertiesFromReader(Files.newBufferedReader(
+                      path,
+                      StandardCharsets.UTF_8));
+                  propertiesMap.put(locale, properties);
+                } catch (IOException ex) {
+                  log.warn("[Simplix] Cannot load language file " + path + " from resource: ", ex);
+                }
+              });
+        }
       } catch (IOException ex) {
         log.warn("[Simplix] Cannot load language files from resource: ", ex);
       }

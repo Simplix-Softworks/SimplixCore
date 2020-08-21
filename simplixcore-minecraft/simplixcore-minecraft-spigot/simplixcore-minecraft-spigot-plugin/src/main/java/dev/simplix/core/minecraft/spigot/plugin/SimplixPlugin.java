@@ -54,6 +54,7 @@ public final class SimplixPlugin extends JavaPlugin {
         try {
           Thread.sleep(10);
         } catch (InterruptedException e) {
+          Thread.currentThread().interrupt();
         }
       }
       SimplixInstaller.instance().install();
