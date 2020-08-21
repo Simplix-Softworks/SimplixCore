@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.maven.repository.internal.MavenRepositorySystemUtils;
 import org.eclipse.aether.DefaultRepositorySystemSession;
@@ -37,7 +38,9 @@ public final class ArtifactDependencyLoader implements DependencyLoader {
     TYPE_HANDLER.put("library", new LibraryTypeHandler());
   }
 
-  public static void registerTypeHandler(@NonNull String type,@NonNull BiConsumer<Dependency, File> handler) {
+  public static void registerTypeHandler(
+      @NonNull String type,
+      @NonNull BiConsumer<Dependency, File> handler) {
     TYPE_HANDLER.put(type, handler);
   }
 
@@ -55,7 +58,7 @@ public final class ArtifactDependencyLoader implements DependencyLoader {
     }
 
     RepositorySystem repositorySystem = newRepositorySystem();
-    RepositorySystemSession session = newSession(repositorySystem, localRepositoryFile);
+    RepositorySystemSession session = newSession(repositorySystem, this.localRepositoryFile);
 
     Artifact artifact = new DefaultArtifact(dependency.groupId(), dependency.artifactId(), "jar",
         dependency.version());
@@ -105,7 +108,9 @@ public final class ArtifactDependencyLoader implements DependencyLoader {
     return locator.getService(RepositorySystem.class);
   }
 
-  private RepositorySystemSession newSession(@NonNull RepositorySystem system,@NonNull File localRepository) {
+  private RepositorySystemSession newSession(
+      @NonNull RepositorySystem system,
+      @NonNull File localRepository) {
     DefaultRepositorySystemSession session = MavenRepositorySystemUtils.newSession();
     LocalRepository localRepo = new LocalRepository(localRepository.toString());
     session.setLocalRepositoryManager(system.newLocalRepositoryManager(session, localRepo));
