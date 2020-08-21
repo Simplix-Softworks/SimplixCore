@@ -63,7 +63,7 @@ public final class SimplixQuickStart {
       final CommandMap commandMap = (CommandMap) commandMapField.get(Bukkit.getServer());
       commandMap.register(command.getLabel(), command);
     } catch (final Throwable throwable) {
-      Bukkit.getLogger().log(Level.SEVERE, "Unable to register command "+command.getName(), throwable);
+      Bukkit.getLogger().log(Level.SEVERE, "Unable to register command", throwable);
     }
   }
 

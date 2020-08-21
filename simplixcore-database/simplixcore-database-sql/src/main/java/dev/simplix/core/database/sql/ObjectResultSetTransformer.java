@@ -49,7 +49,7 @@ public final class ObjectResultSetTransformer<T> implements ResultSetTransformer
     try {
       this.constructor = this.clazz.getDeclaredConstructor(clazzes.toArray(new Class<?>[0]));
     } catch (NoSuchMethodException noSuchMethodException) {
-      throw new RuntimeException("Could not find a proper all argument constructor!", noSuchMethodException);
+      throw new IllegalStateException("Could not find a proper all argument constructor!", noSuchMethodException);
     }
   }
 

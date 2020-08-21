@@ -1,5 +1,6 @@
 package dev.simplix.core.database.sql;
 
+import dev.simplix.core.database.sql.exceptions.SqlRuntimeException;
 import dev.simplix.core.database.sql.function.*;
 import dev.simplix.core.database.sql.handler.ConnectionHandler;
 import dev.simplix.core.database.sql.handlers.HikariConnectionHandler;
@@ -163,7 +164,7 @@ public final class SqlDatabaseConnection {
         batchFiller.fill(ps, t);
         ps.addBatch();
       } catch (SQLException e) {
-        throw new RuntimeException(e);
+        throw new SqlRuntimeException(e);
       }
     }));
   }
@@ -215,7 +216,7 @@ public final class SqlDatabaseConnection {
         updateConnection();
         return rawExecutor0(statement, supplier, filler, executor, consumer, false);
       } else {
-        throw new RuntimeException(e);
+        throw new SqlRuntimeException(e);
       }
     } finally {
       if (k instanceof Closeable) {
@@ -385,7 +386,8 @@ public final class SqlDatabaseConnection {
     }
     try {
       closeable.close();
-    } catch (Throwable throwable) {
+    } catch (Throwable ignored) {
+      // Closing throwables aren't relevant to show
     }
   }
 
