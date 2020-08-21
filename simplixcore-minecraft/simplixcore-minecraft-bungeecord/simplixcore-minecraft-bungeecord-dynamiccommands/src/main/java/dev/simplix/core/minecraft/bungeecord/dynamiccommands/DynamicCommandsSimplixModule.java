@@ -1,6 +1,7 @@
 package dev.simplix.core.minecraft.bungeecord.dynamiccommands;
 
 import dev.simplix.core.common.aop.AbstractSimplixModule;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Command;
@@ -11,7 +12,7 @@ public class DynamicCommandsSimplixModule extends AbstractSimplixModule {
 
   private final Plugin plugin;
 
-  public DynamicCommandsSimplixModule(Plugin plugin) {
+  public DynamicCommandsSimplixModule(@NonNull Plugin plugin) {
     this.plugin = plugin;
     registerComponentInterceptor(
         Command.class,

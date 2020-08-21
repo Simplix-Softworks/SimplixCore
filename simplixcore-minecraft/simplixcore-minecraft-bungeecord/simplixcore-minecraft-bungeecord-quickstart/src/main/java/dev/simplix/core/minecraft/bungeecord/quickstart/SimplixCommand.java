@@ -17,7 +17,7 @@ final class SimplixCommand extends Command {
 
   private final String downloadAddress;
 
-  public SimplixCommand(String downloadAddress) {
+  public SimplixCommand(@NonNull String downloadAddress) {
     super("simplix");
     this.downloadAddress = downloadAddress;
   }
@@ -62,7 +62,7 @@ final class SimplixCommand extends Command {
     if (file.exists()) {
       return;
     }
-    if(!file.createNewFile()) {
+    if (!file.createNewFile()) {
       throw new IOException("File could not be overridden");
     }
     try (FileOutputStream fileOutputStream = new FileOutputStream(file)) {

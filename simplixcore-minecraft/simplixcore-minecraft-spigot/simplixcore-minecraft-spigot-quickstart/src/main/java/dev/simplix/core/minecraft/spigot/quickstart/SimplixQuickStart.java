@@ -33,7 +33,7 @@ public final class SimplixQuickStart {
     return true;
   }
 
-  private static void registerInstaller(JavaPlugin plugin) {
+  private static void registerInstaller(@NonNull JavaPlugin plugin) {
     log("["
         + plugin.getDescription().getName()
         + "] This plugin needs the SimplixCore in order to work "
@@ -51,8 +51,8 @@ public final class SimplixQuickStart {
     registerCommand(new SimplixCommand(SIMPLIX_DOWNLOAD_URL));
   }
 
-  private static void log(String s) {
-    Bukkit.getLogger().severe(s);
+  private static void log(@NonNull String string) {
+    Bukkit.getLogger().severe(string);
   }
 
   public static void registerCommand(@NonNull final Command command) {
