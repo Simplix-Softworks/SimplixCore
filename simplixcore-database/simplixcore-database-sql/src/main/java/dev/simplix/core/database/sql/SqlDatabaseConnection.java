@@ -23,7 +23,7 @@ import org.jetbrains.annotations.Nullable;
 @Getter
 public final class SqlDatabaseConnection {
 
-  public static Set<String> QUERIES = new HashSet<>();
+  private static Set<String> QUERIES = new HashSet<>();
   public static final PreparedStatementFiller EMPTY_FILLER = (ps) -> {
   };
   private DataSource dataSource;
