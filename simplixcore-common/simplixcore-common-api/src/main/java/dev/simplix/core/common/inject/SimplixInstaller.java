@@ -260,6 +260,7 @@ public class SimplixInstaller {
         try {
           inputStream.close();
         } catch (IOException stfu) {
+          // Not relevant
         }
       }
     }

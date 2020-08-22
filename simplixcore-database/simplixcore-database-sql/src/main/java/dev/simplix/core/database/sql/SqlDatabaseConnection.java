@@ -386,8 +386,8 @@ public final class SqlDatabaseConnection {
     }
     try {
       closeable.close();
-    } catch (Throwable ignored) {
-      // Closing throwables aren't relevant to show
+    } catch (Exception ignored) {
+      // Closing exceptions aren't relevant to show
     }
   }
 
