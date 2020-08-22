@@ -263,6 +263,7 @@ public class SimplixInstaller {
         try {
           inputStream.close();
         } catch (IOException ignored) {
+          // Ignored
         }
       }
 
@@ -270,7 +271,7 @@ public class SimplixInstaller {
         try {
           reader.close();
         } catch (IOException ignored) {
-
+          // Ignored
         }
       }
     }
