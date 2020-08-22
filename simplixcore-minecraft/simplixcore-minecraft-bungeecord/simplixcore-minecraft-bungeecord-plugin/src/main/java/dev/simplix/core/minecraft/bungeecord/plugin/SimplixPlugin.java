@@ -3,11 +3,9 @@ package dev.simplix.core.minecraft.bungeecord.plugin;
 import dev.simplix.core.common.aop.ScanComponents;
 import dev.simplix.core.common.aop.SimplixApplication;
 import dev.simplix.core.common.inject.SimplixInstaller;
-import dev.simplix.core.common.libloader.SimpleLibraryLoader;
+import java.io.File;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
-
-import java.io.File;
 
 @SimplixApplication(name = "SimplixCore", version = "1.0", authors = {
     "Exceptionflug",
@@ -18,8 +16,8 @@ public final class SimplixPlugin extends Plugin {
   @Override
   public void onLoad() {
     System.setProperty(
-            "dev.simplix.core.libloader.ClassLoaderFabricator",
-            "dev.simplix.core.minecraft.bungeecord.plugin.libloader.PluginClassLoaderFabricator");
+        "dev.simplix.core.libloader.ClassLoaderFabricator",
+        "dev.simplix.core.minecraft.bungeecord.plugin.libloader.PluginClassLoaderFabricator");
     SimplixInstaller.instance().libraryLoader().loadLibraries(new File("libraries"));
   }
 
@@ -42,7 +40,8 @@ public final class SimplixPlugin extends Plugin {
         }
         try {
           Thread.sleep(10);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException interruptedException) {
+//          throw interruptedException;
           Thread.currentThread().interrupt();
         }
       }

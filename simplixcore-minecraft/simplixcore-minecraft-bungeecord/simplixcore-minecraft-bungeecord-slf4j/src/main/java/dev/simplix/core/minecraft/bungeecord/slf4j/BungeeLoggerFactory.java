@@ -1,11 +1,11 @@
 package dev.simplix.core.minecraft.bungeecord.slf4j;
 
+import java.lang.reflect.Constructor;
+import lombok.NonNull;
 import net.md_5.bungee.api.ProxyServer;
 import org.slf4j.ILoggerFactory;
 import org.slf4j.Logger;
 import org.slf4j.impl.JDK14LoggerAdapter;
-
-import java.lang.reflect.Constructor;
 
 public final class BungeeLoggerFactory implements ILoggerFactory {
 
@@ -19,7 +19,7 @@ public final class BungeeLoggerFactory implements ILoggerFactory {
         .info("[Simplix] Slf4j logging configured for BungeeCord");
   }
 
-  private JDK14LoggerAdapter createLoggerAdapter(java.util.logging.Logger logger) {
+  private JDK14LoggerAdapter createLoggerAdapter(@NonNull java.util.logging.Logger logger) {
     try {
       Constructor<JDK14LoggerAdapter> constructor = JDK14LoggerAdapter.class.getDeclaredConstructor(
           java.util.logging.Logger.class);
@@ -36,7 +36,7 @@ public final class BungeeLoggerFactory implements ILoggerFactory {
   }
 
   @Override
-  public Logger getLogger(String s) {
+  public Logger getLogger(@NonNull String string) {
     return this.bungeeLoggerAdapter;
   }
 

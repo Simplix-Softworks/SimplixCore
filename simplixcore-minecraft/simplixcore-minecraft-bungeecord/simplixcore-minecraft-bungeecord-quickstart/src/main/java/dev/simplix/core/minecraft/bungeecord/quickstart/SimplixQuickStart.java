@@ -1,5 +1,6 @@
 package dev.simplix.core.minecraft.bungeecord.quickstart;
 
+import lombok.NonNull;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
 
@@ -46,7 +47,7 @@ public final class SimplixQuickStart {
         .registerCommand(plugin, new SimplixCommand(SIMPLIX_DOWNLOAD_URL));
   }
 
-  private static void log(String message) {
+  private static void log(@NonNull String message) {
     ProxyServer.getInstance().getLogger().severe(message);
   }
 

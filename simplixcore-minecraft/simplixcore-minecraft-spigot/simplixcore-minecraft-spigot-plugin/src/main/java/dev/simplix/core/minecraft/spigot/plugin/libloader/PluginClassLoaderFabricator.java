@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -30,7 +31,7 @@ public final class PluginClassLoaderFabricator implements Function<File, ClassLo
   }
 
   @Override
-  public ClassLoader apply(File file) {
+  public ClassLoader apply(@NonNull File file) {
     try {
       injectFakeClass(file);
 
@@ -74,7 +75,7 @@ public final class PluginClassLoaderFabricator implements Function<File, ClassLo
     return null;
   }
 
-  private void injectFakeClass(File file) {
+  private void injectFakeClass(@NonNull File file) {
     URI uri;
     if (file.getAbsolutePath().startsWith("/")) { // UNIX
       uri = URI.create("jar:file:" + file.getAbsolutePath());
