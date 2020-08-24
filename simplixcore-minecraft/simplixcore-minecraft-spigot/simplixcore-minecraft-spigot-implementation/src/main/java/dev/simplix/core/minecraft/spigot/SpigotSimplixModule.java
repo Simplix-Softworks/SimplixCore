@@ -1,9 +1,9 @@
 package dev.simplix.core.minecraft.spigot;
 
 import dev.simplix.core.common.aop.AbstractSimplixModule;
-import dev.simplix.core.common.aop.InjectorModule;
+import dev.simplix.core.common.aop.ApplicationModule;
 
-@InjectorModule("SimplixCore")
+@ApplicationModule("SimplixCore")
 public class SpigotSimplixModule extends AbstractSimplixModule {
 
 }

@@ -417,9 +417,9 @@ public class SimplixInstaller {
   }
 
   private void detectModules(@NonNull Set<Module> modules, @NonNull InstallationContext ctx) {
-    for (Class<?> moduleClass : ctx.reflections.getTypesAnnotatedWith(InjectorModule.class)) {
+    for (Class<?> moduleClass : ctx.reflections.getTypesAnnotatedWith(ApplicationModule.class)) {
       try {
-        InjectorModule module = moduleClass.getAnnotation(InjectorModule.class);
+        ApplicationModule module = moduleClass.getAnnotation(ApplicationModule.class);
         if (!module.value().equals(ctx.applicationInfo.name())) {
           continue;
         }
