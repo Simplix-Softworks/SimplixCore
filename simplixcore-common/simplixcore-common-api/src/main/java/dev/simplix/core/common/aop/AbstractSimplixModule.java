@@ -4,6 +4,8 @@ import com.google.inject.Binder;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.google.inject.Scopes;
+import com.google.inject.binder.AnnotatedBindingBuilder;
+import dev.simplix.core.common.aop.Privacy.Level;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.NoArgsConstructor;
@@ -24,9 +26,17 @@ public abstract class AbstractSimplixModule implements Module {
     this.components.keySet().forEach(clazz -> {
       Component component = this.components.get(clazz);
       if (!component.parent().equals(Object.class)) {
-        binder.bind(component.parent()).to(clazz).in(Scopes.SINGLETON);
+        AnnotatedBindingBuilder<?> bindingBuilder = binder.bind(component.parent());
+        if(isPrivate()) {
+          bindingBuilder.annotatedWith(getClass().getAnnotation(Privacy.class));
+        }
+        bindingBuilder.to(clazz).in(Scopes.SINGLETON);
       } else {
-        binder.bind(clazz).in(Scopes.SINGLETON);
+        AnnotatedBindingBuilder bindingBuilder = binder.bind(clazz);
+        if(isPrivate()) {
+          bindingBuilder.annotatedWith(getClass().getAnnotation(Privacy.class));
+        }
+        bindingBuilder.in(Scopes.SINGLETON);
       }
     });
   }
@@ -63,4 +73,12 @@ public abstract class AbstractSimplixModule implements Module {
       ComponentInterceptor<T> interceptor) {
     this.interceptorMap.put(clazz, interceptor);
   }
+
+  public boolean isPrivate() {
+    if(!getClass().isAnnotationPresent(Privacy.class)) {
+      return false;
+    }
+    return getClass().getAnnotation(Privacy.class).value() == Level.PRIVATE;
+  }
+
 }

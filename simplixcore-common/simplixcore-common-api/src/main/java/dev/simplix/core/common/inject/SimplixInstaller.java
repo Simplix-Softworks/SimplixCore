@@ -6,6 +6,7 @@ import com.google.gson.JsonParseException;
 import com.google.inject.*;
 import dev.simplix.core.common.ApplicationInfo;
 import dev.simplix.core.common.aop.*;
+import dev.simplix.core.common.aop.Privacy.Level;
 import dev.simplix.core.common.deploader.Dependencies;
 import dev.simplix.core.common.deploader.Dependency;
 import dev.simplix.core.common.deploader.DependencyLoader;
@@ -348,6 +349,18 @@ public class SimplixInstaller {
           if (rawType.equals(ApplicationInfo.class) || rawType.equals(Stage.class)
               || rawType.equals(Logger.class) || rawType.equals(Injector.class)) {
             continue;
+          }
+          if(rawType.isAnnotationPresent(Privacy.class)) {
+            Privacy privacy = (Privacy) rawType.getAnnotation(Privacy.class);
+            if(privacy.value() == Level.PRIVATE) {
+              continue;
+            }
+          }
+          if(key.getAnnotationType().equals(Privacy.class)) {
+            Privacy privacy = (Privacy) key.getAnnotation();
+            if(privacy.value() == Level.PRIVATE) {
+              continue;
+            }
           }
           if (bound.contains(key)) {
             continue;
