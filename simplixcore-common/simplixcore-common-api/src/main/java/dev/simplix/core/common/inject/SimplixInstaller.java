@@ -356,7 +356,7 @@ public class SimplixInstaller {
               continue;
             }
           }
-          if(key.getAnnotationType().equals(Privacy.class)) {
+          if(key.getAnnotationType() != null && key.getAnnotationType().equals(Privacy.class)) {
             Privacy privacy = (Privacy) key.getAnnotation();
             if(privacy.value() == Level.PRIVATE) {
               continue;
