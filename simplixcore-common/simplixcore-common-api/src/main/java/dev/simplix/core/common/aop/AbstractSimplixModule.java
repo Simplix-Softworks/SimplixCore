@@ -5,7 +5,6 @@ import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.google.inject.Scopes;
 import com.google.inject.binder.AnnotatedBindingBuilder;
-import dev.simplix.core.common.aop.Privacy.Level;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.NoArgsConstructor;
@@ -28,13 +27,13 @@ public abstract class AbstractSimplixModule implements Module {
       if (!component.parent().equals(Object.class)) {
         AnnotatedBindingBuilder<?> bindingBuilder = binder.bind(component.parent());
         if(isPrivate()) {
-          bindingBuilder.annotatedWith(getClass().getAnnotation(Privacy.class));
+          bindingBuilder.annotatedWith(getClass().getAnnotation(Private.class));
         }
         bindingBuilder.to(clazz).in(Scopes.SINGLETON);
       } else {
         AnnotatedBindingBuilder bindingBuilder = binder.bind(clazz);
         if(isPrivate()) {
-          bindingBuilder.annotatedWith(getClass().getAnnotation(Privacy.class));
+          bindingBuilder.annotatedWith(getClass().getAnnotation(Private.class));
         }
         bindingBuilder.in(Scopes.SINGLETON);
       }
@@ -75,10 +74,7 @@ public abstract class AbstractSimplixModule implements Module {
   }
 
   public boolean isPrivate() {
-    if(!getClass().isAnnotationPresent(Privacy.class)) {
-      return false;
-    }
-    return getClass().getAnnotation(Privacy.class).value() == Level.PRIVATE;
+    return getClass().isAnnotationPresent(Private.class);
   }
 
 }
