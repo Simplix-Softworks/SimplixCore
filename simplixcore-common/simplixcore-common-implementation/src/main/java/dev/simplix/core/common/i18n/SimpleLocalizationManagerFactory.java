@@ -3,6 +3,7 @@ package dev.simplix.core.common.i18n;
 import dev.simplix.core.common.CommonSimplixModule;
 import dev.simplix.core.common.aop.Component;
 import java.io.*;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystem;
@@ -56,9 +57,17 @@ public class SimpleLocalizationManagerFactory implements LocalizationManagerFact
       if (!codeSource.getName().endsWith(".jar")) {
         throw new IllegalStateException("Reference class must be contained in a jar file!");
       }
+      URI uri;
+      if (codeSource.getAbsolutePath().startsWith("/")) { // UNIX
+        uri = URI.create("jar:file:" + codeSource.getAbsolutePath());
+      } else { // Windows
+        uri = URI.create("jar:file:/" + codeSource.getAbsolutePath()
+            .replace("\\", "/")
+            .replace(" ", "%20"));
+      }
       try (
           FileSystem fileSystem = FileSystems.newFileSystem(
-              codeSource.toURI(),
+              uri,
               Collections.emptyMap())) {
         try (Stream<Path> listFiles = Files.list(fileSystem.getPath(translationResourcesDirectory))) {
           listFiles.filter(path -> path.getFileName().endsWith(".properties"))
