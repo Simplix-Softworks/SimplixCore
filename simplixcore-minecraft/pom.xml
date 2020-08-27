@@ -17,7 +17,7 @@
 
   <modules>
     <module>simplixcore-minecraft-spigot</module>
-    <module>simplixcore-mineacraft-api</module>
+    <module>simplixcore-minecraft-api</module>
     <module>simplixcore-minecraft-bungeecord</module>
   </modules>
 

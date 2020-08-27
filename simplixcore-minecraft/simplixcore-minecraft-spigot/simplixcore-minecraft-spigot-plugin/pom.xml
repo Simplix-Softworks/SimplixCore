@@ -39,7 +39,7 @@
     <!-- MC API -->
     <dependency>
       <groupId>dev.simplix</groupId>
-      <artifactId>simplixcore-mineacraft-api</artifactId>
+      <artifactId>simplixcore-minecraft-api</artifactId>
       <version>1.0-SNAPSHOT</version>
     </dependency>
 

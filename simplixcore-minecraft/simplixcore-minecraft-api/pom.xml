@@ -9,7 +9,7 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>simplixcore-mineacraft-api</artifactId>
+  <artifactId>simplixcore-minecraft-api</artifactId>
   <dependencies>
     <dependency>
       <groupId>dev.simplix</groupId>
