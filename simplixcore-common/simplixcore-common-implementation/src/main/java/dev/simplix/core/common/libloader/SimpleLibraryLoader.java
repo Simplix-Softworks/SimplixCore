@@ -5,8 +5,12 @@ import com.google.gson.GsonBuilder;
 import dev.simplix.core.common.aop.SimplixApplication;
 import dev.simplix.core.common.inject.SimplixInstaller;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Method;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.Set;
@@ -19,6 +23,16 @@ public class SimpleLibraryLoader implements LibraryLoader {
 
   private final Gson gson = new GsonBuilder().create();
   private final Set<File> files = new HashSet<>();
+  private Method addMethod;
+
+  {
+    try {
+      addMethod = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
+      addMethod.setAccessible(true);
+    } catch (Exception e) {
+      log.error("Cannot initialize LibraryLoader", e);
+    }
+  }
 
   public void loadLibraries(@NonNull File directory) {
     if (!directory.exists()) {
@@ -32,7 +46,7 @@ public class SimpleLibraryLoader implements LibraryLoader {
 
   public void loadLibrary(File file) {
     try {
-      if(files.contains(file)) {
+      if (files.contains(file)) {
         return;
       }
       ClassLoader classLoader = createClassLoader(file);
@@ -40,33 +54,66 @@ public class SimpleLibraryLoader implements LibraryLoader {
         return;
       }
       log.info("[Simplix | LibLoader] Loaded library " + file.getName());
-      files.add(file);
-      InputStream stream = classLoader.getResourceAsStream("library.json");
-      if (stream == null) {
-        return;
-      }
-      try (
-          InputStreamReader inputStreamReader = new InputStreamReader(
-              stream,
-              StandardCharsets.UTF_8)) {
-        LibraryDescription libraryDescription = this.gson.fromJson(
-            inputStreamReader,
-            LibraryDescription.class);
-        try {
-          Class<?> mainClass = classLoader.loadClass(libraryDescription.mainClass());
-          if (mainClass.isAnnotationPresent(SimplixApplication.class)) {
-            SimplixInstaller.instance().register(mainClass);
-            log.info("[Simplix | LibLoader] "
-                     + libraryDescription.name()
-                     + " was registered as a SimplixApplication");
-          }
-        } catch (ClassNotFoundException exception) {
-          throw new RuntimeException("Cannot find library main class", exception);
-        }
-      }
+      checkAndLoadSimplixApplication(file, classLoader);
     } catch (Exception ex) {
       log.info("[Simplix | LibLoader] Unable to load library " + file.getName(), ex);
     }
+  }
+
+  @Override
+  public void loadLibraryEncapsulated(@NonNull File file, Class<?> owner) {
+    try {
+      if (files.contains(file)) {
+        return;
+      }
+      ClassLoader classLoader = owner.getClassLoader();
+      if (!(classLoader instanceof URLClassLoader)) {
+        log.warn("[Simplix | LibLoader] "
+                 + owner.getSimpleName()
+                 + " is not supporting library encapsulation. Loading as shared library...");
+        loadLibrary(file);
+        return;
+      }
+      addUrlToClassLoader((URLClassLoader) classLoader, file);
+      log.info("[Simplix | LibLoader] Loaded encapsulated library " + file.getName() +
+               " for application " + owner.getSimpleName());
+    } catch (Exception ex) {
+      log.info("[Simplix | LibLoader] Unable to load encapsulated library " + file.getName() +
+               " for application " + owner.getSimpleName(), ex);
+    }
+  }
+
+  private void checkAndLoadSimplixApplication(@NonNull File file, ClassLoader classLoader)
+      throws IOException {
+    files.add(file);
+    InputStream stream = classLoader.getResourceAsStream("library.json");
+    if (stream == null) {
+      return;
+    }
+    try (
+        InputStreamReader inputStreamReader = new InputStreamReader(
+            stream,
+            StandardCharsets.UTF_8)) {
+      LibraryDescription libraryDescription = this.gson.fromJson(
+          inputStreamReader,
+          LibraryDescription.class);
+      try {
+        Class<?> mainClass = classLoader.loadClass(libraryDescription.mainClass());
+        if (mainClass.isAnnotationPresent(SimplixApplication.class)) {
+          SimplixInstaller.instance().register(mainClass);
+          log.info("[Simplix | LibLoader] "
+                   + libraryDescription.name()
+                   + " was registered as a SimplixApplication");
+        }
+      } catch (ClassNotFoundException exception) {
+        throw new RuntimeException("Cannot find library main class", exception);
+      }
+    }
+  }
+
+  private void addUrlToClassLoader(URLClassLoader classLoader, File file)
+      throws Exception {
+    addMethod.invoke(classLoader, file.toURI().toURL());
   }
 
   @Override

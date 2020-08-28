@@ -55,6 +55,12 @@ public class SimplixInstaller {
       throw new IllegalArgumentException("Owner class must be annotated with @SimplixApplication");
     }
     SimplixApplication application = owner.getAnnotation(SimplixApplication.class);
+    if(toInstall.containsKey(application.name())) {
+      log.warn("[Simplix | Bootstrap] "+application.name()+" is already registered. Please check "+
+               "for unnecessary double registration of your application. Callstack:");
+      new Exception().printStackTrace();
+      return;
+    }
     Set<String> basePackages = determineBasePackages(owner);
     this.toInstall.put(
         application.name(),
@@ -250,6 +256,8 @@ public class SimplixInstaller {
                  + ": Load dependency "
                  + dependency
                  + " from repository...");
+        dependency.applicationName(context.applicationInfo.name());
+        dependency.applicationClass(context.owner);
         if (!this.dependencyLoader.load(dependency, repositories)) {
           log.error(SIMPLIX_BOOTSTRAP
                     + context.applicationInfo.name() + ": Unable to load dependency " + dependency);

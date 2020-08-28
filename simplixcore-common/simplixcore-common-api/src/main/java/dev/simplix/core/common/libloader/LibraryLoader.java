@@ -10,6 +10,8 @@ public interface LibraryLoader {
 
   void loadLibrary(@NonNull File file);
 
+  void loadLibraryEncapsulated(@NonNull File file, Class<?> owner);
+
   Set<File> loadedLibraries();
 
 }

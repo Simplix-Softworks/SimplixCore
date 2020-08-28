@@ -36,6 +36,9 @@ public class PluginTypeHandler implements BiConsumer<Dependency, File> {
       if (pluginDescription == null) {
         return;
       }
+      if(ProxyServer.getInstance().getPluginManager().getPlugin(pluginDescription.getName()) != null) {
+        return;
+      }
       boolean b = (boolean) enable.invoke(ProxyServer.getInstance().getPluginManager(), new HashMap<>(), new Stack<>(), pluginDescription);
       if(!b) {
         return;

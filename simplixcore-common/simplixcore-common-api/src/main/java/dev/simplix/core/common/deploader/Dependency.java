@@ -1,5 +1,6 @@
 package dev.simplix.core.common.deploader;
 
+import dev.simplix.core.common.ApplicationInfo;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
@@ -10,6 +11,9 @@ import lombok.experimental.Accessors;
 @Accessors(fluent = true)
 @NonNull
 public class Dependency {
+
+  private String applicationName;
+  private Class<?> applicationClass;
 
   private String groupId;
   private String artifactId;
