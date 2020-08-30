@@ -94,7 +94,7 @@ public final class ReflectionUtil {
     }
   }
 
-  public static Field field(Class<?> clazz, String fieldName) throws Exception {
+  public static Field field(Class<?> clazz, String fieldName) throws NoSuchFieldException {
     Field field = clazz.getDeclaredField(fieldName);
     field.setAccessible(true);
     return field;
@@ -110,7 +110,7 @@ public final class ReflectionUtil {
     }
   }
 
-  public static void value(Class c, Object instance, String field, Object value) {
+  public static void value(Class<?> c, Object instance, String field, Object value) {
     try {
       Field f = c.getDeclaredField(field);
       f.setAccessible(true);
@@ -130,7 +130,7 @@ public final class ReflectionUtil {
     }
   }
 
-  public static void sendAllPacket(Object packet) throws Exception {
+  public static void sendAllPacket(Object packet) throws ReflectiveOperationException {
     for (Player p : Bukkit.getOnlinePlayers()) {
       Object nmsPlayer = nmsPlayer(p);
       Object connection = nmsPlayer.getClass().getField("playerConnection").get(nmsPlayer);
@@ -156,7 +156,7 @@ public final class ReflectionUtil {
     }
   }
 
-  public static void sendPlayerPacket(Player p, Object packet) throws Exception {
+  public static void sendPlayerPacket(Player p, Object packet) throws ReflectiveOperationException {
     Object nmsPlayer = nmsPlayer(p);
     Object connection = nmsPlayer.getClass().getField("playerConnection").get(nmsPlayer);
     connection
@@ -166,17 +166,17 @@ public final class ReflectionUtil {
   }
 
   public static void listFields(Object e) {
-    System.out.println(e.getClass().getName() + " contains " + e
+    log.info(e.getClass().getName() + " contains " + e
         .getClass()
         .getDeclaredFields().length + " declared fields.");
-    System.out.println(e.getClass().getName() + " contains " + e
+    log.info(e.getClass().getName() + " contains " + e
         .getClass()
         .getDeclaredClasses().length + " declared classes.");
     Field[] fds = e.getClass().getDeclaredFields();
     for (int i = 0; i < fds.length; i++) {
       fds[i].setAccessible(true);
       try {
-        System.out.println(fds[i].getName() + " -> " + fds[i].get(e));
+        log.info(fds[i].getName() + " -> " + fds[i].get(e));
       } catch (IllegalArgumentException | IllegalAccessException e1) {
         log.error(EXCEPTION_OCCURRED, e1);
       }
