@@ -1,6 +1,5 @@
 package dev.simplix.core.common.deploader;
 
-import dev.simplix.core.common.ApplicationInfo;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;

@@ -31,7 +31,7 @@ public abstract class AbstractSimplixModule implements Module {
         }
         bindingBuilder.to(clazz).in(Scopes.SINGLETON);
       } else {
-        AnnotatedBindingBuilder bindingBuilder = binder.bind(clazz);
+        AnnotatedBindingBuilder<?> bindingBuilder = binder.bind(clazz);
         if(isPrivate()) {
           bindingBuilder.annotatedWith(getClass().getAnnotation(Private.class));
         }

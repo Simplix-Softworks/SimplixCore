@@ -44,7 +44,6 @@ public final class SimplixPlugin extends Plugin {
         try {
           Thread.sleep(10);
         } catch (InterruptedException interruptedException) {
-//          throw interruptedException;
           Thread.currentThread().interrupt();
         }
       }

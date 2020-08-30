@@ -56,7 +56,7 @@ public class SimplixInstaller {
     }
     SimplixApplication application = owner.getAnnotation(SimplixApplication.class);
     if(toInstall.containsKey(application.name())) {
-      log.warn("[Simplix | Bootstrap] "+application.name()+" is already registered. Please check "+
+      log.warn(SIMPLIX_BOOTSTRAP+application.name()+" is already registered. Please check "+
                "for unnecessary double registration of your application. Callstack:");
       return;
     }
@@ -356,13 +356,8 @@ public class SimplixInstaller {
               || rawType.equals(Logger.class) || rawType.equals(Injector.class)) {
             continue;
           }
-          if(rawType.isAnnotationPresent(Private.class)) {
-            continue;
-          }
-          if(key.getAnnotationType() != null && key.getAnnotationType().equals(Private.class)) {
-            continue;
-          }
-          if (bound.contains(key)) {
+          if(rawType.isAnnotationPresent(Private.class) || bound.contains(key) ||
+             (key.getAnnotationType() != null && key.getAnnotationType().equals(Private.class))) {
             continue;
           }
           bound.add(key);

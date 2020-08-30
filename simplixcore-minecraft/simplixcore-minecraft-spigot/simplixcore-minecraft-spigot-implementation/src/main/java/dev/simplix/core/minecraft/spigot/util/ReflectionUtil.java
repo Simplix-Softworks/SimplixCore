@@ -19,8 +19,8 @@ public final class ReflectionUtil {
   private ReflectionUtil() {
   }
 
-  private static final Map<Map.Entry<Class, String>, Field> CACHED_FIELDS = new HashMap<>();
-  private static final Map<String, Class> CACHED_CLASSES = new HashMap<>();
+  private static final Map<Map.Entry<Class<?>, String>, Field> CACHED_FIELDS = new HashMap<>();
+  private static final Map<String, Class<?>> CACHED_CLASSES = new HashMap<>();
 
   public static Class<?> getClass(String classname) throws ClassNotFoundException {
     String path = classname
@@ -40,7 +40,7 @@ public final class ReflectionUtil {
   }
 
   public static Object nmsPlayer(Player p)
-      throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+      throws NoSuchMethodException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
     Method getHandle = p.getClass().getMethod("getHandle");
     return getHandle.invoke(p);
   }
@@ -64,7 +64,7 @@ public final class ReflectionUtil {
 
   public static Object fieldValue(Object instance, String fieldName)
       throws IllegalArgumentException, IllegalAccessException, SecurityException {
-    final Map.Entry<Class, String> key = new AbstractMap.SimpleEntry<>(
+    final Map.Entry<Class<?>, String> key = new AbstractMap.SimpleEntry<>(
         instance.getClass(),
         fieldName);
     final Field field = CACHED_FIELDS.computeIfAbsent(key, i -> {

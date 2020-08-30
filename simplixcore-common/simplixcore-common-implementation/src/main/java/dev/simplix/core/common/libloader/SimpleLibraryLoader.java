@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Method;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.charset.StandardCharsets;
@@ -112,7 +113,7 @@ public class SimpleLibraryLoader implements LibraryLoader {
   }
 
   private void addUrlToClassLoader(URLClassLoader classLoader, File file)
-      throws Exception {
+      throws ReflectiveOperationException, MalformedURLException {
     addMethod.invoke(classLoader, file.toURI().toURL());
   }
 
