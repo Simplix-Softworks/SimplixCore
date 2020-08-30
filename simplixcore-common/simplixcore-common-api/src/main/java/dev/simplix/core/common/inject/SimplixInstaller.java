@@ -353,11 +353,9 @@ public class SimplixInstaller {
         for (Key key : bindings.keySet()) {
           Class rawType = key.getTypeLiteral().getRawType();
           if (rawType.equals(ApplicationInfo.class) || rawType.equals(Stage.class)
-              || rawType.equals(Logger.class) || rawType.equals(Injector.class)) {
-            continue;
-          }
-          if(rawType.isAnnotationPresent(Private.class) || bound.contains(key) ||
-             (key.getAnnotationType() != null && key.getAnnotationType().equals(Private.class))) {
+              || rawType.equals(Logger.class) || rawType.equals(Injector.class)
+              || rawType.isAnnotationPresent(Private.class) || bound.contains(key)
+              || (key.getAnnotationType() != null && key.getAnnotationType().equals(Private.class))) {
             continue;
           }
           bound.add(key);

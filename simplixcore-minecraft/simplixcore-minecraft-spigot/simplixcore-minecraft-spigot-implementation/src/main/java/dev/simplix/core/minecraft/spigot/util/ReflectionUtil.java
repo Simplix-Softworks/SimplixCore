@@ -16,6 +16,8 @@ import org.bukkit.scoreboard.Scoreboard;
 @Slf4j
 public final class ReflectionUtil {
 
+  private static final String EXCEPTION_OCCURRED = "Exception occurred";
+
   private ReflectionUtil() {
   }
 
@@ -40,30 +42,30 @@ public final class ReflectionUtil {
   }
 
   public static Object nmsPlayer(Player p)
-      throws NoSuchMethodException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+      throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
     Method getHandle = p.getClass().getMethod("getHandle");
     return getHandle.invoke(p);
   }
 
   public static Object obcPlayer(Player p)
-      throws SecurityException, IllegalArgumentException, ClassNotFoundException {
+      throws ClassNotFoundException {
     return getClass("{obc}.entity.CraftPlayer").cast(p);
   }
 
   public static Object nmsWorld(World w)
-      throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+      throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
     Method getHandle = w.getClass().getMethod("getHandle");
     return getHandle.invoke(w);
   }
 
   public static Object nmsScoreboard(Scoreboard s)
-      throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+      throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
     Method getHandle = s.getClass().getMethod("getHandle");
     return getHandle.invoke(s);
   }
 
   public static Object fieldValue(Object instance, String fieldName)
-      throws IllegalArgumentException, IllegalAccessException, SecurityException {
+      throws IllegalAccessException {
     final Map.Entry<Class<?>, String> key = new AbstractMap.SimpleEntry<>(
         instance.getClass(),
         fieldName);
@@ -71,7 +73,7 @@ public final class ReflectionUtil {
       try {
         return instance.getClass().getDeclaredField(fieldName);
       } catch (final NoSuchFieldException e) {
-        log.error("Exception occurred", e);
+        log.error(EXCEPTION_OCCURRED, e);
       }
       return null;
     });
@@ -87,7 +89,7 @@ public final class ReflectionUtil {
     try {
       return (T) field.get(obj);
     } catch (Exception e) {
-      log.error("Exception occurred", e);
+      log.error(EXCEPTION_OCCURRED, e);
       return null;
     }
   }
@@ -104,7 +106,7 @@ public final class ReflectionUtil {
       f.setAccessible(true);
       f.set(instance, value);
     } catch (Exception e) {
-      log.error("Exception occurred", e);
+      log.error(EXCEPTION_OCCURRED, e);
     }
   }
 
@@ -114,7 +116,7 @@ public final class ReflectionUtil {
       f.setAccessible(true);
       f.set(instance, value);
     } catch (Exception e) {
-      log.error("Exception occurred", e);
+      log.error(EXCEPTION_OCCURRED, e);
     }
   }
 
@@ -124,7 +126,7 @@ public final class ReflectionUtil {
       f.setAccessible(true);
       f.set(instance, value);
     } catch (Exception e) {
-      log.error("Exception occurred", e);
+      log.error(EXCEPTION_OCCURRED, e);
     }
   }
 
@@ -150,7 +152,7 @@ public final class ReflectionUtil {
             .invoke(connection, packet);
       }
     } catch (Exception e) {
-      log.error("Exception occurred", e);
+      log.error(EXCEPTION_OCCURRED, e);
     }
   }
 
@@ -176,7 +178,7 @@ public final class ReflectionUtil {
       try {
         System.out.println(fds[i].getName() + " -> " + fds[i].get(e));
       } catch (IllegalArgumentException | IllegalAccessException e1) {
-        log.error("Exception occurred", e1);
+        log.error(EXCEPTION_OCCURRED, e1);
       }
     }
   }
