@@ -58,7 +58,6 @@ public class SimplixInstaller {
     if(toInstall.containsKey(application.name())) {
       log.warn("[Simplix | Bootstrap] "+application.name()+" is already registered. Please check "+
                "for unnecessary double registration of your application. Callstack:");
-      new Exception().printStackTrace();
       return;
     }
     Set<String> basePackages = determineBasePackages(owner);
