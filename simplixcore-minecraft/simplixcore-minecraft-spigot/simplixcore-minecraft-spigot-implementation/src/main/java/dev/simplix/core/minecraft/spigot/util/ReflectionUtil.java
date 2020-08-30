@@ -177,7 +177,6 @@ public final class ReflectionUtil {
         System.out.println(fds[i].getName() + " -> " + fds[i].get(e));
       } catch (IllegalArgumentException | IllegalAccessException e1) {
         log.error("Exception occurred", e1);
-        log.error("Exception occurred", e1);
       }
     }
   }
