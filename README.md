@@ -18,4 +18,5 @@ preferable to writing your own utilities. The final paragraph bears repeating:
 ### [Wiki](https://github.com/Simplix-Softworks/SimplixCore/wiki)
 - ### [Getting started](https://github.com/Simplix-Softworks/SimplixCore/wiki/Getting-started)
 
-### Downloading the latest build using Jenkins
+### Download builds
+You can find all builds on our [repository server](https://repo.simplix.dev/#browse/search=attributes.maven2.groupId%3Ddev.simplix.core)
