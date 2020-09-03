@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParseException;
 import com.google.inject.*;
+import com.google.inject.spi.ElementSource;
 import dev.simplix.core.common.ApplicationInfo;
 import dev.simplix.core.common.aop.*;
 import dev.simplix.core.common.deploader.Dependencies;
@@ -55,8 +56,8 @@ public class SimplixInstaller {
       throw new IllegalArgumentException("Owner class must be annotated with @SimplixApplication");
     }
     SimplixApplication application = owner.getAnnotation(SimplixApplication.class);
-    if(toInstall.containsKey(application.name())) {
-      log.warn(SIMPLIX_BOOTSTRAP+application.name()+" is already registered. Please check "+
+    if (toInstall.containsKey(application.name())) {
+      log.warn(SIMPLIX_BOOTSTRAP + application.name() + " is already registered. Please check " +
                "for unnecessary double registration of your application. Callstack:");
       return;
     }
@@ -355,11 +356,24 @@ public class SimplixInstaller {
           if (rawType.equals(ApplicationInfo.class) || rawType.equals(Stage.class)
               || rawType.equals(Logger.class) || rawType.equals(Injector.class)
               || rawType.isAnnotationPresent(Private.class) || bound.contains(key)
-              || (key.getAnnotationType() != null && key.getAnnotationType().equals(Private.class))) {
+              || (
+                  key.getAnnotationType() != null && key
+                      .getAnnotationType()
+                      .equals(Private.class))) {
             continue;
           }
+          Binding<?> binding = bindings.get(key);
+          log.debug(SIMPLIX_BOOTSTRAP
+                   + context.applicationInfo.name()
+                   + ": Bound "
+                   + key
+                   + " to element source "
+                   + ((ElementSource) binding.getSource())
+                       .getDeclaringSource()
+                   + " inherited from "
+                   + dependency);
           bound.add(key);
-          Provider<?> provider = bindings.get(key).getProvider();
+          Provider<?> provider = binding.getProvider();
           binder.bind(key).toProvider(provider);
         }
       }

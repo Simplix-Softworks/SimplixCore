@@ -105,6 +105,10 @@ public class SimpleLibraryLoader implements LibraryLoader {
           log.info("[Simplix | LibLoader] "
                    + libraryDescription.name()
                    + " was registered as a SimplixApplication");
+          log.debug("[Simplix | LibLoader] Application class = "
+                    + mainClass.getName()
+                    + " hashCode = "
+                    + mainClass.hashCode());
         }
       } catch (ClassNotFoundException exception) {
         throw new RuntimeException("Cannot find library main class", exception);

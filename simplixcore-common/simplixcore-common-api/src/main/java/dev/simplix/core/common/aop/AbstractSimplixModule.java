@@ -25,13 +25,13 @@ public abstract class AbstractSimplixModule implements Module {
     this.components.keySet().forEach(clazz -> {
       Component component = this.components.get(clazz);
       if (!component.parent().equals(Object.class)) {
-        AnnotatedBindingBuilder<?> bindingBuilder = binder.bind(component.parent());
+        AnnotatedBindingBuilder<?> bindingBuilder = binder.withSource(clazz).bind(component.parent());
         if(isPrivate()) {
           bindingBuilder.annotatedWith(getClass().getAnnotation(Private.class));
         }
         bindingBuilder.to(clazz).in(Scopes.SINGLETON);
       } else {
-        AnnotatedBindingBuilder<?> bindingBuilder = binder.bind(clazz);
+        AnnotatedBindingBuilder<?> bindingBuilder = binder.withSource(clazz).bind(clazz);
         if(isPrivate()) {
           bindingBuilder.annotatedWith(getClass().getAnnotation(Private.class));
         }
