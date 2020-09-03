@@ -70,8 +70,7 @@ public class SimpleLocalizationManagerFactory implements LocalizationManagerFact
               uri,
               Collections.emptyMap())) {
         try (Stream<Path> listFiles = Files.list(fileSystem.getPath(translationResourcesDirectory))) {
-          listFiles.filter(path -> path.getFileName().endsWith(".properties"))
-              .forEach(path -> {
+          listFiles.forEach(path -> {
                 Locale locale = new Locale(path.getFileName().toString().substring(
                     0,
                     path.getFileName().toString().length() - 11));
