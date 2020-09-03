@@ -20,6 +20,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
+import dev.simplix.core.common.updater.Updater;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -42,6 +43,7 @@ public class SimplixInstaller {
   private Injector bossInjector;
   private DependencyLoader dependencyLoader;
   private LibraryLoader libraryLoader;
+  private Updater updater;
 
   /**
    * This will register a class annotated with {@link SimplixApplication}.
@@ -126,6 +128,29 @@ public class SimplixInstaller {
       initDependencyLoader();
     }
     return this.dependencyLoader;
+  }
+
+  /**
+   * @return The updater instance
+   */
+  public Updater updater() {
+    if(updater == null) {
+      initUpdater();
+    }
+    return updater;
+  }
+
+  private void initUpdater() {
+    try {
+      String libLoaderClass = System.getProperty(
+          "dev.simplix.core.common.updater.Updater",
+          "dev.simplix.core.common.updater.ArtifactUpdater");
+
+      Class<?> clazz = Class.forName(libLoaderClass);
+      this.updater = (Updater) clazz.newInstance();
+    } catch (Exception exception) {
+      throw new RuntimeException("Unable to initialize updater", exception);
+    }
   }
 
   public LibraryLoader libraryLoader() {
@@ -460,6 +485,10 @@ public class SimplixInstaller {
 
   public static SimplixInstaller instance() {
     return INSTANCE;
+  }
+
+  public Class<?> applicationClass(String name) {
+    return toInstall.get(name).owner;
   }
 
   @AllArgsConstructor

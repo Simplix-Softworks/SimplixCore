@@ -92,7 +92,7 @@ public final class ArtifactDependencyLoader implements DependencyLoader {
     return false;
   }
 
-  private List<RemoteRepository> createRemoteRepositories(@NonNull Iterable<Repository> repositories) {
+  public List<RemoteRepository> createRemoteRepositories(@NonNull Iterable<Repository> repositories) {
     List<RemoteRepository> out = new ArrayList<>();
     for (Repository repository : repositories) {
       out.add(new RemoteRepository.Builder(repository.id(), "default", repository.url()).build());
@@ -100,7 +100,7 @@ public final class ArtifactDependencyLoader implements DependencyLoader {
     return out;
   }
 
-  private RepositorySystem newRepositorySystem() {
+  public RepositorySystem newRepositorySystem() {
     DefaultServiceLocator locator = MavenRepositorySystemUtils.newServiceLocator();
     locator.addService(RepositoryConnectorFactory.class, BasicRepositoryConnectorFactory.class);
     locator.addService(TransporterFactory.class, FileTransporterFactory.class);
@@ -108,13 +108,17 @@ public final class ArtifactDependencyLoader implements DependencyLoader {
     return locator.getService(RepositorySystem.class);
   }
 
-  private RepositorySystemSession newSession(
+  public RepositorySystemSession newSession(
       @NonNull RepositorySystem system,
       @NonNull File localRepository) {
     DefaultRepositorySystemSession session = MavenRepositorySystemUtils.newSession();
     LocalRepository localRepo = new LocalRepository(localRepository.toString());
     session.setLocalRepositoryManager(system.newLocalRepositoryManager(session, localRepo));
     return session;
+  }
+
+  public File localRepository() {
+    return localRepositoryFile;
   }
 
 }

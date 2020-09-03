@@ -4,7 +4,7 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <parent>
     <artifactId>simplixcore-minecraft-bungeecord</artifactId>
-    <groupId>dev.simplix</groupId>
+    <groupId>dev.simplix.core</groupId>
     <version>1.0-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
@@ -34,56 +34,56 @@
       <version>1.7.19</version>
     </dependency>
     <dependency>
-      <groupId>dev.simplix</groupId>
+      <groupId>dev.simplix.core</groupId>
       <artifactId>simplixcore-minecraft-bungeecord-slf4j</artifactId>
       <version>1.0-SNAPSHOT</version>
     </dependency>
 
     <!-- MC API -->
     <dependency>
-      <groupId>dev.simplix</groupId>
+      <groupId>dev.simplix.core</groupId>
       <artifactId>simplixcore-minecraft-api</artifactId>
       <version>1.0-SNAPSHOT</version>
     </dependency>
 
     <!-- Implementation of our API -->
     <dependency>
-      <groupId>dev.simplix</groupId>
+      <groupId>dev.simplix.core</groupId>
       <artifactId>simplixcore-common-implementation</artifactId>
       <version>1.0.0-SNAPSHOT</version>
     </dependency>
 
     <!-- Implementation of the bungeecord api -->
     <dependency>
-      <groupId>dev.simplix</groupId>
+      <groupId>dev.simplix.core</groupId>
       <artifactId>simplixcore-minecraft-bungeecord-implementation</artifactId>
       <version>1.0-SNAPSHOT</version>
     </dependency>
 
     <!-- Auto register our listeners -->
     <dependency>
-      <groupId>dev.simplix</groupId>
+      <groupId>dev.simplix.core</groupId>
       <artifactId>simplixcore-minecraft-bungeecord-dynamiclisteners</artifactId>
       <version>1.0-SNAPSHOT</version>
     </dependency>
 
     <!-- Auto register our commands -->
     <dependency>
-      <groupId>dev.simplix</groupId>
+      <groupId>dev.simplix.core</groupId>
       <artifactId>simplixcore-minecraft-bungeecord-dynamiccommands</artifactId>
       <version>1.0-SNAPSHOT</version>
     </dependency>
 
     <!-- Our SQL module -->
     <dependency>
-      <groupId>dev.simplix</groupId>
+      <groupId>dev.simplix.core</groupId>
       <artifactId>simplixcore-database-sql</artifactId>
       <version>1.0-SNAPSHOT</version>
     </dependency>
 
     <!-- Our config module -->
     <dependency>
-      <groupId>dev.simplix</groupId>
+      <groupId>dev.simplix.core</groupId>
       <artifactId>simplixcore-config</artifactId>
       <version>1.0-SNAPSHOT</version>
     </dependency>

@@ -5,30 +5,30 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>dev.simplix</groupId>
+    <groupId>dev.simplix.core</groupId>
     <artifactId>simplixcore-minecraft-spigot</artifactId>
     <version>1.0-SNAPSHOT</version>
   </parent>
 
-  <groupId>dev.simplix</groupId>
+  <groupId>dev.simplix.core</groupId>
   <artifactId>simplixcore-minecraft-spigot-tests</artifactId>
   <version>1.0-SNAPSHOT</version>
 
   <dependencies>
     <dependency>
-      <groupId>dev.simplix</groupId>
+      <groupId>dev.simplix.core</groupId>
       <artifactId>simplixcore-common-api</artifactId>
       <version>1.0.0-SNAPSHOT</version>
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>dev.simplix</groupId>
+      <groupId>dev.simplix.core</groupId>
       <artifactId>simplixcore-common-implementation</artifactId>
       <version>1.0.0-SNAPSHOT</version>
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>dev.simplix</groupId>
+      <groupId>dev.simplix.core</groupId>
       <artifactId>simplixcore-minecraft-spigot-implementation</artifactId>
       <version>1.0-SNAPSHOT</version>
       <scope>test</scope>

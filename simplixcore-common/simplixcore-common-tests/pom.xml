@@ -5,23 +5,23 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>dev.simplix</groupId>
+    <groupId>dev.simplix.core</groupId>
     <artifactId>simplixcore-common</artifactId>
     <version>1.0-SNAPSHOT</version>
   </parent>
 
-  <groupId>dev.simplix</groupId>
+  <groupId>dev.simplix.core</groupId>
   <artifactId>simplixcore-common-tests</artifactId>
   <version>1.0-SNAPSHOT</version>
 
   <dependencies>
     <dependency>
-      <groupId>dev.simplix</groupId>
+      <groupId>dev.simplix.core</groupId>
       <artifactId>simplixcore-common-api</artifactId>
       <version>1.0.0-SNAPSHOT</version>
     </dependency>
     <dependency>
-      <groupId>dev.simplix</groupId>
+      <groupId>dev.simplix.core</groupId>
       <artifactId>simplixcore-common-implementation</artifactId>
       <version>1.0.0-SNAPSHOT</version>
     </dependency>
