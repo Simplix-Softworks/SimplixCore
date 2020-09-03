@@ -11,7 +11,7 @@ import javax.inject.Qualifier;
  * SimplixApplications.
  */
 @Qualifier
-@Target({ElementType.TYPE, ElementType.METHOD})
+@Target({ElementType.TYPE, ElementType.METHOD, ElementType.PARAMETER, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Private {
 }
