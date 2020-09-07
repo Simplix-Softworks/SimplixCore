@@ -64,16 +64,18 @@ public class SimplixInstaller {
       return;
     }
     Set<String> basePackages = determineBasePackages(owner);
+    ApplicationInfo info = ApplicationInfo.builder()
+        .name(application.name())
+        .version(application.version())
+        .authors(application.authors())
+        .workingDirectory(new File(application.workingDirectory()))
+        .dependencies(application.dependencies())
+        .build();
     this.toInstall.put(
         application.name(),
         new InstallationContext(owner, new Reflections(basePackages, owner.getClassLoader()),
-            ApplicationInfo.builder()
-                .name(application.name())
-                .version(application.version())
-                .authors(application.authors())
-                .workingDirectory(new File(application.workingDirectory()))
-                .dependencies(application.dependencies())
-                .build(), detectReferencedModules(owner, modules, application.name())));
+            info, detectReferencedModules(owner, modules, application.name())));
+    processRemoteDependencies(owner, info);
     if (this.bossInjector != null) {
       // YOU ARE TOO LATE
       log.info(SIMPLIX_BOOTSTRAP + "Late install " + application.name() + "...");
@@ -225,7 +227,6 @@ public class SimplixInstaller {
     if (this.injectorMap.containsKey(context.owner)) {
       return true; // Application already installed
     }
-    processRemoteDependencies(context);
     for (String dependency : context.applicationInfo.dependencies()) {
       InstallationContext depContext = this.toInstall.get(dependency);
       if (depContext == null) {
@@ -257,11 +258,11 @@ public class SimplixInstaller {
     return true;
   }
 
-  private void processRemoteDependencies(InstallationContext context) {
+  private void processRemoteDependencies(Class<?> appOwner, ApplicationInfo info) {
     InputStream inputStream = null;
     InputStreamReader reader = null;
     try {
-      inputStream = context.owner.getResourceAsStream("/dependencies.json");
+      inputStream = appOwner.getResourceAsStream("/dependencies.json");
       if (inputStream == null) {
         return;
       }
@@ -276,20 +277,20 @@ public class SimplixInstaller {
       List<Repository> repositories = Arrays.asList(dependencies.repositories());
       for (Dependency dependency : dependencies.dependencies()) {
         log.info(SIMPLIX_BOOTSTRAP
-                 + context.applicationInfo.name()
+                 + info.name()
                  + ": Load dependency "
                  + dependency
                  + " from repository...");
-        dependency.applicationName(context.applicationInfo.name());
-        dependency.applicationClass(context.owner);
+        dependency.applicationName(info.name());
+        dependency.applicationClass(appOwner);
         if (!this.dependencyLoader.load(dependency, repositories)) {
           log.error(SIMPLIX_BOOTSTRAP
-                    + context.applicationInfo.name() + ": Unable to load dependency " + dependency);
+                    + info.name() + ": Unable to load dependency " + dependency);
         }
       }
     } catch (JsonParseException exception) {
       log.error(SIMPLIX_BOOTSTRAP
-                + context.applicationInfo.name() + ": Cannot parse dependencies.json", exception);
+                + info.name() + ": Cannot parse dependencies.json", exception);
     } finally {
       if (inputStream != null) {
         try {
