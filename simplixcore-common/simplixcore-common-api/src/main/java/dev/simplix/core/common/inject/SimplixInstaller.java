@@ -86,8 +86,7 @@ public class SimplixInstaller {
       return modules;
     }
     RequireModules requireModules = owner.getAnnotation(RequireModules.class);
-    Set<Module> out = new HashSet<>();
-    out.addAll(Arrays.asList(modules));
+    Set<Module> out = new HashSet<>(Arrays.asList(modules));
     try {
       Supplier<AbstractSimplixModule[]> supplier = requireModules.value().newInstance();
       out.addAll(Arrays.asList(supplier.get()));
@@ -377,7 +376,7 @@ public class SimplixInstaller {
         Injector injector = this.injectorMap.get(this.toInstall.get(dependency).owner);
         Map<Key<?>, Binding<?>> bindings = injector.getBindings();
         for (Key key : bindings.keySet()) {
-          Class rawType = key.getTypeLiteral().getRawType();
+          Class<?> rawType = key.getTypeLiteral().getRawType();
           if (rawType.equals(ApplicationInfo.class) || rawType.equals(Stage.class)
               || rawType.equals(Logger.class) || rawType.equals(Injector.class)
               || rawType.isAnnotationPresent(Private.class) || bound.contains(key)
