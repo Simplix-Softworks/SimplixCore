@@ -12,6 +12,7 @@ import dev.simplix.core.common.deploader.Dependency;
 import dev.simplix.core.common.deploader.DependencyLoader;
 import dev.simplix.core.common.deploader.Repository;
 import dev.simplix.core.common.libloader.LibraryLoader;
+import dev.simplix.core.common.updater.Updater;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,7 +21,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
-import dev.simplix.core.common.updater.Updater;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -58,7 +58,7 @@ public class SimplixInstaller {
       throw new IllegalArgumentException("Owner class must be annotated with @SimplixApplication");
     }
     SimplixApplication application = owner.getAnnotation(SimplixApplication.class);
-    if (toInstall.containsKey(application.name())) {
+    if (this.toInstall.containsKey(application.name())) {
       log.warn(SIMPLIX_BOOTSTRAP + application.name() + " is already registered. Please check " +
                "for unnecessary double registration of your application. Callstack:");
       return;
@@ -135,10 +135,10 @@ public class SimplixInstaller {
    * @return The updater instance
    */
   public Updater updater() {
-    if(updater == null) {
+    if (this.updater == null) {
       initUpdater();
     }
-    return updater;
+    return this.updater;
   }
 
   private void initUpdater() {
@@ -389,14 +389,14 @@ public class SimplixInstaller {
           }
           Binding<?> binding = bindings.get(key);
           log.debug(SIMPLIX_BOOTSTRAP
-                   + context.applicationInfo.name()
-                   + ": Bound "
-                   + key
-                   + " to element source "
-                   + ((ElementSource) binding.getSource())
-                       .getDeclaringSource()
-                   + " inherited from "
-                   + dependency);
+                    + context.applicationInfo.name()
+                    + ": Bound "
+                    + key
+                    + " to element source "
+                    + ((ElementSource) binding.getSource())
+                        .getDeclaringSource()
+                    + " inherited from "
+                    + dependency);
           bound.add(key);
           Provider<?> provider = binding.getProvider();
           binder.bind(key).toProvider(provider);
@@ -413,17 +413,17 @@ public class SimplixInstaller {
         Component component = componentClass.getAnnotation(Component.class);
         AbstractSimplixModule simplixModule = findAbstractSimplixModule(modules, component.value());
         if (simplixModule == null) {
-          log.warn(SIMPLIX_BOOTSTRAP
-                   + context.applicationInfo.name()
-                   + ": Component "
-                   + componentClass.getName()
-                   + " referenced module "
-                   + component.value().getName()
-                   + " which is not available in this context.");
-          log.warn(SIMPLIX_BOOTSTRAP
-                   + context.applicationInfo.name()
-                   + ": Available modules in this context: "
-                   + modules);
+//          log.warn(SIMPLIX_BOOTSTRAP
+//                   + context.applicationInfo.name()
+//                   + ": Component "
+//                   + componentClass.getName()
+//                   + " referenced module "
+//                   + component.value().getName()
+//                   + " which is not available in this context.");
+//          log.warn(SIMPLIX_BOOTSTRAP
+//                   + context.applicationInfo.name()
+//                   + ": Available modules in this context: "
+//                   + modules);
           continue;
         }
         simplixModule.components().put(componentClass, component);
@@ -488,7 +488,7 @@ public class SimplixInstaller {
   }
 
   public Class<?> applicationClass(String name) {
-    return toInstall.get(name).owner;
+    return this.toInstall.get(name).owner;
   }
 
   @AllArgsConstructor

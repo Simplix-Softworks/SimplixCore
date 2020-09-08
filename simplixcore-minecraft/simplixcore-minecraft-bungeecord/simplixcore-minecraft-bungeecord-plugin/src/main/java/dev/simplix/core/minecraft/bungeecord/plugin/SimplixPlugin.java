@@ -26,6 +26,8 @@ public final class SimplixPlugin extends Plugin {
 
   @Override
   public void onEnable() {
+    ProxyServer.getInstance().getPluginManager().registerListener(this, new ProxyListenerImpl());
+
     SimplixInstaller.instance().register(SimplixPlugin.class);
     ProxyServer.getInstance().getScheduler().runAsync(this, () -> {
       long started = System.currentTimeMillis();
