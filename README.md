@@ -17,8 +17,8 @@ preferable to writing your own utilities. The final paragraph bears repeating:
 
 ### [Wiki](https://github.com/Simplix-Softworks/SimplixCore/wiki)
 - ### [Getting started](https://github.com/Simplix-Softworks/SimplixCore/wiki/Getting-started)
+- ### [Example-Project](https://github.com/Simplix-Softworks/SimplixExample)
+
 
 ### Download builds
 You can find all builds on our [repository server](https://repo.simplix.dev/#browse/search=attributes.maven2.groupId%3Ddev.simplix.core)
-
-[Example](https://github.com/Simplix-Softworks/SimplixExample)
