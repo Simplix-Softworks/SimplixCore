@@ -58,6 +58,7 @@
             <include>**/*Spec.*</include>
             <include>**/*Test.*</include>
           </includes>
+          <trimStackTrace>false</trimStackTrace>
         </configuration>
       </plugin>
     </plugins>

@@ -11,7 +11,7 @@ import lombok.experimental.Accessors;
 @Accessors(fluent = true)
 public class UpdatePolicy {
 
-  private Repository repository;
-  private Dependency dependency;
+  private String projectId;
+  private String versionPattern;
 
 }

@@ -18,8 +18,6 @@ import java.util.Collections;
 @Slf4j
 public final class SimpleUpdater implements Updater {
 
-  private final ArtifactDependencyLoader dependencyLoader =
-      (ArtifactDependencyLoader) SimplixInstaller.instance().dependencyLoader();
   private final File cacheDirectory = new File(".updateCache");
 
   {
@@ -54,17 +52,6 @@ public final class SimpleUpdater implements Updater {
     } catch (URISyntaxException e) {
       // will never happen
     }
-    RepositorySystem repositorySystem = dependencyLoader.newRepositorySystem();
-    RepositorySystemSession session = dependencyLoader.newSession(repositorySystem,
-        dependencyLoader.localRepository());
-
-    Dependency dependency = updatePolicy.dependency();
-    Artifact artifact = new DefaultArtifact(dependency.groupId(), dependency.artifactId(), "jar",
-        dependency.version());
-    ArtifactRequest request = new ArtifactRequest();
-    request.setArtifact(artifact);
-    request.setRepositories(dependencyLoader
-        .createRemoteRepositories(Collections.singletonList(updatePolicy.repository())));
 
   }
 
