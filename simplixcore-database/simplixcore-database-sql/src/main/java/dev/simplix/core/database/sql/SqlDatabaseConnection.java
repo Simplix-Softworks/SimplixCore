@@ -13,10 +13,7 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 import javax.sql.DataSource;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.jetbrains.annotations.Nullable;
 
 @ToString(of = "connectionHandler")
@@ -185,6 +182,17 @@ public final class SqlDatabaseConnection {
     return false;
   }
 
+  @SneakyThrows
+  public void transaction(Transaction transaction) {
+    prepare("BEGIN");
+    try {
+      transaction.transact();
+      prepare("COMMIT");
+    } finally {
+      prepare("ROLLBACK");
+    }
+  }
+
   public <T, K> T rawExecutor(
       @NonNull String statement,
       @NonNull PreparedStatementFiller filler,
@@ -330,14 +338,14 @@ public final class SqlDatabaseConnection {
     return queryCollection(statement, filler, consumer, ArrayList::new);
   }
 
-  public List<TableInformation> getTableInformation(@NonNull String database) {
+  public List<TableInformation> tableInformation(@NonNull String database) {
     return queryList(
         "SELECT * FROM information_schema.tables WHERE table_schema LIKE ?",
         ps -> ps.setString(1, database),
         TableInformation.getTransformer());
   }
 
-  public List<FieldInformation> getFieldInformation(
+  public List<FieldInformation> fieldInformation(
       @NonNull String database,
       @NonNull String table) {
     return queryList(

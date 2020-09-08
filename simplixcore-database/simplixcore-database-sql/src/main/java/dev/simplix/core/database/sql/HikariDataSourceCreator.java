@@ -38,4 +38,5 @@ public class HikariDataSourceCreator {
     hikariConfig.setMaximumPoolSize(maxPoolSize);
     return new HikariDataSource(hikariConfig);
   }
+
 }
