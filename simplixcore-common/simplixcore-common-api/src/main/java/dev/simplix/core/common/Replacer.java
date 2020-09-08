@@ -60,7 +60,7 @@ public final class Replacer {
     return this;
   }
 
-  public Replacer set(final int index, final String message) {
+  public Replacer set(final int index, @NonNull final String message) {
     this.messages.set(index, message);
     return this;
   }
