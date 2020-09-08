@@ -16,8 +16,8 @@ preferable to writing your own utilities. The final paragraph bears repeating:
 > more attention than most developers could afford to devote to the same functionality.
 
 ### [Wiki](https://github.com/Simplix-Softworks/SimplixCore/wiki)
-- ### [Getting started](https://github.com/Simplix-Softworks/SimplixCore/wiki/Getting-started)
-- ### [Example-Project](https://github.com/Simplix-Softworks/SimplixExample)
+- #### [Getting started](https://github.com/Simplix-Softworks/SimplixCore/wiki/Getting-started)
+- #### [Example-Project](https://github.com/Simplix-Softworks/SimplixExample)
 
 
 ### Download builds
