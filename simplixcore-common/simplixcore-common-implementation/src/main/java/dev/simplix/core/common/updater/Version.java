@@ -1,6 +1,5 @@
 package dev.simplix.core.common.updater;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -15,10 +14,12 @@ import org.jetbrains.annotations.NotNull;
 public class Version implements Comparable<Version> {
 
   private final String pattern;
+  private final String representation;
   private final List<Integer> values = new ArrayList<>(3);
 
-  private Version(String pattern) {
+  private Version(String pattern, String representation) {
     this.pattern = pattern;
+    this.representation = representation;
   }
 
   public void value(int pos, int value) {
@@ -69,12 +70,17 @@ public class Version implements Comparable<Version> {
     return 0;
   }
 
+  @Override
+  public String toString() {
+    return representation;
+  }
+
   public static Version parse(String version) {
     return parse("^(\\d+\\.)?(\\d+\\.)?(\\*|\\d+)$", version);
   }
 
   public static Version parse(String pattern, String versionString) {
-    Version version = new Version(pattern);
+    Version version = new Version(pattern, versionString);
     Pattern regex = Pattern.compile(pattern);
     Matcher matcher = regex.matcher(versionString);
     int group = 0;
