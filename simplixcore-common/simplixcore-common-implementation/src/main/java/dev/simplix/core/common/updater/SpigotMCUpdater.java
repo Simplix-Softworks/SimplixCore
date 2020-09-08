@@ -63,7 +63,8 @@ public final class SpigotMCUpdater implements Updater {
           log.info("[Simplix | Updater] "
                    + applicationInfo.name()
                    + ": A new version is available: "
-                   + latest);
+                   + latest
+                   + " (currently installed: " + currentVersion + ")");
           log.info("[Simplix | Updater] "
                    + applicationInfo.name()
                    + ": Download here: https://www.spigotmc.org/resources/"
