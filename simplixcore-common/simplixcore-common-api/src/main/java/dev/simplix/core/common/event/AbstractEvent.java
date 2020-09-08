@@ -1,6 +1,7 @@
 package dev.simplix.core.common.event;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.experimental.Accessors;
 
 @Getter
@@ -14,11 +15,13 @@ public abstract class AbstractEvent implements Event {
     Events.add(this);
   }
 
+  @Override
   public void canceled(boolean canceled) {
     this.canceled = canceled;
   }
 
-  public void cancelReason(String cancelReason) {
+  @Override
+  public void cancelReason(@NonNull String cancelReason) {
     this.cancelReason = cancelReason;
   }
 }

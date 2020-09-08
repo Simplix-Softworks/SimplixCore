@@ -4,11 +4,9 @@ import dev.simplix.core.common.aop.ScanComponents;
 import dev.simplix.core.common.aop.SimplixApplication;
 import dev.simplix.core.common.deploader.ArtifactDependencyLoader;
 import dev.simplix.core.common.inject.SimplixInstaller;
-import dev.simplix.core.common.libloader.LibraryLoader;
 import dev.simplix.core.minecraft.spigot.dynamiclisteners.DynamicListenersSimplixModule;
-import java.io.File;
-
 import dev.simplix.core.minecraft.spigot.plugin.deploader.PluginTypeHandler;
+import java.io.File;
 import lombok.extern.slf4j.Slf4j;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
@@ -33,6 +31,7 @@ public final class SimplixPlugin extends JavaPlugin {
 
   @Override
   public void onEnable() {
+    Bukkit.getPluginManager().registerEvents(new SpigotListenerImpl(), this);
     SimplixInstaller
         .instance()
         .register(SimplixPlugin.class, new DynamicListenersSimplixModule(this));
