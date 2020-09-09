@@ -5,4 +5,5 @@ import dev.simplix.core.common.aop.ApplicationModule;
 
 @ApplicationModule("SimplixCore")
 public class SimplixMinecraftModule extends AbstractSimplixModule {
+
 }

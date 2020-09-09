@@ -41,15 +41,16 @@ public final class UpdatePolicyDeserializer implements JsonDeserializer<UpdatePo
                                             + " must implement "
                                             + UpdateDownloader.class.getName());
           }
-          atomicDownloader.set(jsonDeserializationContext.deserialize(downloaderElement, downloaderClass));
+          atomicDownloader.set(jsonDeserializationContext.deserialize(
+              downloaderElement,
+              downloaderClass));
         } catch (Exception exception) {
           atomicException.set(exception);
         }
       });
-      if(atomicException.get() != null) {
+      if (atomicException.get() != null) {
         throw atomicException.get();
       }
-
 
       return new UpdatePolicy(
           object.get("versionPattern").getAsString(), atomicDownloader.get(), atomicFetcher.get());

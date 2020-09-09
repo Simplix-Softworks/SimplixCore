@@ -1,12 +1,12 @@
 package dev.simplix.core.common.updater;
 
 import dev.simplix.core.common.ApplicationInfo;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
 @NoArgsConstructor

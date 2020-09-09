@@ -12,6 +12,7 @@ public interface ComponentInterceptor<T> {
 
   /**
    * Passes an instance of an intercepted component to this interceptor for further processing.
+   *
    * @param obj An instance of component
    */
   void intercept(@NonNull T obj);

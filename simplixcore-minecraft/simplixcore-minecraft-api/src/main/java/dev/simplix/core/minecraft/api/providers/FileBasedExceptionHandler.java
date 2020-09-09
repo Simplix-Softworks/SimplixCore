@@ -6,6 +6,7 @@ import dev.simplix.core.common.ApplicationInfo;
 import dev.simplix.core.common.TimeFormatUtil;
 import dev.simplix.core.common.aop.Component;
 import dev.simplix.core.common.providers.ExceptionHandler;
+import dev.simplix.core.minecraft.modules.SimplixMinecraftModule;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -17,7 +18,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.*;
-import dev.simplix.core.minecraft.modules.SimplixMinecraftModule;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.Nullable;
@@ -64,7 +64,7 @@ public final class FileBasedExceptionHandler implements ExceptionHandler {
       }
 
     } catch (final Exception exception) {
-      log.error("Exception occurred while writing to "+file, exception);
+      log.error("Exception occurred while writing to " + file, exception);
     }
   }
 

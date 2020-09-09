@@ -1,6 +1,6 @@
 name: Dummy
 version: 1.0
-authors: [SimplixSoftworks]
+authors: [ SimplixSoftworks ]
 
 main: dev.simplix.core.minecraft.spigot.fake.FakeJavaPlugin
 

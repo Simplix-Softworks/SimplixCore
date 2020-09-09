@@ -231,15 +231,17 @@ public class SimplixInstaller {
   }
 
   private void startUpdateTimer() {
-    updateTimer.schedule(new TimerTask() {
+    this.updateTimer.schedule(new TimerTask() {
       @Override
       public void run() {
-        for (String appName : updatePolicyMap.keySet()) {
-          ApplicationInfo applicationInfo = toInstall.get(appName).applicationInfo;
-          if(System.getProperty("simplix.disableupdate."+appName) != null) {
+        for (String appName : SimplixInstaller.this.updatePolicyMap.keySet()) {
+          ApplicationInfo applicationInfo = SimplixInstaller.this.toInstall.get(appName).applicationInfo;
+          if (System.getProperty("simplix.disableupdate." + appName) != null) {
             continue;
           }
-          updater().checkForUpdates(applicationInfo, updatePolicyMap.get(appName));
+          updater().checkForUpdates(
+              applicationInfo,
+              SimplixInstaller.this.updatePolicyMap.get(appName));
         }
       }
     }, 1000, TimeUnit.MINUTES.toMillis(5));
@@ -301,7 +303,7 @@ public class SimplixInstaller {
       UpdatePolicy policy = this.gson.fromJson(
           inputStreamReader,
           UpdatePolicy.class);
-      updatePolicyMap.put(context.applicationInfo.name(), policy);
+      this.updatePolicyMap.put(context.applicationInfo.name(), policy);
     }
   }
 

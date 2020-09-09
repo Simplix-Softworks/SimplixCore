@@ -1,13 +1,12 @@
 package dev.simplix.minecraft.spigot.dynamiccommands;
 
 import dev.simplix.core.common.aop.AbstractSimplixModule;
+import java.lang.reflect.Field;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandMap;
-
-import java.lang.reflect.Field;
 
 @Slf4j
 public class DynamicCommandsSimplixModule extends AbstractSimplixModule {
@@ -26,7 +25,7 @@ public class DynamicCommandsSimplixModule extends AbstractSimplixModule {
       final CommandMap commandMap = (CommandMap) commandMapField.get(Bukkit.getServer());
       commandMap.register(command.getLabel(), command);
     } catch (final Throwable throwable) {
-      log.error("Unable to register command "+command.getName(), throwable);
+      log.error("Unable to register command " + command.getName(), throwable);
     }
   }
 

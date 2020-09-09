@@ -1,7 +1,6 @@
 package dev.simplix.core.common.aop;
 
 import dev.simplix.core.common.inject.SimplixInstaller;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -31,6 +30,7 @@ public @interface SimplixApplication {
 
   /**
    * Tells the {@link SimplixInstaller} to install dependent applications before this application.
+   *
    * @return The dependencies of the application
    */
   String[] dependencies() default {};

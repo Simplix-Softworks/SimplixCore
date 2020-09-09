@@ -1,6 +1,9 @@
 package dev.simplix.core.minecraft.spigot.tests;
 
-import com.google.inject.*;
+import com.google.inject.ConfigurationException;
+import com.google.inject.Injector;
+import com.google.inject.Key;
+import com.google.inject.Provides;
 import dev.simplix.core.common.CommonSimplixModule;
 import dev.simplix.core.common.aop.AbstractSimplixModule;
 import dev.simplix.core.common.aop.Private;
@@ -33,20 +36,24 @@ public class GuiceTest {
     Assertions.assertNotNull(pluginManager);
 
     PluginManager pluginManager2 = dependTestInjector.getInstance(PluginManager.class);
-    if(pluginManager != pluginManager2) {
+    if (pluginManager != pluginManager2) {
       throw new IllegalStateException("PluginManagers are not the same instance!");
     }
 
-    expect(() -> dependTestInjector.getInstance(Key.get(Car.class, Private.class)), ConfigurationException.class);
-    Assertions.assertEquals("Audi A6", unitTestInjector.getInstance(Key.get(Car.class, Private.class)).getName());
+    expect(
+        () -> dependTestInjector.getInstance(Key.get(Car.class, Private.class)),
+        ConfigurationException.class);
+    Assertions.assertEquals(
+        "Audi A6",
+        unitTestInjector.getInstance(Key.get(Car.class, Private.class)).getName());
   }
 
   private void expect(Runnable runnable, Class<? extends Exception> clazz) {
     try {
       runnable.run();
-      throw new IllegalStateException(clazz.getName()+" did not occur");
+      throw new IllegalStateException(clazz.getName() + " did not occur");
     } catch (Exception e) {
-      if(!e.getClass().equals(clazz)) {
+      if (!e.getClass().equals(clazz)) {
         throw e;
       }
     }
@@ -55,11 +62,13 @@ public class GuiceTest {
   @SimplixApplication(name = "UnitTest", version = "1.0", authors = "SimplixSoftworks")
   @ScanComponents("dev.simplix.core")
   final static class TestApplication {
+
   }
 
   @SimplixApplication(name = "DependTest", version = "1.0", authors = "SimplixSoftworks",
       dependencies = "UnitTest")
   final static class DependTestApplication {
+
   }
 
   static class PrivacyTestModule extends AbstractSimplixModule {

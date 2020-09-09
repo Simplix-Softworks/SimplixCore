@@ -13,13 +13,15 @@ public final class Converters {
 
   private static final Map<Map.Entry<Class, Class>, Converter> CONVERTER_MAP = new HashMap<>();
 
-  private Converters(){}
+  private Converters() {
+  }
 
   /**
    * Converts a source object to a given type.
+   *
    * @param source The source object to convert
-   * @param to The target type class
-   * @param <T> The target type
+   * @param to     The target type class
+   * @param <T>    The target type
    * @return An object instance of the target type
    */
   public static <T> T convert(@NonNull final Object source, @NonNull final Class<T> to) {
@@ -90,9 +92,10 @@ public final class Converters {
 
   /**
    * Registers a {@link Converter} for a given type conversion.
+   *
    * @param sourceType The source type
    * @param targetType The target type
-   * @param converter The convert instance
+   * @param converter  The convert instance
    */
   public static void register(
       @NonNull final Class<?> sourceType,
@@ -103,10 +106,11 @@ public final class Converters {
 
   /**
    * Returns a registered converter
+   *
    * @param sourceType The source type class
    * @param targetType The target type class
-   * @param <S> The source type
-   * @param <T> The target type
+   * @param <S>        The source type
+   * @param <T>        The target type
    * @return The converter instance or null if no such converter exists
    */
   public static <S, T> Converter<S, T> getConverter(

@@ -26,7 +26,7 @@ public final class SpigotPluginManager implements PluginManager {
       final org.bukkit.plugin.PluginManager handle = Bukkit.getPluginManager();
       handle.enablePlugin(handle.loadPlugin(jarFile));
     } catch (InvalidPluginException | InvalidDescriptionException exception) {
-      log.error("Unable to enable plugin "+jarFile.getName(), exception);
+      log.error("Unable to enable plugin " + jarFile.getName(), exception);
     }
   }
 

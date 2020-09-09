@@ -36,10 +36,12 @@ public class Version implements Comparable<Version> {
 
   @Override
   public boolean equals(Object o) {
-    if (this == o)
+    if (this == o) {
       return true;
-    if (o == null || getClass() != o.getClass())
+    }
+    if (o == null || getClass() != o.getClass()) {
       return false;
+    }
     Version version = (Version) o;
     return pattern.equals(version.pattern) &&
            values.equals(version.values);
@@ -52,18 +54,18 @@ public class Version implements Comparable<Version> {
 
   @Override
   public int compareTo(@NotNull Version version) {
-    if(!version.pattern.equals(pattern)) {
+    if (!version.pattern.equals(pattern)) {
       throw new IllegalArgumentException("Pattern mismatch");
     }
     for (int i = 0; i < version.values.size(); i++) {
-      if(i >= values.size()) {
+      if (i >= values.size()) {
         return 1;
       }
       int j = version.values.get(i);
       int value = values.get(i);
-      if(j > value) {
+      if (j > value) {
         return 1;
-      } else if(j < value) {
+      } else if (j < value) {
         return -1;
       }
     }
@@ -87,14 +89,14 @@ public class Version implements Comparable<Version> {
     while (matcher.find()) {
       for (int i = 1; i <= matcher.groupCount(); i++) {
         String match = matcher.group(i);
-        if(match == null) {
+        if (match == null) {
           continue;
         }
         match = match.replaceAll("\\D+", "");
-        if(match.matches("\\d+")) {
+        if (match.matches("\\d+")) {
           version.values.add(Integer.parseInt(match));
         }
-        group ++;
+        group++;
       }
     }
     return version;

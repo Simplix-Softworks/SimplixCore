@@ -17,7 +17,7 @@ public class UrlUpdateDownloader implements UpdateDownloader {
     URL url = new URL(this.url.replace("{latest}", latest.toString()));
 
     URLConnection urlConnection = url.openConnection();
-    try(BufferedInputStream bufferedInputStream = new BufferedInputStream(urlConnection.getInputStream())) {
+    try (BufferedInputStream bufferedInputStream = new BufferedInputStream(urlConnection.getInputStream())) {
       try (FileOutputStream fileOutputStream = new FileOutputStream(target)) {
         fileOutputStream.write(ByteStreams.toByteArray(bufferedInputStream));
         fileOutputStream.flush();

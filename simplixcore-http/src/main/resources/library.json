@@ -1,6 +1,8 @@
 {
   "name": "SimplixCoreHttp",
   "version": "1.0",
-  "authors": ["SimplixSoftworks"],
+  "authors": [
+    "SimplixSoftworks"
+  ],
   "mainClass": "dev.simplix.core.http.HttpLibrary"
 }

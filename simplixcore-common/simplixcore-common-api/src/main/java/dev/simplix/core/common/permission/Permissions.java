@@ -1,15 +1,13 @@
 package dev.simplix.core.common.permission;
 
 import de.leonhard.storage.util.FileUtils;
-
+import dev.simplix.core.common.ApplicationInfo;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
-import dev.simplix.core.common.ApplicationInfo;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;

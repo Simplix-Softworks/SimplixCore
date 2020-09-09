@@ -71,18 +71,18 @@ public class SimpleLocalizationManagerFactory implements LocalizationManagerFact
               Collections.emptyMap())) {
         try (Stream<Path> listFiles = Files.list(fileSystem.getPath(translationResourcesDirectory))) {
           listFiles.forEach(path -> {
-                Locale locale = new Locale(path.getFileName().toString().substring(
-                    0,
-                    path.getFileName().toString().length() - 11));
-                try {
-                  Properties properties = loadPropertiesFromReader(Files.newBufferedReader(
-                      path,
-                      StandardCharsets.UTF_8));
-                  propertiesMap.put(locale, properties);
-                } catch (IOException ex) {
-                  log.warn("[Simplix] Cannot load language file " + path + " from resource: ", ex);
-                }
-              });
+            Locale locale = new Locale(path.getFileName().toString().substring(
+                0,
+                path.getFileName().toString().length() - 11));
+            try {
+              Properties properties = loadPropertiesFromReader(Files.newBufferedReader(
+                  path,
+                  StandardCharsets.UTF_8));
+              propertiesMap.put(locale, properties);
+            } catch (IOException ex) {
+              log.warn("[Simplix] Cannot load language file " + path + " from resource: ", ex);
+            }
+          });
         }
       } catch (IOException ex) {
         log.warn("[Simplix] Cannot load language files from resource: ", ex);

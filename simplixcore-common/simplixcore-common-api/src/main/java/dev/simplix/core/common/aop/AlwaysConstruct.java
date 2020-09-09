@@ -6,9 +6,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Normally, {@link Component}s are lazy constructed. When there is no need for a specific component to be injected,
- * there will also be no instance of this component. A component annotated with {@link AlwaysConstruct} will always
- * be constructed during application installation.
+ * Normally, {@link Component}s are lazy constructed. When there is no need for a specific component
+ * to be injected, there will also be no instance of this component. A component annotated with
+ * {@link AlwaysConstruct} will always be constructed during application installation.
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)

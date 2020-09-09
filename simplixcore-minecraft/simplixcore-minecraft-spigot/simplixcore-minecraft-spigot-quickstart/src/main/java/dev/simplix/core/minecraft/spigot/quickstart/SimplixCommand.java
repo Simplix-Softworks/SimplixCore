@@ -56,7 +56,7 @@ final class SimplixCommand extends Command {
     if (file.exists()) {
       return;
     }
-    if(!file.createNewFile()) {
+    if (!file.createNewFile()) {
       throw new IOException("File could not be overridden");
     }
     try (FileOutputStream fileOutputStream = new FileOutputStream(file)) {
