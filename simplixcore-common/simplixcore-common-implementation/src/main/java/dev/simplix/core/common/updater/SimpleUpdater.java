@@ -2,26 +2,23 @@ package dev.simplix.core.common.updater;
 
 import dev.simplix.core.common.ApplicationInfo;
 import dev.simplix.core.common.inject.SimplixInstaller;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.URISyntaxException;
-import java.net.URL;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public final class SimpleUpdater implements Updater {
 
+  private static final String SIMPLIX_UPDATER = "[Simplix | Updater]";
   private final File cacheDirectory = new File(".updateCache");
 
   {
-    cacheDirectory.mkdir();
+    this.cacheDirectory.mkdir();
   }
 
   @Override
   public void installCachedUpdates() {
-    for (File file : cacheDirectory.listFiles()) {
+    for (File file : this.cacheDirectory.listFiles()) {
       if (file.isDirectory()) {
         installUpdates(file, file.getName());
       }
@@ -36,9 +33,9 @@ public final class SimpleUpdater implements Updater {
       if (!file.renameTo(new File(
           path,
           file.getName().substring(0, file.getName().length() - 7)))) {
-        log.warn("[Simplix | Updater] Cannot update " + file.getName());
+        log.warn(SIMPLIX_UPDATER + " Cannot update " + file.getName());
       } else {
-        log.info("[Simplix | Updater] Installed update for " + file.getName());
+        log.info(SIMPLIX_UPDATER + " Installed update for " + file.getName());
       }
     }
   }
@@ -64,7 +61,7 @@ public final class SimpleUpdater implements Updater {
             .versionFetcher()
             .fetchLatestVersion(applicationInfo, updatePolicy);
         if (latest.newerThen(currentVersion)) {
-          log.info("[Simplix | Updater] "
+          log.info(SIMPLIX_UPDATER + " "
                    + applicationInfo.name()
                    + ": A new version is available: "
                    + latest
@@ -73,20 +70,20 @@ public final class SimpleUpdater implements Updater {
             try {
               updatePolicy
                   .updateDownloader()
-                  .download(new File(cacheDirectory, toReplace.getName() + ".update"), latest);
-              log.info("[Simplix | Updater] "
+                  .download(new File(this.cacheDirectory, toReplace.getName() + ".update"), latest);
+              log.info(SIMPLIX_UPDATER + " "
                        + applicationInfo.name()
                        + ": Update downloaded. To install the update you have to restart your server.");
             } catch (Exception exception) {
               log.warn(
-                  "[Simplix | Updater] " + applicationInfo.name() + ": Cannot download update",
+                  SIMPLIX_UPDATER + " " + applicationInfo.name() + ": Cannot download update",
                   exception);
             }
           }
         }
       } catch (Exception exception) {
         log.warn(
-            "[Simplix | Updater] " + applicationInfo.name() + ": Could not check for updates",
+            SIMPLIX_UPDATER + " " + applicationInfo.name() + ": Could not check for updates",
             exception);
       }
     } catch (URISyntaxException exception) {

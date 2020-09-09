@@ -17,6 +17,10 @@ import org.bukkit.scoreboard.Scoreboard;
 public final class ReflectionUtil {
 
   private static final String EXCEPTION_OCCURRED = "Exception occurred";
+  private static final String GET_HANDLE = "getHandle";
+  private static final String PLAYER_CONNECTION = "playerConnection";
+  private static final String SEND_PACKET = "sendPacket";
+  private static final String NMS_PACKET = "{nms}.Packet";
 
   private ReflectionUtil() {
   }
@@ -41,27 +45,27 @@ public final class ReflectionUtil {
     return Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
   }
 
-  public static Object nmsPlayer(Player p)
+  public static Object nmsPlayer(Player player)
       throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-    Method getHandle = p.getClass().getMethod("getHandle");
-    return getHandle.invoke(p);
+    Method getHandle = player.getClass().getMethod(GET_HANDLE);
+    return getHandle.invoke(player);
   }
 
-  public static Object obcPlayer(Player p)
+  public static Object obcPlayer(Player player)
       throws ClassNotFoundException {
-    return getClass("{obc}.entity.CraftPlayer").cast(p);
+    return getClass("{obc}.entity.CraftPlayer").cast(player);
   }
 
-  public static Object nmsWorld(World w)
+  public static Object nmsWorld(World world)
       throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-    Method getHandle = w.getClass().getMethod("getHandle");
-    return getHandle.invoke(w);
+    Method getHandle = world.getClass().getMethod(GET_HANDLE);
+    return getHandle.invoke(world);
   }
 
-  public static Object nmsScoreboard(Scoreboard s)
+  public static Object nmsScoreboard(Scoreboard scoreboard)
       throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-    Method getHandle = s.getClass().getMethod("getHandle");
-    return getHandle.invoke(s);
+    Method getHandle = scoreboard.getClass().getMethod(GET_HANDLE);
+    return getHandle.invoke(scoreboard);
   }
 
   public static Object fieldValue(Object instance, String fieldName)
@@ -77,8 +81,9 @@ public final class ReflectionUtil {
       }
       return null;
     });
-    if (field == null)
+    if (field == null) {
       return null;
+    }
     if (!field.isAccessible()) {
       field.setAccessible(true);
     }
@@ -88,8 +93,8 @@ public final class ReflectionUtil {
   public static <T> T fieldValue(Field field, Object obj) {
     try {
       return (T) field.get(obj);
-    } catch (Exception e) {
-      log.error(EXCEPTION_OCCURRED, e);
+    } catch (Exception exception) {
+      log.error(EXCEPTION_OCCURRED, exception);
       return null;
     }
   }
@@ -105,16 +110,16 @@ public final class ReflectionUtil {
       Field f = instance.getClass().getDeclaredField(field);
       f.setAccessible(true);
       f.set(instance, value);
-    } catch (Exception e) {
-      log.error(EXCEPTION_OCCURRED, e);
+    } catch (Exception exception) {
+      log.error(EXCEPTION_OCCURRED, exception);
     }
   }
 
-  public static void value(Class<?> c, Object instance, String field, Object value) {
+  public static void value(Class<?> clazz, Object instance, String field, Object value) {
     try {
-      Field f = c.getDeclaredField(field);
-      f.setAccessible(true);
-      f.set(instance, value);
+      Field declaredField = clazz.getDeclaredField(field);
+      declaredField.setAccessible(true);
+      declaredField.set(instance, value);
     } catch (Exception e) {
       log.error(EXCEPTION_OCCURRED, e);
     }
@@ -122,9 +127,9 @@ public final class ReflectionUtil {
 
   public static void valueSubclass(Class<?> clazz, Object instance, String field, Object value) {
     try {
-      Field f = clazz.getDeclaredField(field);
-      f.setAccessible(true);
-      f.set(instance, value);
+      Field declaredField = clazz.getDeclaredField(field);
+      declaredField.setAccessible(true);
+      declaredField.set(instance, value);
     } catch (Exception e) {
       log.error(EXCEPTION_OCCURRED, e);
     }
@@ -133,10 +138,10 @@ public final class ReflectionUtil {
   public static void sendAllPacket(Object packet) throws ReflectiveOperationException {
     for (Player p : Bukkit.getOnlinePlayers()) {
       Object nmsPlayer = nmsPlayer(p);
-      Object connection = nmsPlayer.getClass().getField("playerConnection").get(nmsPlayer);
+      Object connection = nmsPlayer.getClass().getField(PLAYER_CONNECTION).get(nmsPlayer);
       connection
           .getClass()
-          .getMethod("sendPacket", ReflectionUtil.getClass("{nms}.Packet"))
+          .getMethod(SEND_PACKET, ReflectionUtil.getClass(NMS_PACKET))
           .invoke(connection, packet);
     }
   }
@@ -145,40 +150,41 @@ public final class ReflectionUtil {
     try {
       for (String name : players) {
         Object nmsPlayer = nmsPlayer(Bukkit.getPlayer(name));
-        Object connection = nmsPlayer.getClass().getField("playerConnection").get(nmsPlayer);
+        Object connection = nmsPlayer.getClass().getField(PLAYER_CONNECTION).get(nmsPlayer);
         connection
             .getClass()
-            .getMethod("sendPacket", ReflectionUtil.getClass("{nms}.Packet"))
+            .getMethod(SEND_PACKET, ReflectionUtil.getClass(NMS_PACKET))
             .invoke(connection, packet);
       }
-    } catch (Exception e) {
-      log.error(EXCEPTION_OCCURRED, e);
+    } catch (Exception exception) {
+      log.error(EXCEPTION_OCCURRED, exception);
     }
   }
 
-  public static void sendPlayerPacket(Player p, Object packet) throws ReflectiveOperationException {
-    Object nmsPlayer = nmsPlayer(p);
-    Object connection = nmsPlayer.getClass().getField("playerConnection").get(nmsPlayer);
+  public static void sendPlayerPacket(Player player, Object packet)
+      throws ReflectiveOperationException {
+    Object nmsPlayer = nmsPlayer(player);
+    Object connection = nmsPlayer.getClass().getField(PLAYER_CONNECTION).get(nmsPlayer);
     connection
         .getClass()
-        .getMethod("sendPacket", ReflectionUtil.getClass("{nms}.Packet"))
+        .getMethod(SEND_PACKET, ReflectionUtil.getClass(NMS_PACKET))
         .invoke(connection, packet);
   }
 
-  public static void listFields(Object e) {
-    log.info(e.getClass().getName() + " contains " + e
+  public static void listFields(Object object) {
+    log.info(object.getClass().getName() + " contains " + object
         .getClass()
         .getDeclaredFields().length + " declared fields.");
-    log.info(e.getClass().getName() + " contains " + e
+    log.info(object.getClass().getName() + " contains " + object
         .getClass()
         .getDeclaredClasses().length + " declared classes.");
-    Field[] fds = e.getClass().getDeclaredFields();
-    for (int i = 0; i < fds.length; i++) {
-      fds[i].setAccessible(true);
+    Field[] declaredFields = object.getClass().getDeclaredFields();
+    for (Field field : declaredFields) {
+      field.setAccessible(true);
       try {
-        log.info(fds[i].getName() + " -> " + fds[i].get(e));
-      } catch (IllegalArgumentException | IllegalAccessException e1) {
-        log.error(EXCEPTION_OCCURRED, e1);
+        log.info(field.getName() + " -> " + field.get(object));
+      } catch (IllegalArgumentException | IllegalAccessException exception) {
+        log.error(EXCEPTION_OCCURRED, exception);
       }
     }
   }

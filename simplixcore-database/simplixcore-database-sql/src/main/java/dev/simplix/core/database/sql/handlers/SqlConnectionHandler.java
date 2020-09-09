@@ -23,17 +23,19 @@ public class SqlConnectionHandler implements ConnectionHandler {
 
   @Override
   public void preConnect() {
+    // Intentional blank
   }
 
   @Override
   public Connection openConnection() throws SQLException {
-    return dataSource.getConnection(
-        sqlDatabaseConnection.getUser(),
-        sqlDatabaseConnection.getPass());
+    return this.dataSource.getConnection(
+        this.sqlDatabaseConnection.getUser(),
+        this.sqlDatabaseConnection.getPass());
   }
 
   @Override
   public void updateConnection() {
+    // Intentional blank
   }
 
   @Override

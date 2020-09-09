@@ -5,11 +5,6 @@ import dev.simplix.core.common.duration.AbstractDuration;
 import dev.simplix.core.common.duration.Duration;
 import lombok.NonNull;
 
-/**
- * Class to be able
- * <p>
- * TODO: do not obfuscate!
- */
 public final class SimpleDuration extends AbstractDuration {
 
   public SimpleDuration(long ms) {
