@@ -7,8 +7,10 @@ import com.google.inject.Scopes;
 import com.google.inject.binder.AnnotatedBindingBuilder;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * A {@link Module} which allows the registration of {@link ComponentInterceptor}s.
@@ -25,14 +27,16 @@ public abstract class AbstractSimplixModule implements Module {
     this.components.keySet().forEach(clazz -> {
       Component component = this.components.get(clazz);
       if (!component.parent().equals(Object.class)) {
-        AnnotatedBindingBuilder<?> bindingBuilder = binder.withSource(clazz).bind(component.parent());
-        if(isPrivate()) {
+        AnnotatedBindingBuilder<?> bindingBuilder = binder
+            .withSource(clazz)
+            .bind(component.parent());
+        if (isPrivate()) {
           bindingBuilder.annotatedWith(getClass().getAnnotation(Private.class));
         }
         bindingBuilder.to(clazz).in(Scopes.SINGLETON);
       } else {
         AnnotatedBindingBuilder<?> bindingBuilder = binder.withSource(clazz).bind(clazz);
-        if(isPrivate()) {
+        if (isPrivate()) {
           bindingBuilder.annotatedWith(getClass().getAnnotation(Private.class));
         }
         bindingBuilder.in(Scopes.SINGLETON);
@@ -54,10 +58,11 @@ public abstract class AbstractSimplixModule implements Module {
     });
   }
 
+  @Nullable
   private ComponentInterceptor findAssignable(@NonNull Class<?> clazz) {
-    for (Class<?> c : this.interceptorMap.keySet()) {
-      if (c.isAssignableFrom(clazz)) {
-        return this.interceptorMap.get(c);
+    for (Entry<Class<?>, ComponentInterceptor> entry : this.interceptorMap.entrySet()) {
+      if (entry.getKey().isAssignableFrom(clazz)) {
+        return entry.getValue();
       }
     }
     return null;
