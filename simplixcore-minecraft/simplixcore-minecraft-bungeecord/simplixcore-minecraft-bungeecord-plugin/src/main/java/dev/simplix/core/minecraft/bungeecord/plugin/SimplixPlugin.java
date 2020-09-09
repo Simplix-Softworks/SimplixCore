@@ -6,6 +6,7 @@ import dev.simplix.core.common.deploader.ArtifactDependencyLoader;
 import dev.simplix.core.common.inject.SimplixInstaller;
 import dev.simplix.core.minecraft.bungeecord.plugin.deploader.PluginTypeHandler;
 import java.io.File;
+import java.util.logging.Level;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
 
@@ -17,6 +18,14 @@ public final class SimplixPlugin extends Plugin {
 
   @Override
   public void onLoad() {
+    try {
+      SimplixInstaller.instance().updater().installCachedUpdates();
+    } catch (Exception exception) {
+      getLogger().log(
+          Level.WARNING,
+          "[Simplix | Updater] Cannot install cached updates",
+          exception);
+    }
     System.setProperty(
         "dev.simplix.core.libloader.ClassLoaderFabricator",
         "dev.simplix.core.minecraft.bungeecord.plugin.libloader.PluginClassLoaderFabricator");

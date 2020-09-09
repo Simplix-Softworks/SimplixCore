@@ -12,6 +12,8 @@ import dev.simplix.core.common.deploader.Dependency;
 import dev.simplix.core.common.deploader.DependencyLoader;
 import dev.simplix.core.common.deploader.Repository;
 import dev.simplix.core.common.libloader.LibraryLoader;
+import dev.simplix.core.common.updater.UpdatePolicy;
+import dev.simplix.core.common.updater.UpdatePolicyDeserializer;
 import dev.simplix.core.common.updater.Updater;
 import java.io.File;
 import java.io.IOException;
@@ -19,6 +21,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
 import lombok.AllArgsConstructor;
@@ -39,7 +42,11 @@ public class SimplixInstaller {
   private static final SimplixInstaller INSTANCE = new SimplixInstaller();
   private final Map<Class<?>, Injector> injectorMap = new HashMap<>();
   private final Map<String, InstallationContext> toInstall = new HashMap<>();
-  private final Gson gson = new GsonBuilder().create();
+  private final Map<String, UpdatePolicy> updatePolicyMap = new HashMap<>();
+  private final Gson gson = new GsonBuilder()
+      .registerTypeAdapter(UpdatePolicy.class, new UpdatePolicyDeserializer())
+      .create();
+  private final Timer updateTimer = new Timer("UpdateTimer");
   private Injector bossInjector;
   private DependencyLoader dependencyLoader;
   private LibraryLoader libraryLoader;
@@ -219,6 +226,23 @@ public class SimplixInstaller {
                  + context.applicationInfo.name());
       }
     }
+
+    startUpdateTimer();
+  }
+
+  private void startUpdateTimer() {
+    updateTimer.schedule(new TimerTask() {
+      @Override
+      public void run() {
+        for (String appName : updatePolicyMap.keySet()) {
+          ApplicationInfo applicationInfo = toInstall.get(appName).applicationInfo;
+          if(System.getProperty("simplix.disableupdate."+appName) != null) {
+            continue;
+          }
+          updater().checkForUpdates(applicationInfo, updatePolicyMap.get(appName));
+        }
+      }
+    }, 1000, TimeUnit.MINUTES.toMillis(5));
   }
 
   private boolean installApplication(
@@ -255,7 +279,30 @@ public class SimplixInstaller {
       }
     }
     createAppInjector(context);
+    try {
+      loadUpdatePolicy(context);
+    } catch (Exception exception) {
+      log.warn(SIMPLIX_BOOTSTRAP
+               + "Cannot load updatepolicy.json of "
+               + context.applicationInfo.name(), exception);
+    }
     return true;
+  }
+
+  private void loadUpdatePolicy(InstallationContext context) throws IOException {
+    InputStream stream = context.owner.getClassLoader().getResourceAsStream("updatepolicy.json");
+    if (stream == null) {
+      return;
+    }
+    try (
+        InputStreamReader inputStreamReader = new InputStreamReader(
+            stream,
+            StandardCharsets.UTF_8)) {
+      UpdatePolicy policy = this.gson.fromJson(
+          inputStreamReader,
+          UpdatePolicy.class);
+      updatePolicyMap.put(context.applicationInfo.name(), policy);
+    }
   }
 
   private void processRemoteDependencies(Class<?> appOwner, ApplicationInfo info) {

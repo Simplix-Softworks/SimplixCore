@@ -7,6 +7,7 @@ import dev.simplix.core.common.inject.SimplixInstaller;
 import dev.simplix.core.minecraft.spigot.dynamiclisteners.DynamicListenersSimplixModule;
 import dev.simplix.core.minecraft.spigot.plugin.deploader.PluginTypeHandler;
 import java.io.File;
+import java.util.logging.Level;
 import lombok.extern.slf4j.Slf4j;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
@@ -22,6 +23,14 @@ public final class SimplixPlugin extends JavaPlugin {
 
   @Override
   public void onLoad() {
+    try {
+      SimplixInstaller.instance().updater().installCachedUpdates();
+    } catch (Exception exception) {
+      getLogger().log(
+          Level.WARNING,
+          "[Simplix | Updater] Cannot install cached updates",
+          exception);
+    }
     System.setProperty(
         "dev.simplix.core.libloader.ClassLoaderFabricator",
         "dev.simplix.core.minecraft.spigot.plugin.libloader.PluginClassLoaderFabricator");
