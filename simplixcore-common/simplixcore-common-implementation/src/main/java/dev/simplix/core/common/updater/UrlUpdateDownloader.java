@@ -13,8 +13,8 @@ public class UrlUpdateDownloader implements UpdateDownloader {
   private String url;
 
   @Override
-  public void download(File target) throws IOException {
-    URL url = new URL(this.url);
+  public void download(File target, Version latest) throws IOException {
+    URL url = new URL(this.url.replace("{latest}", latest.toString()));
 
     URLConnection urlConnection = url.openConnection();
     try(BufferedInputStream bufferedInputStream = new BufferedInputStream(urlConnection.getInputStream())) {

@@ -5,6 +5,6 @@ import java.io.IOException;
 
 public interface UpdateDownloader {
 
-  void download(File target) throws IOException;
+  void download(File target, Version latest) throws IOException;
 
 }

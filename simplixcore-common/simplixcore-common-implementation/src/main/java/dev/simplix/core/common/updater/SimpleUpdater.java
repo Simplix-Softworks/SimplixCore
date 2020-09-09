@@ -73,7 +73,7 @@ public final class SimpleUpdater implements Updater {
             try {
               updatePolicy
                   .updateDownloader()
-                  .download(new File(cacheDirectory, toReplace.getName() + ".update"));
+                  .download(new File(cacheDirectory, toReplace.getName() + ".update"), latest);
               log.info("[Simplix | Updater] "
                        + applicationInfo.name()
                        + ": Update downloaded. To install the update you have to restart your server.");
