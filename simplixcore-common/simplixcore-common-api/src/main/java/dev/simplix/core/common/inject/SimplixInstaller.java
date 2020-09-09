@@ -539,7 +539,7 @@ public class SimplixInstaller {
   }
 
   @AllArgsConstructor
-  final static class InstallationContext {
+  static final class InstallationContext {
 
     private final Class<?> owner;
     private final Reflections reflections;
