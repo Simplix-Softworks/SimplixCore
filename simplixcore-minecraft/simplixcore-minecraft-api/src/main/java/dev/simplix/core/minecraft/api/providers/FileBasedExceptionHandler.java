@@ -1,13 +1,11 @@
-package dev.simplix.core.common.providers.impl;
+package dev.simplix.core.minecraft.api.providers;
 
 import com.google.inject.Inject;
 import de.leonhard.storage.util.FileUtils;
 import dev.simplix.core.common.ApplicationInfo;
-import dev.simplix.core.common.CommonSimplixModule;
 import dev.simplix.core.common.TimeFormatUtil;
 import dev.simplix.core.common.aop.Component;
 import dev.simplix.core.common.providers.ExceptionHandler;
-import dev.simplix.core.common.providers.PluginManager;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -19,11 +17,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.*;
+import dev.simplix.core.minecraft.modules.SimplixMinecraftModule;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.Nullable;
 
-@Component(value = CommonSimplixModule.class, parent = ExceptionHandler.class)
+@Component(value = SimplixMinecraftModule.class, parent = ExceptionHandler.class)
 @Slf4j
 public final class FileBasedExceptionHandler implements ExceptionHandler {
 

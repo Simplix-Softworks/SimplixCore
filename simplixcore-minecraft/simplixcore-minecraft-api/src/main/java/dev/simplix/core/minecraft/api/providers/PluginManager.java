@@ -1,4 +1,4 @@
-package dev.simplix.core.common.providers;
+package dev.simplix.core.minecraft.api.providers;
 
 import java.io.File;
 import java.util.List;

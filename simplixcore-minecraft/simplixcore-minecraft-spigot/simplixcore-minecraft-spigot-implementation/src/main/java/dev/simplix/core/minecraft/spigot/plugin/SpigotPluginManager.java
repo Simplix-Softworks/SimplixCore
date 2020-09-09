@@ -1,7 +1,7 @@
 package dev.simplix.core.minecraft.spigot.plugin;
 
 import dev.simplix.core.common.aop.Component;
-import dev.simplix.core.common.providers.PluginManager;
+import dev.simplix.core.minecraft.api.providers.PluginManager;
 import dev.simplix.core.minecraft.spigot.SpigotSimplixModule;
 import java.io.File;
 import java.util.Arrays;
