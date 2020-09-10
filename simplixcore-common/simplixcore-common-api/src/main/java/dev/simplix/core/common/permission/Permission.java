@@ -1,19 +1,22 @@
 package dev.simplix.core.common.permission;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 
-@Setter
-@Getter
+@Data
 @Accessors(fluent = true, chain = true)
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class Permission {
 
-  private final String permission;
+  private final String permissionString;
   private final String[] description;
-  private PermissionType type = PermissionType.COMMAND;
 
-  public static Permission of(@NonNull final String name, @NonNull final String... desc) {
-    return new Permission(name, desc);
+  public static Permission of(
+      @NonNull final String permissionString,
+      @NonNull final String... desc) {
+    return new Permission(permissionString, desc);
   }
 }

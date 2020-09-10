@@ -1,42 +1,49 @@
 package dev.simplix.core.common.permission;
 
-import de.leonhard.storage.util.FileUtils;
-import dev.simplix.core.common.ApplicationInfo;
-import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
-import lombok.val;
 
 /**
- * Manager class for your {@link Permission}
+ * Central utility class to handle {@link Permission}'s
  * <p>
- * With this class you can store and registered permissions
+ * Within this class you can store and register permissions
  */
 @UtilityClass
 public class Permissions {
 
-  private static ApplicationInfo applicationInfo;
-
   private final List<Permission> registeredPermissions = new ArrayList<>();
 
+  /**
+   * Returns all registered {@link Permission}'s as an unmodifiable collection. It is made
+   * unmodifiable since we don't want listeners to be removed from it
+   */
   public List<Permission> registeredPermissions() {
     return Collections.unmodifiableList(Permissions.registeredPermissions);
   }
 
-  public void register(@NonNull final Permission permission) {
+  /**
+   * Add an {@link Permission} to the known permissions
+   */
+  public void register(@NonNull Permission permission) {
     Permissions.registeredPermissions.add(permission);
   }
 
-  public void registerAll(@NonNull final List<Permission> permissions) {
+  /**
+   * Add a collection of {@link Permission} to the known permissions
+   */
+  public void registerAll(@NonNull Collection<Permission> permissions) {
     Permissions.registeredPermissions.addAll(permissions);
   }
 
+  /**
+   * Method to register permissions from an class that contains them as static fields
+   */
   @SneakyThrows
   public <T> void addFromClass(final Class<?> clazz) {
     for (final Field field : clazz.getFields()) {
@@ -50,30 +57,5 @@ public class Permissions {
       }
       Permissions.register(perm);
     }
-  }
-
-  public void writeToFile() {
-    final File dataFile = FileUtils.getAndMake(
-        applicationInfo.name() + ".perms",
-        applicationInfo.workingDirectory().getAbsolutePath());
-
-    final List<String> out = new ArrayList<>(Arrays.asList(
-        "# "
-        + applicationInfo.name()
-        + " v."
-        + applicationInfo.version(),
-        "# This file lists all permissions we use.",
-        "# You can also view them using our menu system.",
-        "# ",
-        "# Do not change them! Please use the settings.yml instead.",
-        ""
-    ));
-
-    for (final val perm : Permissions.registeredPermissions()) {
-      out.add(perm.permission() + ";" + perm.type() + ";" + String
-          .join(",", perm.description()));
-    }
-
-    FileUtils.write(dataFile, out);
   }
 }

@@ -40,7 +40,7 @@ public class Durations {
     return new SimpleDuration(milliseconds);
   }
 
-  public Duration of(final long timeInMs) {
+  public Duration of(long timeInMs) {
     if (timeInMs == -1) {
       return permanent();
     }
@@ -50,7 +50,7 @@ public class Durations {
     return new SimpleDuration(timeInMs);
   }
 
-  public Duration of(final long time, @NonNull final TimeUnit unit) {
+  public Duration of(final long time, @NonNull TimeUnit unit) {
     if (time == -1) {
       return permanent();
     }
