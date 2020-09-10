@@ -17,21 +17,29 @@ public class Events {
 
   private final List<Event> knownEvents = new ArrayList<>();
 
-  void add(final Event event) {
+  void add(@NonNull Event event) {
     knownEvents.add(event);
   }
 
-  public List<Event> knownEvents() {
+  public List<Event> registeredEvents() {
     return Collections.unmodifiableList(knownEvents);
   }
 
-  public <T extends Event> T call(@NonNull final T event) {
+  /**
+   * Calls an {@link Event} and the {@link Listener#handleEvent(Event)} method of all {@link
+   * Listeners} registered using {@link Listeners#register(Listener)} that are listening for the
+   * given {@link Event}
+   *
+   * @return Returns the event
+   */
+  public <T extends Event> T call(@NonNull T event) {
     for (final Listener listener : Listeners.registeredListeners()) {
       if (listener.type() != event.getClass()) {
         continue;
       }
 
       listener.handleEvent(event);
+      // Don't call further Listeners if the event was already canceled
       if (event.canceled()) {
         return event;
       }
