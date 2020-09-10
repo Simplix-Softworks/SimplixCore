@@ -14,9 +14,9 @@
 
   <dependencies>
     <dependency>
-      <artifactId>LightningStorage</artifactId>
-      <groupId>com.github.JavaFactoryDev</groupId>
-      <version>3.1.8</version>
+      <groupId>com.github.simplix-softworks</groupId>
+      <artifactId>lightningstorage</artifactId>
+      <version>3.1.9</version>
     </dependency>
     <dependency>
       <groupId>com.google.code.gson</groupId>
