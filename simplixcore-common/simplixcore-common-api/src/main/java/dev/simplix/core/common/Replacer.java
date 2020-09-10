@@ -65,6 +65,11 @@ public final class Replacer {
     return this;
   }
 
+  /**
+   * Replaces all variables with replacements.
+   *
+   * @param associativeArray Variable, Replacement, Variable, Replacement
+   */
   public final Replacer replaceAll(@NonNull final Object... associativeArray) {
     this.variables.clear();
     this.replacements.clear();

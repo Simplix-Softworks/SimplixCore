@@ -16,21 +16,34 @@ public final class SimpleDuration extends AbstractDuration {
   // ----------------------------------------------------------------------------------------------------
 
   @Override
-  public boolean moreThan(@NonNull final Duration punishDuration) {
+  public boolean moreThan(@NonNull Duration duration) {
     if (isPermanent()) {
       return true;
     }
 
-    if (punishDuration.isPermanent()) {
+    if (duration.isPermanent()) {
       return false;
     }
 
-    return toMs() > punishDuration.toMs();
+    return toMs() > duration.toMs();
   }
 
   @Override
-  public boolean lessThan(@NonNull final Duration duration) {
+  public boolean lessThan(@NonNull Duration duration) {
     return !moreThan(duration);
+  }
+
+  @Override
+  public boolean sameAs(@NonNull Duration duration) {
+    if (isPermanent() && duration.isPermanent()) {
+      return true;
+    }
+
+    if (isEmpty() && duration.isEmpty()) {
+      return true;
+    }
+
+    return toMs() == duration.toMs();
   }
 
   @Override

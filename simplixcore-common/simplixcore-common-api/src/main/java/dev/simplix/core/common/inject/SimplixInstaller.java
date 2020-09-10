@@ -157,7 +157,7 @@ public class SimplixInstaller {
       Class<?> clazz = Class.forName(libLoaderClass);
       this.updater = (Updater) clazz.newInstance();
     } catch (Exception exception) {
-      throw new RuntimeException("Unable to initialize updater", exception);
+//      throw new RuntimeException("Unable to initialize updater", exception);
     }
   }
 

@@ -8,6 +8,9 @@ import java.util.stream.IntStream;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 
+/**
+ * Utility class to format durations.
+ */
 @UtilityClass
 public class TimeFormatUtil {
 

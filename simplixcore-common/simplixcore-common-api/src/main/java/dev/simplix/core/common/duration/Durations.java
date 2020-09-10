@@ -7,6 +7,9 @@ import java.util.concurrent.TimeUnit;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 
+/**
+ * Central utility class to manage durations
+ */
 @UtilityClass
 public class Durations {
 
@@ -37,16 +40,23 @@ public class Durations {
     return new SimpleDuration(milliseconds);
   }
 
-  public Duration of(final long ms) {
-    if (ms == -1) {
+  public Duration of(final long timeInMs) {
+    if (timeInMs == -1) {
       return permanent();
     }
-    return new SimpleDuration(ms);
+    if (timeInMs == Long.MIN_VALUE) {
+      return empty();
+    }
+    return new SimpleDuration(timeInMs);
   }
 
   public Duration of(final long time, @NonNull final TimeUnit unit) {
     if (time == -1) {
       return permanent();
+    }
+
+    if (time == Long.MIN_VALUE) {
+      return empty();
     }
     return new SimpleDuration(unit.toMillis(time));
   }
