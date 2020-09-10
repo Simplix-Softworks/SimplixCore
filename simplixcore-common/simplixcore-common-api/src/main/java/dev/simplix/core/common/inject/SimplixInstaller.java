@@ -152,7 +152,7 @@ public class SimplixInstaller {
     try {
       String libLoaderClass = System.getProperty(
           "dev.simplix.core.common.updater.Updater",
-          "dev.simplix.core.common.updater.ArtifactUpdater");
+          "dev.simplix.core.common.updater.SimpleUpdater");
 
       Class<?> clazz = Class.forName(libLoaderClass);
       this.updater = (Updater) clazz.newInstance();
