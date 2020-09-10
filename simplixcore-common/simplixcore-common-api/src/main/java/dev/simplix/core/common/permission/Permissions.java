@@ -45,7 +45,7 @@ public class Permissions {
    * Method to register permissions from an class that contains them as static fields
    */
   @SneakyThrows
-  public <T> void addFromClass(final Class<?> clazz) {
+  public void addFromClass(final Class<?> clazz) {
     for (final Field field : clazz.getFields()) {
       if (field.getType() != Permission.class) {
         continue;
