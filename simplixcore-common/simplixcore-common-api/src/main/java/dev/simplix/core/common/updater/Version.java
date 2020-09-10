@@ -14,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 public class Version implements Comparable<Version> {
 
   private final String pattern;
+  
   private final String representation;
   private final List<Integer> values = new ArrayList<>(3);
 
@@ -35,14 +36,14 @@ public class Version implements Comparable<Version> {
   }
 
   @Override
-  public boolean equals(Object o) {
-    if (this == o) {
+  public boolean equals(Object obj) {
+    if (this == obj) {
       return true;
     }
-    if (o == null || getClass() != o.getClass()) {
+    if (obj == null || getClass() != obj.getClass()) {
       return false;
     }
-    Version version = (Version) o;
+    Version version = (Version) obj;
     return pattern.equals(version.pattern) &&
            values.equals(version.values);
   }
