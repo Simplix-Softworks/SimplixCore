@@ -12,7 +12,6 @@ import lombok.experimental.UtilityClass;
  * Central utility class for handling events
  */
 @UtilityClass
-@SuppressWarnings({"rawtypes", "unchecked"})
 public class Events {
 
   private final List<Event> knownEvents = new ArrayList<>();
@@ -33,7 +32,7 @@ public class Events {
    * @return Returns the event
    */
   public <T extends Event> T call(@NonNull T event) {
-    for (final Listener listener : Listeners.registeredListeners()) {
+    for (final Listener<Event> listener : Listeners.registeredListeners()) {
       if (listener.type() != event.getClass()) {
         continue;
       }
