@@ -124,10 +124,15 @@ public class SimplixInstaller {
    * @param owner The main class of the application
    * @return The injector of that application
    */
+  @Nullable
   public Injector injector(@NonNull Class<?> owner) {
     return this.injectorMap.get(owner);
   }
 
+  public Optional<Injector> findInjector(@NonNull Class<?> owner) {
+    return Optional.ofNullable(injectorMap.get(owner));
+  }
+  
   /**
    * @return The dependency loader
    */
@@ -326,7 +331,7 @@ public class SimplixInstaller {
       if (dependencies == null) {
         return;
       }
-      
+
       List<Repository> repositories = Arrays.asList(dependencies.repositories());
       for (Dependency dependency : dependencies.dependencies()) {
         log.info(SIMPLIX_BOOTSTRAP
