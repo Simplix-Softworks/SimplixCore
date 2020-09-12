@@ -323,6 +323,10 @@ public class SimplixInstaller {
       if (this.dependencyLoader == null) {
         initDependencyLoader();
       }
+      if (dependencies == null) {
+        return;
+      }
+      
       List<Repository> repositories = Arrays.asList(dependencies.repositories());
       for (Dependency dependency : dependencies.dependencies()) {
         log.info(SIMPLIX_BOOTSTRAP
