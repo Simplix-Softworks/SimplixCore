@@ -35,7 +35,7 @@ public final class SimplixPlugin extends Plugin {
 
   @Override
   public void onEnable() {
-    ProxyServer.getInstance().getPluginManager().registerListener(this, new ProxyListenerImpl());
+    ProxyServer.getInstance().getPluginManager().registerListener(this, new BungeeCordListenerImpl());
 
     SimplixInstaller.instance().register(SimplixPlugin.class);
     ProxyServer.getInstance().getScheduler().runAsync(this, () -> {

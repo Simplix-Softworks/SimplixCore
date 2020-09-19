@@ -10,10 +10,10 @@ import net.md_5.bungee.api.event.PostLoginEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 
-public class ProxyListenerImpl implements Listener {
+public class BungeeCordListenerImpl implements Listener {
 
-  public static ProxyListenerImpl create() {
-    return new ProxyListenerImpl();
+  public static BungeeCordListenerImpl create() {
+    return new BungeeCordListenerImpl();
   }
 
   @EventHandler

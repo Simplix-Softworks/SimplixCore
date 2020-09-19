@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class GuiceTest {
+public class GuiceSpigotTest {
 
   @Test
   public void testInstall() {
