@@ -7,6 +7,9 @@ import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import lombok.AccessLevel;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -14,6 +17,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Scoreboard;
 
 @Slf4j
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ReflectionUtil {
 
   private static final String EXCEPTION_OCCURRED = "Exception occurred";
@@ -21,9 +25,6 @@ public final class ReflectionUtil {
   private static final String PLAYER_CONNECTION = "playerConnection";
   private static final String SEND_PACKET = "sendPacket";
   private static final String NMS_PACKET = "{nms}.Packet";
-
-  private ReflectionUtil() {
-  }
 
   private static final Map<Map.Entry<Class<?>, String>, Field> CACHED_FIELDS = new HashMap<>();
   private static final Map<String, Class<?>> CACHED_CLASSES = new HashMap<>();
@@ -45,30 +46,30 @@ public final class ReflectionUtil {
     return Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
   }
 
-  public static Object nmsPlayer(Player player)
+  public static Object nmsPlayer(@NonNull Player player)
       throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
     Method getHandle = player.getClass().getMethod(GET_HANDLE);
     return getHandle.invoke(player);
   }
 
-  public static Object obcPlayer(Player player)
+  public static Object obcPlayer(@NonNull Player player)
       throws ClassNotFoundException {
     return getClass("{obc}.entity.CraftPlayer").cast(player);
   }
 
-  public static Object nmsWorld(World world)
+  public static Object nmsWorld(@NonNull World world)
       throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
     Method getHandle = world.getClass().getMethod(GET_HANDLE);
     return getHandle.invoke(world);
   }
 
-  public static Object nmsScoreboard(Scoreboard scoreboard)
+  public static Object nmsScoreboard(@NonNull Scoreboard scoreboard)
       throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
     Method getHandle = scoreboard.getClass().getMethod(GET_HANDLE);
     return getHandle.invoke(scoreboard);
   }
 
-  public static Object fieldValue(Object instance, String fieldName)
+  public static Object fieldValue(@NonNull Object instance, @NonNull String fieldName)
       throws IllegalAccessException {
     final Map.Entry<Class<?>, String> key = new AbstractMap.SimpleEntry<>(
         instance.getClass(),
@@ -90,7 +91,7 @@ public final class ReflectionUtil {
     return field.get(instance);
   }
 
-  public static <T> T fieldValue(Field field, Object obj) {
+  public static <T> T fieldValue(@NonNull Field field, @NonNull Object obj) {
     try {
       return (T) field.get(obj);
     } catch (Exception exception) {
@@ -99,7 +100,8 @@ public final class ReflectionUtil {
     }
   }
 
-  public static Field field(Class<?> clazz, String fieldName) throws NoSuchFieldException {
+  public static Field field(@NonNull Class<?> clazz, @NonNull String fieldName)
+      throws NoSuchFieldException {
     Field field = clazz.getDeclaredField(fieldName);
     field.setAccessible(true);
     return field;
@@ -115,7 +117,11 @@ public final class ReflectionUtil {
     }
   }
 
-  public static void value(Class<?> clazz, Object instance, String field, Object value) {
+  public static void value(
+      @NonNull Class<?> clazz,
+      @NonNull Object instance,
+      @NonNull String field,
+      @NonNull Object value) {
     try {
       Field declaredField = clazz.getDeclaredField(field);
       declaredField.setAccessible(true);
@@ -125,7 +131,11 @@ public final class ReflectionUtil {
     }
   }
 
-  public static void valueSubclass(Class<?> clazz, Object instance, String field, Object value) {
+  public static void valueSubclass(
+      @NonNull Class<?> clazz,
+      @NonNull Object instance,
+      @NonNull String field,
+      @NonNull Object value) {
     try {
       Field declaredField = clazz.getDeclaredField(field);
       declaredField.setAccessible(true);
@@ -135,7 +145,7 @@ public final class ReflectionUtil {
     }
   }
 
-  public static void sendAllPacket(Object packet) throws ReflectiveOperationException {
+  public static void sendAllPacket(@NonNull Object packet) throws ReflectiveOperationException {
     for (Player p : Bukkit.getOnlinePlayers()) {
       Object nmsPlayer = nmsPlayer(p);
       Object connection = nmsPlayer.getClass().getField(PLAYER_CONNECTION).get(nmsPlayer);
@@ -146,7 +156,7 @@ public final class ReflectionUtil {
     }
   }
 
-  public static void sendListPacket(List<String> players, Object packet) {
+  public static void sendListPacket(@NonNull List<String> players, @NonNull Object packet) {
     try {
       for (String name : players) {
         Object nmsPlayer = nmsPlayer(Bukkit.getPlayer(name));
@@ -161,7 +171,7 @@ public final class ReflectionUtil {
     }
   }
 
-  public static void sendPlayerPacket(Player player, Object packet)
+  public static void sendPlayerPacket(@NonNull Player player, @NonNull Object packet)
       throws ReflectiveOperationException {
     Object nmsPlayer = nmsPlayer(player);
     Object connection = nmsPlayer.getClass().getField(PLAYER_CONNECTION).get(nmsPlayer);
@@ -171,7 +181,7 @@ public final class ReflectionUtil {
         .invoke(connection, packet);
   }
 
-  public static void listFields(Object object) {
+  public static void listFields(@NonNull Object object) {
     log.info(object.getClass().getName() + " contains " + object
         .getClass()
         .getDeclaredFields().length + " declared fields.");
@@ -189,7 +199,10 @@ public final class ReflectionUtil {
     }
   }
 
-  public static Object fieldValue(Class<?> superclass, Object instance, String fieldName)
+  public static Object fieldValue(
+      @NonNull Class<?> superclass,
+      @NonNull Object instance,
+      @NonNull String fieldName)
       throws IllegalAccessException, NoSuchFieldException {
     Field field = superclass.getDeclaredField(fieldName);
     field.setAccessible(true);
