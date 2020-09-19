@@ -7,6 +7,11 @@ public class DependencyLoadingException extends RuntimeException {
 
   private final Dependency dependency;
 
+  public DependencyLoadingException(@NonNull Dependency dependency, @NonNull final String message) {
+    super(message);
+    this.dependency = dependency;
+  }
+
   public DependencyLoadingException(@NonNull Dependency dependency, @Nullable Throwable cause) {
     super("Unable to load dependency " + dependency.toString(), cause);
     this.dependency = dependency;

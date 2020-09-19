@@ -1,5 +1,6 @@
 package dev.simplix.core.common.deploader;
 
+import java.util.Optional;
 import lombok.NonNull;
 
 /**
@@ -13,6 +14,8 @@ public interface DependencyLoader {
    * @param dependency   The dependency to download
    * @param repositories The repositories to search
    */
-  boolean load(@NonNull Dependency dependency, @NonNull Iterable<Repository> repositories);
+  Optional<DependencyLoadingException> load(
+      @NonNull Dependency dependency,
+      @NonNull Iterable<Repository> repositories);
 
 }

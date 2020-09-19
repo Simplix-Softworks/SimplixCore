@@ -49,6 +49,10 @@ public class SimplixInstaller {
   private LibraryLoader libraryLoader;
   private Updater updater;
 
+  public static SimplixInstaller instance() {
+    return INSTANCE;
+  }
+
   /**
    * This will register a class annotated with {@link SimplixApplication}.
    *
@@ -57,7 +61,9 @@ public class SimplixInstaller {
    * @throws IllegalArgumentException when the owner class is not annotated with {@link
    *                                  SimplixApplication}
    */
-  public void register(@NonNull Class<?> owner, @NonNull Module... modules) {
+  public Optional<DependencyLoadingException> register(
+      @NonNull Class<?> owner,
+      @NonNull Module... modules) {
     if (!owner.isAnnotationPresent(SimplixApplication.class)) {
       throw new IllegalArgumentException("Owner class must be annotated with @SimplixApplication");
     }
@@ -65,7 +71,7 @@ public class SimplixInstaller {
     if (this.toInstall.containsKey(application.name())) {
       log.warn(SIMPLIX_BOOTSTRAP + application.name() + " is already registered. Please check " +
                "for unnecessary double registration of your application.");
-      return;
+      return Optional.empty();
     }
     Set<String> basePackages = determineBasePackages(owner);
     ApplicationInfo info = ApplicationInfo.builder()
@@ -79,12 +85,15 @@ public class SimplixInstaller {
         application.name(),
         new InstallationContext(owner, new Reflections(basePackages, owner.getClassLoader()),
             info, detectReferencedModules(owner, modules, application.name())));
-    processRemoteDependencies(owner, info);
+    final Optional<DependencyLoadingException> optionalDependencyLoadingException = processRemoteDependencies(
+        owner,
+        info);
     if (this.bossInjector != null) {
       // YOU ARE TOO LATE
       log.info(SIMPLIX_BOOTSTRAP + "Late install " + application.name() + "...");
       installApplication(this.toInstall.get(application.name()), new Stack<>());
     }
+    return optionalDependencyLoadingException;
   }
 
   private Module[] detectReferencedModules(Class<?> owner, Module[] modules, String appName) {
@@ -129,7 +138,7 @@ public class SimplixInstaller {
   public Optional<Injector> findInjector(@NonNull Class<?> owner) {
     return Optional.ofNullable(injectorMap.get(owner));
   }
-  
+
   /**
    * @return The dependency loader
    */
@@ -309,13 +318,15 @@ public class SimplixInstaller {
     }
   }
 
-  private void processRemoteDependencies(Class<?> appOwner, ApplicationInfo info) {
+  private Optional<DependencyLoadingException> processRemoteDependencies(
+      Class<?> appOwner,
+      ApplicationInfo info) {
     InputStream inputStream = null;
     InputStreamReader reader = null;
     try {
       inputStream = appOwner.getResourceAsStream("/dependencies.json");
       if (inputStream == null) {
-        return;
+        return Optional.empty();
       }
 
       reader = new InputStreamReader(
@@ -326,7 +337,7 @@ public class SimplixInstaller {
         initDependencyLoader();
       }
       if (dependencies == null) {
-        return;
+        return Optional.empty();
       }
 
       List<Repository> repositories = Arrays.asList(dependencies.repositories());
@@ -338,10 +349,13 @@ public class SimplixInstaller {
                  + " from repository...");
         dependency.applicationName(info.name());
         dependency.applicationClass(appOwner);
-        if (!this.dependencyLoader.load(dependency, repositories)) {
+        final Optional<DependencyLoadingException> load = this.dependencyLoader.load(
+            dependency,
+            repositories);
+        if (load.isPresent()) {
           log.error(SIMPLIX_BOOTSTRAP
                     + info.name() + ": Unable to load dependency " + dependency);
-          throw new DependencyLoadingException(dependency);
+          return load;
         }
       }
     } catch (JsonParseException exception) {
@@ -364,6 +378,7 @@ public class SimplixInstaller {
         }
       }
     }
+    return Optional.empty();
   }
 
   private void initDependencyLoader() {
@@ -537,10 +552,6 @@ public class SimplixInstaller {
                  + ctx.applicationInfo.name(), throwable);
       }
     }
-  }
-
-  public static SimplixInstaller instance() {
-    return INSTANCE;
   }
 
   public Class<?> applicationClass(String name) {

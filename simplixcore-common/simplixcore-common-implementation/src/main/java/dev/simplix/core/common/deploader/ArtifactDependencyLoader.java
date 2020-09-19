@@ -2,10 +2,7 @@ package dev.simplix.core.common.deploader;
 
 import dev.simplix.core.common.libloader.LibraryTypeHandler;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.BiConsumer;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -30,13 +27,14 @@ import org.eclipse.aether.transport.http.HttpTransporterFactory;
 public final class ArtifactDependencyLoader implements DependencyLoader {
 
   private final static Map<String, BiConsumer<Dependency, File>> TYPE_HANDLER = new HashMap<>();
-  private final File localRepositoryFile = new File(
-      System.getProperty("user.home"),
-      ".m2/repository");
 
   static {
     TYPE_HANDLER.put("library", new LibraryTypeHandler());
   }
+
+  private final File localRepositoryFile = new File(
+      System.getProperty("user.home"),
+      ".m2/repository");
 
   public static void registerTypeHandler(
       @NonNull String type,
@@ -45,16 +43,17 @@ public final class ArtifactDependencyLoader implements DependencyLoader {
   }
 
   @Override
-  public boolean load(
+  public Optional<DependencyLoadingException> load(
       @NonNull Dependency dependency,
       @NonNull Iterable<Repository> repositories) {
     BiConsumer<Dependency, File> handler = TYPE_HANDLER.get(dependency.type());
     if (handler == null) {
-      log.error("[Simplix | DependencyLoader] Unknown type "
-                + dependency.type()
-                + " for dependency "
-                + dependency);
-      return false;
+      return Optional.of(new DependencyLoadingException(
+          dependency,
+          "[Simplix | DependencyLoader] Unknown type "
+          + dependency.type()
+          + " for dependency "
+          + dependency));
     }
 
     RepositorySystem repositorySystem = newRepositorySystem();
@@ -71,25 +70,23 @@ public final class ArtifactDependencyLoader implements DependencyLoader {
       artifact = result.getArtifact();
       if (artifact != null) {
         handler.accept(dependency, artifact.getFile());
-        return true;
+        return Optional.empty();
       } else {
         if (!result.isResolved()) {
-          log.error("[Simplix | DependencyLoader] Unable to resolve dependency " + dependency);
+          return Optional.of(new DependencyLoadingException(
+              dependency,
+              "[Simplix | DependencyLoader] Unable to resolve dependency " + dependency));
         }
         if (!result.getExceptions().isEmpty()) {
-          result
-              .getExceptions()
-              .forEach(exception -> log.error(
-                  "[Simplix | DependencyLoader] An error occurred while loading dependency "
-                  + dependency,
-                  exception));
+          for (Exception exception : result.getExceptions()) {
+            return Optional.of(new DependencyLoadingException(dependency, exception));
+          }
         }
-        return false;
       }
     } catch (Exception exception) {
-      log.error("[Simplix | DependencyLoader] Unable to load dependency " + dependency, exception);
+      return Optional.of(new DependencyLoadingException(dependency, exception));
     }
-    return false;
+    return Optional.empty();
   }
 
   public List<RemoteRepository> createRemoteRepositories(@NonNull Iterable<Repository> repositories) {
