@@ -17,12 +17,10 @@ import org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-//@Setting
 @Component(value = DynamicListenersSimplixModule.class)
 public final class SpigotListenerImpl implements Listener {
 
-  //  @Setting("Advanced.Listen_For_Commands")
-  private static boolean LISTEN_FOR_COMMANDS = true;
+  private final static boolean LISTEN_FOR_COMMANDS = true;
   private final ExceptionHandler exceptionHandler;
 
   @Inject
