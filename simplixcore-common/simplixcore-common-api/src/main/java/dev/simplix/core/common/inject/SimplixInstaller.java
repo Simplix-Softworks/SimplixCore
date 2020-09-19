@@ -7,10 +7,7 @@ import com.google.inject.*;
 import com.google.inject.spi.ElementSource;
 import dev.simplix.core.common.ApplicationInfo;
 import dev.simplix.core.common.aop.*;
-import dev.simplix.core.common.deploader.Dependencies;
-import dev.simplix.core.common.deploader.Dependency;
-import dev.simplix.core.common.deploader.DependencyLoader;
-import dev.simplix.core.common.deploader.Repository;
+import dev.simplix.core.common.deploader.*;
 import dev.simplix.core.common.libloader.LibraryLoader;
 import dev.simplix.core.common.updater.UpdatePolicy;
 import dev.simplix.core.common.updater.UpdatePolicyDeserializer;
@@ -344,6 +341,7 @@ public class SimplixInstaller {
         if (!this.dependencyLoader.load(dependency, repositories)) {
           log.error(SIMPLIX_BOOTSTRAP
                     + info.name() + ": Unable to load dependency " + dependency);
+          throw new DependencyLoadingException(dependency);
         }
       }
     } catch (JsonParseException exception) {
