@@ -1,9 +1,19 @@
 package dev.simplix.core.common.deploader;
 
+import lombok.NonNull;
+import org.jetbrains.annotations.Nullable;
+
 public class DependencyLoadingException extends RuntimeException {
 
-  public DependencyLoadingException(Dependency dependency) {
-    super("Unable to load dependency "+dependency.toString());
+  private final Dependency dependency;
+
+  public DependencyLoadingException(@NonNull Dependency dependency, @Nullable Throwable cause) {
+    super("Unable to load dependency " + dependency.toString(), cause);
+    this.dependency = dependency;
   }
 
+  public DependencyLoadingException(@NonNull Dependency dependency) {
+    super("Unable to load dependency " + dependency.toString());
+    this.dependency = dependency;
+  }
 }

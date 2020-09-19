@@ -1,0 +1,281 @@
+[CENTER]
+[IMG]https://i.imgur.com/tDf7NVA.png[/IMG]
+[/CENTER]
+
+[IMG]https://i.imgur.com/gNK6hA5.png[/IMG]
+
+Do you want to work more productive with  YAML, JSON & TOML files?
+
+Dou you want to preserve your comments in YAML-Files while editing?
+
+Do you want to save your config files easily and [B]independently[/B] from Bukkit or BungeeCord?
+Want to do more than just use simple .yml files store data?
+Are you looking for a powerful "bukkitlike" (Very similar to Bukkit config) library to store data in files?
+
+Do you want to save your self a lot of time & write up to 90% less code while working with config files?
+
+
+Then[B] this library is just right for you.[/B]
+
+I was looking for a library that I could use to store data with Bukkit like methods without being dependent on Bukkit/BungeeCord. But there was nothing out there so I decided to write my own library. Of course, there are a few libraries with bukkitlike methods but no one has the features that I need. ThunderBolt-2 for example only supports JSON files but does not support nested objects. Now I'm publishing this library because I think libraries of high quality should be publicly available for everyone Now it is here: [B]SimplixStorage[/B]!
+
+At the moment SimplixStorage supports four file types:
+
+[SPOILER="JSON"]A very fast and slim file format. It is much faster than YAML files and is, therefore, better suited for storing larger amounts of data, such as player data (rank, money, playtime, etc.)[/SPOILER]
+
+[SPOILER="TOML"]
+An also fast and slime file format. It is also very fast but very easy to read.
+At the moment it is very uncommon but it is a very brilliant file format.
+You could use it to store player data or just configure your plugin.
+[/SPOILER]
+
+[SPOILER="YAML"]I think everyone here knows YAML files as they are very common in Bukkit development YAML files are not as fast as JSON files, but they are easier to read and are therefore more suitable than configuration files.[/SPOILER]
+
+[SIZE=5][SIZE=4][SIZE=5][SIZE=4]Maybe you are [B]asking for the benefits of SimplixStorage [/B]while[/SIZE][/SIZE][/SIZE][/SIZE]
+[SIZE=5][SIZE=4][SIZE=5][SIZE=4]Bukkit & BungeeCord have their own possibilities to store data in files. [/SIZE][/SIZE][/SIZE][/SIZE]
+[SIZE=5][SIZE=4][SIZE=5][SIZE=4]So here are the:[/SIZE][/SIZE][/SIZE][/SIZE]
+
+[SIZE=5][SIZE=4][SIZE=5][SIZE=4][IMG]https://i.imgur.com/D6mVxct.png[/IMG] [/SIZE][/SIZE][/SIZE][/SIZE]
+
+
+[IMG]https://i.imgur.com/mHyTEKq.png[/IMG]
+
+[SIZE=4][COLOR=#0000b3][B]Professional workflow:[/B][/COLOR][/SIZE]
+[SIZE=7][COLOR=#8000ff][COLOR=#000000][SIZE=4]Most professional developers on SpigotMC are using their own configuration library to fit their needs - they don't only use the bukkit one.[/SIZE][/COLOR][/COLOR][/SIZE]
+[COLOR=#000000][SIZE=4]For SimplixStorage I have taken a look at very many of these private libraries talked to developers and pointed out their many productivity boosters.
+
+SimplixStorage combines the best ideas of many great developers in one brilliant library.
+[/SIZE][/COLOR]
+[SIZE=5][SIZE=4][SIZE=5][SIZE=4][B][SIZE=7][SIZE=5][COLOR=#0000b3]Standalone:[/COLOR][/SIZE][/SIZE][/B] [/SIZE][/SIZE][/SIZE]
+[SIZE=4][SIZE=5][SIZE=4][SIZE=4]This library [B]does not depend [/B]on any other plugin and even[/SIZE] [SIZE=5][SIZE=4]not on Bukkit or BungeeCord! [/SIZE][/SIZE][/SIZE][/SIZE][/SIZE][/SIZE]
+[SIZE=5]You can use this in Bukkit or Proxy plugins - and [B]even standalone Java applications are supported![/B]
+[SIZE=4]You can use this [B]on any Minecraft-version[/B] out there and it totally do es not matter which version platform or whatever you use -[/SIZE] [/SIZE]
+[SIZE=5][B]SimplixStorage just works.[/B][/SIZE]
+
+
+
+[SIZE=5][SIZE=4][COLOR=#0000b3] [SIZE=5][B]Ease to use:[/B][/SIZE][/COLOR][/SIZE]
+
+[SIZE=4][SIZE=5][B][SIZE=4][COLOR=#000000]Although easy to understand after some training the Bukkit&Bungee Configuration classes can be quite confusing - SimplixStorage is designed to be easy(And very powerful at the same time)[/COLOR][/SIZE][/B][/SIZE][/SIZE][/SIZE]
+[SIZE=5]
+[SIZE=4][SIZE=4]All directories will be[/SIZE][B][SIZE=4] created automatically[/SIZE][/B][SIZE=4] if needed if a file already exists it will just be loaded. And there are so much easier to use productivity boosters![/SIZE][/SIZE][/SIZE]
+
+[IMG]https://i.ibb.co/2K70gzX/AllTypes.png[/IMG]
+
+[SIZE=5][SIZE=4][B][SIZE=5][COLOR=#0000b3]Flexibility - You decide!: [/COLOR][/SIZE][/B][/SIZE]
+
+[SIZE=4][B][SIZE=5][SIZE=4]Do you want more than only one filetype?[/SIZE][/SIZE][/B][/SIZE][/SIZE]
+[SIZE=5]
+[SIZE=4]As already mentioned you can use more than only one filetype: Do you want your datafile faster or more readable (for humans)? [/SIZE][/SIZE]
+[SIZE=5][SIZE=4]SimplixStorage enables you to decide.[/SIZE][/SIZE]
+
+
+[IMG]https://i.ibb.co/C2zRfj5/YAMLJSON.png[/IMG]
+[IMG]https://i.ibb.co/Njsjp0X/TOMLExample.png[/IMG]
+
+[SIZE=5]
+[SIZE=4][B][SIZE=5][COLOR=#0000b3]Productivity:[/COLOR][/SIZE][/B][/SIZE]
+
+[SIZE=4][B][SIZE=5][SIZE=4]Sick of typing hundreds of lines just for a config class?[/SIZE][/SIZE][/B][/SIZE][/SIZE]
+
+If you want to be productive, this library is just right for you: I've been working with config files and this stuff for a long time and I know how annoying the default checks can be so I decided to implement custom methods that will boost your productivity!
+
+[SIZE=5][SIZE=4][SIZE=5][SIZE=4]We also improved your methods over time in order to constantly increase the benefit SimplixStorage provides you.[/SIZE][/SIZE][/SIZE][/SIZE]
+
+[SIZE=5][SIZE=4][SIZE=5][SIZE=4]SimplixStorage uses the most cutting-edge technologies to fast track your Java-Application. [/SIZE][/SIZE][/SIZE][/SIZE]
+
+[SIZE=5][SIZE=4][SIZE=5][SIZE=4]With this productivity boosters, you will become able to be way more productive than your competitors and totally outrun them by having an almost unfair advantage.[/SIZE][/SIZE][/SIZE][/SIZE]
+
+[SIZE=5][SIZE=4][SIZE=5][SIZE=4]Here you can see how it works:[/SIZE][/SIZE][/SIZE][/SIZE]
+
+[SIZE=5][SIZE=4][SIZE=5][SIZE=4][B]Main Productivity-Boosters:[/B][/SIZE][/SIZE][/SIZE][/SIZE]
+
+[SIZE=5][SIZE=4][SIZE=5][SIZE=4][B]setDefault:[/B][/SIZE][/SIZE][/SIZE][/SIZE]
+It sets a value only if the file does not yet contain the associated key.
+[SIZE=5][SIZE=4][SIZE=5][SIZE=4]This saves you from various contains checks in some cases this will [B]reduce the code you have to write by 90%![/B][/SIZE][/SIZE][/SIZE][/SIZE]
+
+[B]getOrDefault:[/B]
+[SIZE=4]This method can be used to retrieve a default value from a file.
+Instead of using a lot of duplicated & hard to read if conditions you can just use [B]getOrDefault[/B].
+This method can make your code way cleaner and thus way easier to read and understand.[/SIZE]
+
+[SIZE=5][SIZE=4][SIZE=5][SIZE=4][B]getOrSetDefault:[/B][/SIZE][/SIZE][/SIZE][/SIZE]
+[SIZE=5][SIZE=4][SIZE=5][SIZE=4]It sets a value only if the file does not yet contain the associated key.[/SIZE][/SIZE][/SIZE][/SIZE]
+[SIZE=5][SIZE=4][SIZE=5][SIZE=4]If the file does not yet contain the file it will return the default value.[/SIZE][/SIZE][/SIZE][/SIZE]
+[SIZE=5][SIZE=4][SIZE=5][SIZE=4]If the file already contains the key it just returns the value of it (and not the default value)[/SIZE][/SIZE][/SIZE][/SIZE]
+[SIZE=5][SIZE=4][SIZE=5][SIZE=4]This is incredibly[B] helpful if you want to store player data[/B] or things like that in a file! [/SIZE][/SIZE][/SIZE][/SIZE]
+
+[SIZE=5][SIZE=4][SIZE=5][SIZE=4]It's also very helpful if you want to have a multilingual plugin.[/SIZE][/SIZE][/SIZE][/SIZE]
+[SIZE=5][SIZE=4][SIZE=5][SIZE=4]You can just [B]get&set the messages in one line![/B][/SIZE][/SIZE][/SIZE][/SIZE]
+[SIZE=5][SIZE=4][SIZE=5][SIZE=4]Believe me, this saves large amounts of time[/SIZE][/SIZE][/SIZE][/SIZE]
+
+
+[SIZE=5][SIZE=4] [SIZE=5][SIZE=4][IMG]https://i.ibb.co/zS890bv/productivity.png[/IMG] [/SIZE][/SIZE] [/SIZE][/SIZE]
+
+[B]setPathPrefix:
+[/B]
+This method sets a pathPrefix so you don't have to type so much!
+
+This avoids you from typing
+
+get("spawn.x")
+get("spawn.y")
+get("spawn.z")
+
+instead, you can just type:
+
+setPathPrefix("spawn")
+
+and then
+
+get("x")
+
+This method also reduces the amount of code you have to write dramatically
+and will [B]make your code more readable!
+
+[/B]
+[SIZE=5][COLOR=#0000b3][B]Intelligent:[/B][/COLOR][/SIZE]
+[B]Forget your /config reload command![/B]
+SimplixStorage reloads the files automatically for you - But only if the file has changed.
+And of course, you can configure how SimplixStorage reloads your file
+
+[B]
+[SIZE=5][COLOR=#0000b3]Comment preserving![/COLOR][/SIZE][/B]
+
+[SIZE=4]SimplixStorage preserves all comments!
+Yes, it does!
+The config class, for example, handles this automatically in the default Yaml class you just have to type:
+
+[IMG]https://i.ibb.co/D9C79NW/Comment-Preservation.png[/IMG] 
+
+All your comments in y
+our file will be preserved!
+[B]No other library out there is enabled to do that![/B]
+
+[SPOILER="Note "]
+If you have the same key in one YAML file multiple times the comments above it may be placed in the wrong order.
+Also, it is not yet possible to preserve side comments.
+This is caused because of the way YamlBeans saves its values.
+I will have to write my own YAML-Parser to fix that.
+[/SPOILER][/SIZE]
+
+[B][SIZE=5][COLOR=#0000b3]Set Headers![/COLOR][/SIZE][/B]
+[SIZE=5][COLOR=#0000b3][COLOR=#404040][SIZE=4]No other library in this world enables you to edit your YAML Comments so easily as SimplixStorage:[/SIZE][/COLOR][/COLOR][/SIZE]
+
+[SIZE=5][COLOR=#0000b3][COLOR=#404040][SIZE=4][IMG]https://i.ibb.co/Z8QvKgb/cpI.png[/IMG] [/SIZE][/COLOR][/COLOR][/SIZE]
+[SIZE=5][COLOR=#0000b3][COLOR=#404040][SIZE=4][IMG]https://i.ibb.co/7WP7Ghg/CPII.png[/IMG] [/SIZE][/COLOR][/COLOR][/SIZE]
+[SIZE=5].
+[SIZE=4][SIZE=5][COLOR=#0000b3][B]Documentation:[/B][/COLOR][/SIZE][/SIZE]
+[SIZE=4]There is extremely good documentation on how to use this library[/SIZE][/SIZE]
+[SIZE=5][SIZE=4]on the [URL='https://github.com/Simplix-Softworks/SimplixStorage']GitHub-Page [/URL]of SimplixStorage![/SIZE][/SIZE]
+
+
+[SIZE=5][SIZE=4][SIZE=5][COLOR=#0000b3][B]Apache-2-Licensed:[/B][/COLOR][/SIZE][/SIZE]
+[SIZE=4] [SIZE=4]SimplixStorage is licensed under the Apache-2.0-License[/SIZE][/SIZE][/SIZE]
+[SIZE=5][SIZE=4][SIZE=4]what means that you can use this library in your open and closed source[/SIZE][/SIZE][/SIZE]
+[SIZE=5][SIZE=4][SIZE=4]applications(Apache-2.0-License is compatible with GLPv3).[/SIZE][/SIZE][/SIZE]
+[SIZE=5][SIZE=4][SIZE=4]This is one of the greatest benefits as I think because many libraries out there are licensed under GLP or some copyleft license and you have to license your work under these copyleft licenses, too if you are using their[/SIZE][/SIZE][/SIZE]
+[SIZE=5][SIZE=4][SIZE=4]projects.[/SIZE][/SIZE][/SIZE]
+
+[SIZE=5][SIZE=4][SIZE=4][SIZE=5][SIZE=4][SIZE=5][SIZE=4]After I've shown the benefits, I will show you the [/SIZE][/SIZE][/SIZE][/SIZE][/SIZE][/SIZE][/SIZE]
+
+[SPOILER=" Ways of installation"]
+[COLOR=#0000b3][B][SIZE=5]Ways of Installation[/SIZE][/B][SIZE=5][SIZE=5]:[/SIZE][/SIZE][/COLOR]
+[SIZE=4]There are [B]2 possible ways[/B] to install making use of the SimplixStorage in your plugin.[/SIZE]
+
+[SIZE=5][COLOR=#0000b3][B]1) Use with the SimplixCore[/B][/COLOR][/SIZE]
+The[B] SimplixCore contains SimplixStorage[/B] as a library.
+If you install it as a plugin on your server you won't need to shade SimplixStorage into your jar-file.
+
+1:  Download SimplixCore and install it on your server:
+[URL='https://github.com/Simplix-Softworks/SimplixCore/releases/download/1.0.0/SimplixCore-Spigot.jar']Spigot[/URL]
+[URL='https://github.com/Simplix-Softworks/SimplixCore/releases/download/1.0.0/SimplixCore-BungeeCord.jar']BungeeCord[/URL]
+ 
+2) Put the this into your pom.xml file:
+[B]1[/B]. Place this in your repository-section:
+[code]
+<repository>
+    <id>jitpack.io</id>
+    <url>https://jitpack.io</url>
+</repository>
+[/code]
+
+2. Place this in your dependency-section:
+
+[code]
+<dependency>
+    <groupId>com.github.simplix-softworks</groupId>
+    <artifactId>SimplixStorage</artifactId>
+    <version>3.1.9</version>
+   <scope>provided</scope> <!-- Must be provided since we want to use it from the SimplixCore!-->
+</dependency>
+[/code]
+[SIZE=5][COLOR=#0000b3]
+[B]2) Or: Use SimplixStorage standalone[/B][/COLOR]
+[/SIZE]
+You will need Maven to use SimplixStorage.
+(For a link to the GitHub release page just click the download button.)
+Example pom.xml: [URL]https://pastebin.com/S7UE516z[/URL]
+__
+[B]1[/B]. Place this in your repository-section:
+[code]
+<repository>
+    <id>jitpack.io</id>
+    <url>https://jitpack.io</url>
+</repository>
+[/code]
+
+2. Place this in your dependency-section:
+[code]
+<dependency>
+    <groupId>com.github.simplix-softworks</groupId>
+    <artifactId>SimplixStorage</artifactId>
+    <version>3.1.9</version>
+   <scope>compile</scope> <!-- Must be compile since we want to shade it to your jarfile!-->
+</dependency>
+[/code]
+
+3. Important! Use a shade plugin to make sure that the library is shaded into your final .jar file when your plugin is compiled. The relocation is optional but heavily recommended.
+If you don't know how or where to put this in your build section, just look at the example pom.
+
+[code]<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-shade-plugin</artifactId>
+    <version>3.1.0</version>
+    <executions>
+        <execution>
+            <phase>package</phase>
+            <goals>
+                <goal>shade</goal>
+            </goals>
+        </execution>
+    </executions>
+    <configuration>
+        <createDependencyReducedPom>false</createDependencyReducedPom>
+        <relocations>
+            <relocation>
+                <pattern>de.leonhard</pattern>
+                <shadedPattern>yourpackage.yourname.storage</shadedPattern>
+            </relocation>
+        </relocations>
+    </configuration>
+</plugin>[/code]
+
+After this, you should be good to go!
+
+[/SPOILER]
+
+[IMG]https://i.imgur.com/m9QTOkk.png[/IMG]
+[SIZE=5][SIZE=4]If there are any questions or bugs, they will be fixed as soon as possible.[/SIZE][/SIZE]
+[SIZE=5][SIZE=4]If you have any feature request(Even more features are planned)[/SIZE][/SIZE]
+[SIZE=5][SIZE=4]There are multiple ways to create a bug report or a feature request:[/SIZE][/SIZE]
+
+[SIZE=5][SIZE=4]-You can pm me via SpigotMC[/SIZE][/SIZE]
+[SIZE=5][SIZE=4]- You can pm me via Discord: Leonhard#8192[/SIZE][/SIZE]
+
+[SIZE=5][SIZE=4]But the best way is to create an issue at the [URL='https://github.com/Simplix-Softworks/SimplixStorage']GitHub-Page[/URL] of SimplixStorage[/SIZE][/SIZE]
+
+
+[IMG]https://i.imgur.com/xBMMETT.png[/IMG]
+
+[URL]https://github.com/Simplix-Softworks/SimplixStorage[/URL][/CENTER]
