@@ -1,6 +1,5 @@
 package dev.simplix.core.minecraft.spigot.plugin;
 
-import de.leonhard.storage.util.LagCatcher;
 import dev.simplix.core.common.event.Events;
 import dev.simplix.core.minecraft.api.events.ChatEvent;
 import dev.simplix.core.minecraft.api.events.JoinEvent;
@@ -18,7 +17,6 @@ public final class SpigotListenerImpl implements Listener {
   @EventHandler
   public void login(AsyncPlayerPreLoginEvent playerPreLoginEvent) {
 
-    LagCatcher.start("async-join");
     JoinEvent joinEvent = Events.call(
         JoinEvent
             .create(playerPreLoginEvent.getUniqueId(), playerPreLoginEvent.getName(),
@@ -51,7 +49,6 @@ public final class SpigotListenerImpl implements Listener {
     if (playerCommandPreprocessEvent.isCancelled()) {
       return;
     }
-    LagCatcher.start("command-chat");
     ChatEvent chatEvent = Events.call(ChatEvent
         .create(
             playerCommandPreprocessEvent.getPlayer().getUniqueId(),
@@ -59,7 +56,6 @@ public final class SpigotListenerImpl implements Listener {
             playerCommandPreprocessEvent.getMessage()));
     playerCommandPreprocessEvent.setCancelled(chatEvent.canceled());
     playerCommandPreprocessEvent.setMessage(chatEvent.message());
-    LagCatcher.start("command-chat");
   }
 
   @EventHandler
