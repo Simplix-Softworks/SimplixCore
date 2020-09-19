@@ -18,8 +18,6 @@ import org.bukkit.plugin.Plugin;
 @Slf4j
 public final class SpigotPluginManager implements PluginManager {
 
-//  private final org.bukkit.plugin.PluginManager handle =
-
   @Override
   public void enablePlugin(@NonNull File jarFile) {
     try {
