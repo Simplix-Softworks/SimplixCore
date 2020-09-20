@@ -26,12 +26,19 @@ public class PluginTypeHandler implements BiConsumer<Dependency, File> {
   private final Yaml yaml = new Yaml();
 
   private Field toLoadField;
+  private Method enable;
 
   public PluginTypeHandler() {
     try {
       toLoadField = PluginManager.class.getDeclaredField("toLoad");
       toLoadField.setAccessible(true);
-    } catch (NoSuchFieldException ignored) {
+      enable = PluginManager.class.getDeclaredMethod(
+          "enablePlugin",
+          Map.class,
+          Stack.class,
+          PluginDescription.class);
+      enable.setAccessible(true);
+    } catch (ReflectiveOperationException ignored) {
     }
   }
 
@@ -40,12 +47,6 @@ public class PluginTypeHandler implements BiConsumer<Dependency, File> {
     File target = new File("plugins", file.getName());
     try {
       Files.copy(file, target);
-      Method enable = PluginManager.class.getDeclaredMethod(
-          "enablePlugin",
-          Map.class,
-          Stack.class,
-          PluginDescription.class);
-      enable.setAccessible(true);
       PluginDescription pluginDescription = loadPluginYml(target);
       if (pluginDescription == null) {
         return;
@@ -100,6 +101,7 @@ public class PluginTypeHandler implements BiConsumer<Dependency, File> {
       throws ReflectiveOperationException {
     Map<String, PluginDescription> toLoad = (Map<String, PluginDescription>) toLoadField.get(
         ProxyServer.getInstance().getPluginManager());
+    log.debug("[Simplix] Checking if "+name+" will be automatically enabled. Automatically enabled will be: "+toLoad.keySet());
     return toLoad.containsKey(name);
   }
 
