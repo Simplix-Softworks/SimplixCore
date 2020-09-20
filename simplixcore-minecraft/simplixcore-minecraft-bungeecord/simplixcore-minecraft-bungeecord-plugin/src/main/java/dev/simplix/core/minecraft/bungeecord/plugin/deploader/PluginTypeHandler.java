@@ -5,6 +5,7 @@ import com.google.common.io.Files;
 import dev.simplix.core.common.deploader.Dependency;
 import java.io.File;
 import java.io.InputStream;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,6 +25,15 @@ public class PluginTypeHandler implements BiConsumer<Dependency, File> {
 
   private final Yaml yaml = new Yaml();
 
+  private Field toLoadField;
+
+  public PluginTypeHandler() {
+    try {
+      toLoadField = PluginManager.class.getDeclaredField("toLoad");
+    } catch (NoSuchFieldException ignored) {
+    }
+  }
+
   @Override
   public void accept(Dependency dependency, File file) {
     File target = new File("plugins", file.getName());
@@ -39,8 +49,7 @@ public class PluginTypeHandler implements BiConsumer<Dependency, File> {
       if (pluginDescription == null) {
         return;
       }
-      if (ProxyServer.getInstance().getPluginManager().getPlugin(pluginDescription.getName())
-          != null) {
+      if (willBeAutomaticallyLoaded(pluginDescription.getName())) {
         return;
       }
       boolean b = (boolean) enable.invoke(
@@ -84,6 +93,13 @@ public class PluginTypeHandler implements BiConsumer<Dependency, File> {
           .log(Level.WARNING, "Could not load plugin from file " + target, ex);
     }
     return null;
+  }
+
+  private boolean willBeAutomaticallyLoaded(String name)
+      throws ReflectiveOperationException {
+    Map<String, PluginDescription> toLoad = (Map<String, PluginDescription>) toLoadField.get(
+        ProxyServer.getInstance().getPluginManager());
+    return toLoad.containsKey(name);
   }
 
 }
