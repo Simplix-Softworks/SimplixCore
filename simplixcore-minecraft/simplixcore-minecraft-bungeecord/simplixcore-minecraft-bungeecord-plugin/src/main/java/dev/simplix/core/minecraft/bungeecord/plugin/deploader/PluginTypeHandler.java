@@ -30,6 +30,7 @@ public class PluginTypeHandler implements BiConsumer<Dependency, File> {
   public PluginTypeHandler() {
     try {
       toLoadField = PluginManager.class.getDeclaredField("toLoad");
+      toLoadField.setAccessible(true);
     } catch (NoSuchFieldException ignored) {
     }
   }
