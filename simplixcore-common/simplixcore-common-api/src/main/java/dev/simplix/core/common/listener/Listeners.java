@@ -17,14 +17,14 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class Listeners {
 
-  private final List<Listener<Event>> registeredListeners = new ArrayList<>();
+  private final List<Listener<? extends Event>> registeredListeners = new ArrayList<>();
 
   /**
    * Registers an {@link Listener}. If an {@link Listener} is registered using this method it's
    * {@link Listener#handleEvent(Event)} method will be called once an {@link Event} is called using
    * {@link Events#call(Event)} method
    */
-  public void register(@NonNull final Listener<Event> listener) {
+  public void register(@NonNull final Listener<? extends Event> listener) {
     registeredListeners.add(listener);
   }
 
@@ -32,7 +32,7 @@ public class Listeners {
    * Returns all registered {@link Listener}'s as an unmodifiable collection. It is made
    * unmodifiable since we don't want listeners to be removed from it
    */
-  public Collection<Listener<Event>> registeredListeners() {
+  public Collection<Listener<? extends Event>> registeredListeners() {
     return Collections.unmodifiableCollection(registeredListeners);
   }
 }

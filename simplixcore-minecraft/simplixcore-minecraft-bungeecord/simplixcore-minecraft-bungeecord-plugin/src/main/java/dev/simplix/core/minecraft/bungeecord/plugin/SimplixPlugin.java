@@ -3,21 +3,26 @@ package dev.simplix.core.minecraft.bungeecord.plugin;
 import dev.simplix.core.common.aop.ScanComponents;
 import dev.simplix.core.common.aop.SimplixApplication;
 import dev.simplix.core.common.deploader.ArtifactDependencyLoader;
+import dev.simplix.core.common.event.Event;
+import dev.simplix.core.common.event.Events;
 import dev.simplix.core.common.inject.SimplixInstaller;
+import dev.simplix.core.common.listener.Listeners;
 import dev.simplix.core.minecraft.bungeecord.plugin.deploader.PluginTypeHandler;
+import dev.simplix.core.minecraft.bungeecord.plugin.listeners.ApplicationPreInstallListener;
 import java.io.File;
 import java.util.logging.Level;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
 
-@SimplixApplication(name = "SimplixCore", version = "1.0", authors = {
-    "Exceptionflug",
+@SimplixApplication(name = "SimplixCore", authors = {
+    "Simplix Softworks",
     "JavaFactoryDev"}, workingDirectory = "plugins/SimplixCore")
 @ScanComponents("dev.simplix.core")
 public final class SimplixPlugin extends Plugin {
 
   @Override
   public void onLoad() {
+    new ApplicationPreInstallListener();
     try {
       SimplixInstaller.instance().updater().installCachedUpdates();
     } catch (Exception exception) {

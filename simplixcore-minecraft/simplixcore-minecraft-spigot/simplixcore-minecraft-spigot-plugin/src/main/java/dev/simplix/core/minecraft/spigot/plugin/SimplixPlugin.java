@@ -6,6 +6,7 @@ import dev.simplix.core.common.deploader.ArtifactDependencyLoader;
 import dev.simplix.core.common.inject.SimplixInstaller;
 import dev.simplix.core.minecraft.spigot.dynamiclisteners.DynamicListenersSimplixModule;
 import dev.simplix.core.minecraft.spigot.plugin.deploader.PluginTypeHandler;
+import dev.simplix.core.minecraft.spigot.plugin.listeners.ApplicationPreInstallListener;
 import java.io.File;
 import java.util.logging.Level;
 import lombok.extern.slf4j.Slf4j;
@@ -14,8 +15,8 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.Nullable;
 
-@SimplixApplication(name = "SimplixCore", version = "1.0", authors = {
-    "Exceptionflug",
+@SimplixApplication(name = "SimplixCore", authors = {
+    "Simplix Softworks",
     "JavaFactoryDev"}, workingDirectory = "plugins/SimplixCore")
 @ScanComponents("dev.simplix.core")
 @Slf4j
@@ -23,6 +24,7 @@ public final class SimplixPlugin extends JavaPlugin {
 
   @Override
   public void onLoad() {
+    new ApplicationPreInstallListener();
     try {
       SimplixInstaller.instance().updater().installCachedUpdates();
     } catch (Exception exception) {

@@ -32,12 +32,11 @@ public class Events {
    * @return Returns the event
    */
   public <T extends Event> T call(@NonNull T event) {
-    for (final Listener<Event> listener : Listeners.registeredListeners()) {
+    for (final Listener<? extends Event> listener : Listeners.registeredListeners()) {
       if (listener.type() != event.getClass()) {
         continue;
       }
-
-      listener.handleEvent(event);
+      ((Listener<T>) listener).handleEvent(event);
       // Don't call further Listeners if the event was already canceled
       if (event.canceled()) {
         return event;

@@ -21,7 +21,7 @@ public @interface SimplixApplication {
   /**
    * @return The version of the application
    */
-  String version();
+  String version() default "<auto>";
 
   /**
    * @return The authors of the application

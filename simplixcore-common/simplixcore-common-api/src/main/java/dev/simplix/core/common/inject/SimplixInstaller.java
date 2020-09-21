@@ -8,6 +8,8 @@ import com.google.inject.spi.ElementSource;
 import dev.simplix.core.common.ApplicationInfo;
 import dev.simplix.core.common.aop.*;
 import dev.simplix.core.common.deploader.*;
+import dev.simplix.core.common.event.Events;
+import dev.simplix.core.common.events.ApplicationPreInstallEvent;
 import dev.simplix.core.common.libloader.LibraryLoader;
 import dev.simplix.core.common.updater.UpdatePolicy;
 import dev.simplix.core.common.updater.UpdatePolicyDeserializer;
@@ -232,6 +234,12 @@ public class SimplixInstaller {
       if (this.injectorMap.containsKey(context.owner)) {
         continue;
       }
+      ApplicationPreInstallEvent event = new ApplicationPreInstallEvent(
+          context.applicationInfo,
+          context.owner);
+      Events.call(event);
+      context.applicationInfo = event.applicationInfo();
+      context.owner = event.applicationClass();
       if (!installApplication(context, new Stack<>())) {
         log.warn(SIMPLIX_BOOTSTRAP + "Failed to load application "
                  + context.applicationInfo.name());
@@ -561,9 +569,9 @@ public class SimplixInstaller {
   @AllArgsConstructor
   static final class InstallationContext {
 
-    private final Class<?> owner;
+    private Class<?> owner;
     private final Reflections reflections;
-    private final ApplicationInfo applicationInfo;
+    private ApplicationInfo applicationInfo;
     private final Module[] modules;
 
   }
