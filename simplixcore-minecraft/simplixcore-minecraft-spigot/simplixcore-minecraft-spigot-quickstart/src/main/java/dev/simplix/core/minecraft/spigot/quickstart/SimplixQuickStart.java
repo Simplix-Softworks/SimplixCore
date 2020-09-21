@@ -16,7 +16,7 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public final class SimplixQuickStart {
 
-  private static final String SIMPLIX_DOWNLOAD_URL
+  public static final String SIMPLIX_DOWNLOAD_URL
       = "https://github.com/Simplix-Softworks/SimplixCore/releases/latest/SimplixCore-Spigot.jar";
 
   /**

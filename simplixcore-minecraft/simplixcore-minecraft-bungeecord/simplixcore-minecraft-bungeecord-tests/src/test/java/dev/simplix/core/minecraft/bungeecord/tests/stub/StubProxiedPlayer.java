@@ -33,4 +33,9 @@ public class StubProxiedPlayer extends FakeProxiedPlayer {
       return null;
     }
   }
+
+  @Override
+  public boolean hasPermission(String s) {
+    return true; //By pass command permissions
+  }
 }

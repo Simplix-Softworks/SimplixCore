@@ -13,7 +13,7 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Command;
 
-final class SimplixCommand extends Command {
+public final class SimplixCommand extends Command {
 
   private final String downloadAddress;
 

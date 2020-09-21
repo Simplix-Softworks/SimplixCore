@@ -185,22 +185,26 @@ public class FakeProxiedPlayer implements ProxiedPlayer {
 
   @Override
   public void sendMessage(String s) {
-
+    System.out.println(s);
   }
 
   @Override
   public void sendMessages(String... strings) {
-
+    for (String string : strings) {
+      sendMessage(string);
+    }
   }
 
   @Override
   public void sendMessage(BaseComponent... baseComponents) {
-
+    for (BaseComponent baseComponent : baseComponents) {
+      sendMessage(baseComponent);
+    }
   }
 
   @Override
   public void sendMessage(BaseComponent baseComponent) {
-
+    sendMessage(baseComponent.toLegacyText());
   }
 
   @Override

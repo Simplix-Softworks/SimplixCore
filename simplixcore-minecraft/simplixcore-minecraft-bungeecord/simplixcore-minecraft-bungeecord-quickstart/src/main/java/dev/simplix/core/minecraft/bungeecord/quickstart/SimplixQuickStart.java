@@ -10,7 +10,7 @@ import net.md_5.bungee.api.plugin.Plugin;
  */
 public final class SimplixQuickStart {
 
-  private static final String SIMPLIX_DOWNLOAD_URL
+  public static final String SIMPLIX_DOWNLOAD_URL
       = "https://github.com/Simplix-Softworks/SimplixCore/releases/latest/SimplixCore-BungeeCord.jar";
 
   /**

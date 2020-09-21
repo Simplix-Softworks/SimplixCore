@@ -42,4 +42,9 @@ public class StubPlayer extends FakePlayer {
   public Server getServer() {
     return new StubServer();
   }
+
+  @Override
+  public boolean hasPermission(String name) {
+    return true; //By pass command permissions
+  }
 }

@@ -13,7 +13,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
 @Slf4j
-final class SimplixCommand extends Command {
+public final class SimplixCommand extends Command {
 
   private final String downloadAddress;
 

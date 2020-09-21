@@ -608,12 +608,14 @@ public class FakePlayer implements Player {
 
   @Override
   public void sendMessage(String message) {
-
+    System.out.println(message);
   }
 
   @Override
   public void sendMessage(String[] messages) {
-
+    for (String message : messages) {
+      sendMessage(message);
+    }
   }
 
   @Override
