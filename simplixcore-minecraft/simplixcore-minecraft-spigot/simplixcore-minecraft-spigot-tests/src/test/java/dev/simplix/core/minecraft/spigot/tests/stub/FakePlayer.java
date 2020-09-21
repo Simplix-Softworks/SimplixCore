@@ -1,4 +1,4 @@
-package dev.simplix.core.minecraft.spigot.tests.mock;
+package dev.simplix.core.minecraft.spigot.tests.stub;
 
 import java.net.InetSocketAddress;
 import java.util.*;
@@ -22,11 +22,11 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.util.Vector;
 
-public class MockPlayerBase implements Player {
+public class FakePlayer implements Player {
 
   @Override
   public String getDisplayName() {
-    return null;
+    throw new AbstractMethodError("Not implemented");
   }
 
   @Override
@@ -36,7 +36,7 @@ public class MockPlayerBase implements Player {
 
   @Override
   public String getPlayerListName() {
-    return null;
+    throw new AbstractMethodError("Not implemented");
   }
 
   @Override
@@ -45,18 +45,18 @@ public class MockPlayerBase implements Player {
   }
 
   @Override
+  public Location getCompassTarget() {
+    throw new AbstractMethodError("Not implemented");
+  }
+
+  @Override
   public void setCompassTarget(Location loc) {
 
   }
 
   @Override
-  public Location getCompassTarget() {
-    return null;
-  }
-
-  @Override
   public InetSocketAddress getAddress() {
-    return null;
+    throw new AbstractMethodError("Not implemented");
   }
 
   @Override
@@ -136,13 +136,13 @@ public class MockPlayerBase implements Player {
   }
 
   @Override
-  public void setSleepingIgnored(boolean isSleeping) {
-
+  public boolean isSleepingIgnored() {
+    return false;
   }
 
   @Override
-  public boolean isSleepingIgnored() {
-    return false;
+  public void setSleepingIgnored(boolean isSleeping) {
+
   }
 
   @Override
@@ -345,13 +345,13 @@ public class MockPlayerBase implements Player {
   }
 
   @Override
-  public void setPlayerWeather(WeatherType type) {
-
+  public WeatherType getPlayerWeather() {
+    throw new AbstractMethodError("Not implemented");
   }
 
   @Override
-  public WeatherType getPlayerWeather() {
-    return null;
+  public void setPlayerWeather(WeatherType type) {
+
   }
 
   @Override
@@ -456,7 +456,7 @@ public class MockPlayerBase implements Player {
 
   @Override
   public Player getPlayer() {
-    return null;
+    throw new AbstractMethodError("Not implemented");
   }
 
   @Override
@@ -476,7 +476,7 @@ public class MockPlayerBase implements Player {
 
   @Override
   public Location getBedSpawnLocation() {
-    return null;
+    throw new AbstractMethodError("Not implemented");
   }
 
   @Override
@@ -516,22 +516,22 @@ public class MockPlayerBase implements Player {
 
   @Override
   public Location getLocation() {
-    return null;
+    throw new AbstractMethodError("Not implemented");
   }
 
   @Override
   public Location getLocation(Location loc) {
-    return null;
+    throw new AbstractMethodError("Not implemented");
+  }
+
+  @Override
+  public Vector getVelocity() {
+    throw new AbstractMethodError("Not implemented");
   }
 
   @Override
   public void setVelocity(Vector velocity) {
 
-  }
-
-  @Override
-  public Vector getVelocity() {
-    return null;
   }
 
   @Override
@@ -541,7 +541,7 @@ public class MockPlayerBase implements Player {
 
   @Override
   public World getWorld() {
-    return null;
+    throw new AbstractMethodError("Not implemented");
   }
 
   @Override
@@ -568,7 +568,7 @@ public class MockPlayerBase implements Player {
 
   @Override
   public List<Entity> getNearbyEntities(double x, double y, double z) {
-    return null;
+    throw new AbstractMethodError("Not implemented");
   }
 
   @Override
@@ -582,13 +582,13 @@ public class MockPlayerBase implements Player {
   }
 
   @Override
-  public int getMaxFireTicks() {
-    return 0;
+  public void setFireTicks(int ticks) {
+
   }
 
   @Override
-  public void setFireTicks(int ticks) {
-
+  public int getMaxFireTicks() {
+    return 0;
   }
 
   @Override
@@ -618,12 +618,12 @@ public class MockPlayerBase implements Player {
 
   @Override
   public Server getServer() {
-    return null;
+    throw new AbstractMethodError("Not implemented");
   }
 
   @Override
   public Entity getPassenger() {
-    return null;
+    throw new AbstractMethodError("Not implemented");
   }
 
   @Override
@@ -652,18 +652,18 @@ public class MockPlayerBase implements Player {
   }
 
   @Override
+  public EntityDamageEvent getLastDamageCause() {
+    throw new AbstractMethodError("Not implemented");
+  }
+
+  @Override
   public void setLastDamageCause(EntityDamageEvent event) {
 
   }
 
   @Override
-  public EntityDamageEvent getLastDamageCause() {
-    return null;
-  }
-
-  @Override
   public UUID getUniqueId() {
-    return null;
+    throw new AbstractMethodError("Not implemented");
   }
 
   @Override
@@ -683,7 +683,7 @@ public class MockPlayerBase implements Player {
 
   @Override
   public EntityType getType() {
-    return null;
+    throw new AbstractMethodError("Not implemented");
   }
 
   @Override
@@ -698,7 +698,12 @@ public class MockPlayerBase implements Player {
 
   @Override
   public Entity getVehicle() {
-    return null;
+    throw new AbstractMethodError("Not implemented");
+  }
+
+  @Override
+  public String getCustomName() {
+    throw new AbstractMethodError("Not implemented");
   }
 
   @Override
@@ -707,18 +712,13 @@ public class MockPlayerBase implements Player {
   }
 
   @Override
-  public String getCustomName() {
-    return null;
+  public boolean isCustomNameVisible() {
+    return false;
   }
 
   @Override
   public void setCustomNameVisible(boolean flag) {
 
-  }
-
-  @Override
-  public boolean isCustomNameVisible() {
-    return false;
   }
 
   @Override
@@ -732,23 +732,23 @@ public class MockPlayerBase implements Player {
   }
 
   @Override
-  public void setFlySpeed(float value) throws IllegalArgumentException {
-
-  }
-
-  @Override
-  public void setWalkSpeed(float value) throws IllegalArgumentException {
-
-  }
-
-  @Override
   public float getFlySpeed() {
     return 0;
   }
 
   @Override
+  public void setFlySpeed(float value) throws IllegalArgumentException {
+
+  }
+
+  @Override
   public float getWalkSpeed() {
     return 0;
+  }
+
+  @Override
+  public void setWalkSpeed(float value) throws IllegalArgumentException {
+
   }
 
   @Override
@@ -763,7 +763,7 @@ public class MockPlayerBase implements Player {
 
   @Override
   public Scoreboard getScoreboard() {
-    return null;
+    throw new AbstractMethodError("Not implemented");
   }
 
   @Override
@@ -783,18 +783,18 @@ public class MockPlayerBase implements Player {
   }
 
   @Override
-  public void setHealthScale(double scale) throws IllegalArgumentException {
-
-  }
-
-  @Override
   public double getHealthScale() {
     return 0;
   }
 
   @Override
+  public void setHealthScale(double scale) throws IllegalArgumentException {
+
+  }
+
+  @Override
   public Entity getSpectatorTarget() {
-    return null;
+    throw new AbstractMethodError("Not implemented");
   }
 
   @Override
@@ -814,27 +814,27 @@ public class MockPlayerBase implements Player {
 
   @Override
   public Spigot spigot() {
-    return null;
+    throw new AbstractMethodError("Not implemented");
   }
 
   @Override
   public Map<String, Object> serialize() {
-    return null;
+    throw new AbstractMethodError("Not implemented");
   }
 
   @Override
   public String getName() {
-    return null;
+    throw new AbstractMethodError("Not implemented");
   }
 
   @Override
   public PlayerInventory getInventory() {
-    return null;
+    throw new AbstractMethodError("Not implemented");
   }
 
   @Override
   public Inventory getEnderChest() {
-    return null;
+    throw new AbstractMethodError("Not implemented");
   }
 
   @Override
@@ -844,22 +844,22 @@ public class MockPlayerBase implements Player {
 
   @Override
   public InventoryView getOpenInventory() {
-    return null;
+    throw new AbstractMethodError("Not implemented");
   }
 
   @Override
   public InventoryView openInventory(Inventory inventory) {
-    return null;
+    throw new AbstractMethodError("Not implemented");
   }
 
   @Override
   public InventoryView openWorkbench(Location location, boolean force) {
-    return null;
+    throw new AbstractMethodError("Not implemented");
   }
 
   @Override
   public InventoryView openEnchanting(Location location, boolean force) {
-    return null;
+    throw new AbstractMethodError("Not implemented");
   }
 
   @Override
@@ -874,7 +874,7 @@ public class MockPlayerBase implements Player {
 
   @Override
   public ItemStack getItemInHand() {
-    return null;
+    throw new AbstractMethodError("Not implemented");
   }
 
   @Override
@@ -884,7 +884,7 @@ public class MockPlayerBase implements Player {
 
   @Override
   public ItemStack getItemOnCursor() {
-    return null;
+    throw new AbstractMethodError("Not implemented");
   }
 
   @Override
@@ -904,7 +904,7 @@ public class MockPlayerBase implements Player {
 
   @Override
   public GameMode getGameMode() {
-    return null;
+    throw new AbstractMethodError("Not implemented");
   }
 
   @Override
@@ -934,53 +934,53 @@ public class MockPlayerBase implements Player {
 
   @Override
   public Location getEyeLocation() {
-    return null;
+    throw new AbstractMethodError("Not implemented");
   }
 
   @Override
   public List<Block> getLineOfSight(
       HashSet<Byte> transparent, int maxDistance) {
-    return null;
+    throw new AbstractMethodError("Not implemented");
   }
 
   @Override
   public List<Block> getLineOfSight(Set<Material> transparent, int maxDistance) {
-    return null;
+    throw new AbstractMethodError("Not implemented");
   }
 
   @Override
   public Block getTargetBlock(HashSet<Byte> transparent, int maxDistance) {
-    return null;
+    throw new AbstractMethodError("Not implemented");
   }
 
   @Override
   public Block getTargetBlock(Set<Material> transparent, int maxDistance) {
-    return null;
+    throw new AbstractMethodError("Not implemented");
   }
 
   @Override
   public List<Block> getLastTwoTargetBlocks(HashSet<Byte> transparent, int maxDistance) {
-    return null;
+    throw new AbstractMethodError("Not implemented");
   }
 
   @Override
   public List<Block> getLastTwoTargetBlocks(Set<Material> transparent, int maxDistance) {
-    return null;
+    throw new AbstractMethodError("Not implemented");
   }
 
   @Override
   public Egg throwEgg() {
-    return null;
+    throw new AbstractMethodError("Not implemented");
   }
 
   @Override
   public Snowball throwSnowball() {
-    return null;
+    throw new AbstractMethodError("Not implemented");
   }
 
   @Override
   public Arrow shootArrow() {
-    return null;
+    throw new AbstractMethodError("Not implemented");
   }
 
   @Override
@@ -1019,13 +1019,13 @@ public class MockPlayerBase implements Player {
   }
 
   @Override
-  public int _INVALID_getLastDamage() {
-    return 0;
+  public void setLastDamage(double damage) {
+
   }
 
   @Override
-  public void setLastDamage(double damage) {
-
+  public int _INVALID_getLastDamage() {
+    return 0;
   }
 
   @Override
@@ -1045,7 +1045,7 @@ public class MockPlayerBase implements Player {
 
   @Override
   public Player getKiller() {
-    return null;
+    throw new AbstractMethodError("Not implemented");
   }
 
   @Override
@@ -1075,7 +1075,7 @@ public class MockPlayerBase implements Player {
 
   @Override
   public Collection<PotionEffect> getActivePotionEffects() {
-    return null;
+    throw new AbstractMethodError("Not implemented");
   }
 
   @Override
@@ -1095,17 +1095,17 @@ public class MockPlayerBase implements Player {
 
   @Override
   public EntityEquipment getEquipment() {
-    return null;
-  }
-
-  @Override
-  public void setCanPickupItems(boolean pickup) {
-
+    throw new AbstractMethodError("Not implemented");
   }
 
   @Override
   public boolean getCanPickupItems() {
     return false;
+  }
+
+  @Override
+  public void setCanPickupItems(boolean pickup) {
+
   }
 
   @Override
@@ -1115,7 +1115,7 @@ public class MockPlayerBase implements Player {
 
   @Override
   public Entity getLeashHolder() throws IllegalStateException {
-    return null;
+    throw new AbstractMethodError("Not implemented");
   }
 
   @Override
@@ -1149,13 +1149,13 @@ public class MockPlayerBase implements Player {
   }
 
   @Override
-  public int _INVALID_getHealth() {
-    return 0;
+  public void setHealth(double health) {
+
   }
 
   @Override
-  public void setHealth(double health) {
-
+  public int _INVALID_getHealth() {
+    return 0;
   }
 
   @Override
@@ -1169,13 +1169,13 @@ public class MockPlayerBase implements Player {
   }
 
   @Override
-  public int _INVALID_getMaxHealth() {
-    return 0;
+  public void setMaxHealth(double health) {
+
   }
 
   @Override
-  public void setMaxHealth(double health) {
-
+  public int _INVALID_getMaxHealth() {
+    return 0;
   }
 
   @Override
@@ -1195,7 +1195,7 @@ public class MockPlayerBase implements Player {
 
   @Override
   public List<MetadataValue> getMetadata(String metadataKey) {
-    return null;
+    throw new AbstractMethodError("Not implemented");
   }
 
   @Override
@@ -1231,22 +1231,22 @@ public class MockPlayerBase implements Player {
   @Override
   public PermissionAttachment addAttachment(
       Plugin plugin, String name, boolean value) {
-    return null;
+    throw new AbstractMethodError("Not implemented");
   }
 
   @Override
   public PermissionAttachment addAttachment(Plugin plugin) {
-    return null;
+    throw new AbstractMethodError("Not implemented");
   }
 
   @Override
   public PermissionAttachment addAttachment(Plugin plugin, String name, boolean value, int ticks) {
-    return null;
+    throw new AbstractMethodError("Not implemented");
   }
 
   @Override
   public PermissionAttachment addAttachment(Plugin plugin, int ticks) {
-    return null;
+    throw new AbstractMethodError("Not implemented");
   }
 
   @Override
@@ -1261,7 +1261,7 @@ public class MockPlayerBase implements Player {
 
   @Override
   public Set<PermissionAttachmentInfo> getEffectivePermissions() {
-    return null;
+    throw new AbstractMethodError("Not implemented");
   }
 
   @Override
@@ -1281,17 +1281,17 @@ public class MockPlayerBase implements Player {
 
   @Override
   public Set<String> getListeningPluginChannels() {
-    return null;
+    throw new AbstractMethodError("Not implemented");
   }
 
   @Override
   public <T extends Projectile> T launchProjectile(Class<? extends T> projectile) {
-    return null;
+    throw new AbstractMethodError("Not implemented");
   }
 
   @Override
   public <T extends Projectile> T launchProjectile(
       Class<? extends T> projectile, Vector velocity) {
-    return null;
+    throw new AbstractMethodError("Not implemented");
   }
 }

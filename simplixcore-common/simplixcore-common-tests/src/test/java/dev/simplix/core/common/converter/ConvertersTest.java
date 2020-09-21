@@ -1,5 +1,6 @@
 package dev.simplix.core.common.converter;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 class ConvertersTest {
@@ -9,7 +10,9 @@ class ConvertersTest {
   }
 
   @Test
-  void register() {
+  @BeforeAll
+  static void register() {
+//    Converters.register();
   }
 
   @Test

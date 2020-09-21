@@ -19,7 +19,7 @@ public class FakeProxiedPlayer implements ProxiedPlayer {
 
   @Override
   public String getDisplayName() {
-    return null;
+    throw new IllegalStateException("Not implemented");
   }
 
   @Override
@@ -68,7 +68,7 @@ public class FakeProxiedPlayer implements ProxiedPlayer {
 
   @Override
   public Server getServer() {
-    return null;
+    throw new IllegalStateException("Not implemented");
   }
 
   @Override
@@ -83,7 +83,7 @@ public class FakeProxiedPlayer implements ProxiedPlayer {
 
   @Override
   public PendingConnection getPendingConnection() {
-    return null;
+    throw new IllegalStateException("Not implemented");
   }
 
   @Override
@@ -93,7 +93,7 @@ public class FakeProxiedPlayer implements ProxiedPlayer {
 
   @Override
   public ServerInfo getReconnectServer() {
-    return null;
+    throw new IllegalStateException("Not implemented");
   }
 
   @Override
@@ -103,17 +103,17 @@ public class FakeProxiedPlayer implements ProxiedPlayer {
 
   @Override
   public String getUUID() {
-    return null;
+    throw new IllegalStateException("Not implemented");
   }
 
   @Override
   public UUID getUniqueId() {
-    return null;
+    throw new IllegalStateException("Not implemented");
   }
 
   @Override
   public Locale getLocale() {
-    return null;
+    throw new IllegalStateException("Not implemented");
   }
 
   @Override
@@ -123,7 +123,7 @@ public class FakeProxiedPlayer implements ProxiedPlayer {
 
   @Override
   public ChatMode getChatMode() {
-    return null;
+    throw new IllegalStateException("Not implemented");
   }
 
   @Override
@@ -133,12 +133,12 @@ public class FakeProxiedPlayer implements ProxiedPlayer {
 
   @Override
   public SkinConfiguration getSkinParts() {
-    return null;
+    throw new IllegalStateException("Not implemented");
   }
 
   @Override
   public MainHand getMainHand() {
-    return null;
+    throw new IllegalStateException("Not implemented");
   }
 
   @Override
@@ -170,17 +170,17 @@ public class FakeProxiedPlayer implements ProxiedPlayer {
 
   @Override
   public Map<String, String> getModList() {
-    return null;
+    throw new IllegalStateException("Not implemented");
   }
 
   @Override
   public Scoreboard getScoreboard() {
-    return null;
+    throw new IllegalStateException("Not implemented");
   }
 
   @Override
   public String getName() {
-    return null;
+    throw new IllegalStateException("Not implemented");
   }
 
   @Override
@@ -205,7 +205,7 @@ public class FakeProxiedPlayer implements ProxiedPlayer {
 
   @Override
   public Collection<String> getGroups() {
-    return null;
+    throw new IllegalStateException("Not implemented");
   }
 
   @Override
@@ -230,17 +230,17 @@ public class FakeProxiedPlayer implements ProxiedPlayer {
 
   @Override
   public Collection<String> getPermissions() {
-    return null;
+    throw new IllegalStateException("Not implemented");
   }
 
   @Override
   public InetSocketAddress getAddress() {
-    return null;
+    throw new IllegalStateException("Not implemented");
   }
 
   @Override
   public SocketAddress getSocketAddress() {
-    return null;
+    throw new IllegalStateException("Not implemented");
   }
 
   @Override
@@ -265,6 +265,6 @@ public class FakeProxiedPlayer implements ProxiedPlayer {
 
   @Override
   public Unsafe unsafe() {
-    return null;
+    throw new IllegalStateException("Not implemented");
   }
 }

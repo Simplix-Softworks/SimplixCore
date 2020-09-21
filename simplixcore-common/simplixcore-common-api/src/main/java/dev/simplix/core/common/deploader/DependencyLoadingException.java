@@ -1,8 +1,10 @@
 package dev.simplix.core.common.deploader;
 
+import lombok.Data;
 import lombok.NonNull;
 import org.jetbrains.annotations.Nullable;
 
+@Data
 public class DependencyLoadingException extends RuntimeException {
 
   private final Dependency dependency;

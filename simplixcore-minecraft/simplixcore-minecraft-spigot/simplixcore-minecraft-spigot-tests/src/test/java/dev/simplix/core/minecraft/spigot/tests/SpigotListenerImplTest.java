@@ -2,7 +2,7 @@ package dev.simplix.core.minecraft.spigot.tests;
 
 import com.google.common.collect.Sets;
 import dev.simplix.core.minecraft.spigot.plugin.SpigotListenerImpl;
-import dev.simplix.core.minecraft.spigot.tests.mock.MockPlayer;
+import dev.simplix.core.minecraft.spigot.tests.stub.StubPlayer;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.UUID;
@@ -38,7 +38,7 @@ class SpigotListenerImplTest {
   void chat() {
     spigotListener.chat(new AsyncPlayerChatEvent(
         false,
-        new MockPlayer(),
+        new StubPlayer(),
         "Example message",
         Sets.newHashSet()));
   }
@@ -46,7 +46,7 @@ class SpigotListenerImplTest {
   @Test
   void chat2() {
     spigotListener.chat2(new PlayerCommandPreprocessEvent(
-        new MockPlayer(),
+        new StubPlayer(),
         "/example",
         // Recipients must be given or the test will fail due to the MockPlayer#getServer returning null
         Sets.newHashSet()));
@@ -54,7 +54,7 @@ class SpigotListenerImplTest {
 
   @Test
   void quit() {
-    spigotListener.quit(new PlayerQuitEvent(new MockPlayer(), "Quitted"));
+    spigotListener.quit(new PlayerQuitEvent(new StubPlayer(), "Quitted"));
   }
 }
 

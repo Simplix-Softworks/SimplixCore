@@ -36,4 +36,9 @@ public final class SpigotPluginManager implements PluginManager {
         .map(Plugin::getName)
         .collect(Collectors.toList());
   }
+
+  public static void main(String[] args) {
+    final SpigotPluginManager spigotPluginManager = new SpigotPluginManager();
+    spigotPluginManager.enabledPlugins();
+  }
 }

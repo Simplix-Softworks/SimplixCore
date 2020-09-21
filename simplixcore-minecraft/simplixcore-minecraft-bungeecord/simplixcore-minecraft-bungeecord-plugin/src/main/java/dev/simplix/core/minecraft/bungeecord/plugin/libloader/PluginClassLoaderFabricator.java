@@ -1,6 +1,5 @@
 package dev.simplix.core.minecraft.bungeecord.plugin.libloader;
 
-import dev.simplix.core.minecraft.bungeecord.plugin.SimplixPlugin;
 import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -9,6 +8,7 @@ import java.net.URL;
 import java.util.Collections;
 import java.util.Set;
 import java.util.function.Function;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.PluginDescription;
@@ -16,14 +16,15 @@ import net.md_5.bungee.api.plugin.PluginDescription;
 @Slf4j
 public class PluginClassLoaderFabricator implements Function<File, ClassLoader> {
 
-  private void unfinalize(Field loadersField) throws NoSuchFieldException, IllegalAccessException {
+  private void unfinalize(@NonNull Field loadersField)
+      throws NoSuchFieldException, IllegalAccessException {
     Field modifiersField = Field.class.getDeclaredField("modifiers");
     modifiersField.setAccessible(true);
     modifiersField.set(loadersField, loadersField.getModifiers() & ~Modifier.FINAL);
   }
 
   @Override
-  public ClassLoader apply(File file) {
+  public ClassLoader apply(@NonNull File file) {
     try {
       Class<?> classLoaderClass = Class.forName("net.md_5.bungee.api.plugin.PluginClassloader",
           false, ClassLoader.getSystemClassLoader());
@@ -33,10 +34,6 @@ public class PluginClassLoaderFabricator implements Function<File, ClassLoader> 
           URL[].class);
       constructor.setAccessible(true);
 
-      SimplixPlugin plugin = (SimplixPlugin) ProxyServer
-          .getInstance()
-          .getPluginManager()
-          .getPlugin("SimplixCore");
       PluginDescription pluginDescription = new PluginDescription(
           "Dummy",
           "Dummy",
