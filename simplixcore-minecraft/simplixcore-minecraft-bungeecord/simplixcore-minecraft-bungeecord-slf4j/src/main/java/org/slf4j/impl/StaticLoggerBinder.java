@@ -23,7 +23,7 @@
  * Copyright (c) 2004-2011 QOS.ch All rights reserved.
  * <p>
  * Permission is hereby granted, free  of charge, to any person obtaining a  copy  of this  software
- *  and  associated  documentation files  (the "Software"), to  deal in  the Software without
+ * and  associated  documentation files  (the "Software"), to  deal in  the Software without
  * restriction, including without limitation  the rights to  use, copy, modify,  merge, publish,
  * distribute,  sublicense, and/or sell  copies of  the Software,  and to permit persons to whom the
  * Software  is furnished to do so, subject to the following conditions:
@@ -41,13 +41,14 @@
 package org.slf4j.impl;
 
 import dev.simplix.core.minecraft.bungeecord.slf4j.BungeeLoggerFactory;
+import net.md_5.bungee.api.ProxyServer;
 import org.slf4j.ILoggerFactory;
 import org.slf4j.LoggerFactory;
 import org.slf4j.spi.LoggerFactoryBinder;
 
 /**
- * The binding of {@link LoggerFactory} class with an actual instance of
- * {@link ILoggerFactory} is performed using information returned by this class.
+ * The binding of {@link LoggerFactory} class with an actual instance of {@link ILoggerFactory} is
+ * performed using information returned by this class.
  *
  * @author Ceki G&uuml;lc&uuml;
  * @author Ronald Jack Jenkins Jr.
@@ -55,8 +56,8 @@ import org.slf4j.spi.LoggerFactoryBinder;
 public class StaticLoggerBinder implements LoggerFactoryBinder {
 
   /**
-   * Declare the version of the SLF4J API this implementation is compiled
-   * against. The value of this field is modified with each major release.
+   * Declare the version of the SLF4J API this implementation is compiled against. The value of this
+   * field is modified with each major release.
    */
   // to avoid constant folding by the compiler, this field must *not* be final
   public static String REQUESTED_API_VERSION = "1.6.99";                           // !final
@@ -67,13 +68,37 @@ public class StaticLoggerBinder implements LoggerFactoryBinder {
   private static final StaticLoggerBinder SINGLETON = new StaticLoggerBinder();
 
   /**
-   * The ILoggerFactory instance returned by the {@link #getLoggerFactory}
-   * method should always be the same object
+   * The ILoggerFactory instance returned by the {@link #getLoggerFactory} method should always be
+   * the same object
    */
   private final ILoggerFactory loggerFactory;
 
   private StaticLoggerBinder() {
-    this.loggerFactory = new BungeeLoggerFactory();
+    this.loggerFactory = detectLoggingFrameworkAndCreateFactory();
+  }
+
+  private ILoggerFactory detectLoggingFrameworkAndCreateFactory() {
+    try {
+      Class<?> staticLoggerBinder = Class.forName(
+          StaticLoggerBinder.class.getName(),
+          true,
+          ProxyServer.class.getClassLoader());
+      Object loggerBinder = staticLoggerBinder.getMethod("getSingleton").invoke(null);
+      Object factory = loggerBinder.getClass().getMethod("getLoggerFactory").invoke(loggerBinder);
+      ProxyServer
+          .getInstance()
+          .getLogger()
+          .info("[Simplix] This proxy server comes with on-board slf4j support. Utilizing...");
+      return (ILoggerFactory) factory;
+    } catch (ClassNotFoundException classNotFoundException) {
+      return new BungeeLoggerFactory();
+    } catch (Exception e) {
+      ProxyServer
+          .getInstance()
+          .getLogger()
+          .warning("[Simplix] Cannot set up slf4j on this platform.");
+      return null;
+    }
   }
 
   /**
@@ -92,7 +117,7 @@ public class StaticLoggerBinder implements LoggerFactoryBinder {
 
   @Override
   public String getLoggerFactoryClassStr() {
-    return BungeeLoggerFactory.class.getName();
+    return getLoggerFactory().getClass().getName();
   }
 
 }

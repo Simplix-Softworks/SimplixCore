@@ -14,9 +14,8 @@ import java.util.logging.Level;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
 
-@SimplixApplication(name = "SimplixCore", authors = {
-    "Simplix Softworks",
-    "JavaFactoryDev"}, workingDirectory = "plugins/SimplixCore")
+@SimplixApplication(name = "SimplixCore", authors = "Simplix Softworks",
+    workingDirectory = "plugins/SimplixCore")
 @ScanComponents("dev.simplix.core")
 public final class SimplixPlugin extends Plugin {
 

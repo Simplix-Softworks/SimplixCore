@@ -15,9 +15,8 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.Nullable;
 
-@SimplixApplication(name = "SimplixCore", authors = {
-    "Simplix Softworks",
-    "JavaFactoryDev"}, workingDirectory = "plugins/SimplixCore")
+@SimplixApplication(name = "SimplixCore", authors = "Simplix Softworks",
+    workingDirectory = "plugins/SimplixCore")
 @ScanComponents("dev.simplix.core")
 @Slf4j
 public final class SimplixPlugin extends JavaPlugin {
