@@ -1,7 +1,7 @@
-package dev.simplix.core.minecraft.bungeecord.slf4j;
+package dev.simplix.core.minecraft.bungeecord.tests;
 
 import dev.simplix.core.minecraft.bungeecord.plugin.BungeeCordListenerImpl;
-import dev.simplix.core.minecraft.bungeecord.slf4j.mock.MockProxiedPlayer;
+import dev.simplix.core.minecraft.bungeecord.tests.stub.StubProxiedPlayer;
 import net.md_5.bungee.api.event.ChatEvent;
 import net.md_5.bungee.api.event.PlayerDisconnectEvent;
 import net.md_5.bungee.api.event.PostLoginEvent;
@@ -23,19 +23,19 @@ class BungeeCordListenerImplTest {
 
   @Test
   void login() {
-    bungeeCordListenerImpl.login(new PostLoginEvent(new MockProxiedPlayer()));
+    bungeeCordListenerImpl.login(new PostLoginEvent(new StubProxiedPlayer()));
   }
 
   @Test
   void chat() {
     bungeeCordListenerImpl.chat(new ChatEvent(
-        new MockProxiedPlayer(),
-        new MockProxiedPlayer(),
+        new StubProxiedPlayer(),
+        new StubProxiedPlayer(),
         "Example message"));
   }
 
   @Test
   void quit() {
-    bungeeCordListenerImpl.quit(new PlayerDisconnectEvent(new MockProxiedPlayer()));
+    bungeeCordListenerImpl.quit(new PlayerDisconnectEvent(new StubProxiedPlayer()));
   }
 }

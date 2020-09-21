@@ -1,4 +1,4 @@
-package dev.simplix.core.minecraft.bungeecord.slf4j.mock;
+package dev.simplix.core.minecraft.bungeecord.tests.stub;
 
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
 @NoArgsConstructor
-public class MockProxiedPlayer extends BaseMockProxiedPlayer {
+public class StubProxiedPlayer extends FakeProxiedPlayer {
 
   private String name = "KotlinFactory";
   private UUID uuid = UUID.randomUUID();

@@ -22,6 +22,8 @@
     <java.version>1.8</java.version>
 
     <sonar.host.url>https://review.simplix.dev</sonar.host.url>
+
+    <build.number>unknown</build.number>
   </properties>
 
   <repositories>

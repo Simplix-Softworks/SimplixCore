@@ -1,4 +1,4 @@
-package dev.simplix.core.minecraft.bungeecord.slf4j.mock;
+package dev.simplix.core.minecraft.bungeecord.tests.stub;
 
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
@@ -15,7 +15,7 @@ import net.md_5.bungee.api.connection.Server;
 import net.md_5.bungee.api.event.ServerConnectEvent.Reason;
 import net.md_5.bungee.api.score.Scoreboard;
 
-public class BaseMockProxiedPlayer implements ProxiedPlayer {
+public class FakeProxiedPlayer implements ProxiedPlayer {
 
   @Override
   public String getDisplayName() {
