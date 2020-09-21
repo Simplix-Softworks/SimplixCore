@@ -8,6 +8,7 @@ class EventsTest {
 
   @BeforeEach
   void setUp() {
+
   }
 
   @AfterEach

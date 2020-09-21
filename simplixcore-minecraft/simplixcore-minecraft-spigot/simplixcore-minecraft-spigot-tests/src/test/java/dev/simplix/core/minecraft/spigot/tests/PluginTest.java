@@ -1,4 +1,4 @@
-package dev.simplix.core.minecraft.spigot.tests.stub;
+package dev.simplix.core.minecraft.spigot.tests;
 
 import be.seeseemelk.mockbukkit.MockBukkit;
 import dev.simplix.core.minecraft.spigot.plugin.SimplixPlugin;
@@ -19,6 +19,10 @@ public class PluginTest {
 
   @Test
   void testEnabled() {
+    Assertions.assertEquals(
+        "dev.simplix.core.minecraft.spigot.plugin.SimplixPlugin",
+        SimplixPlugin.class.getName(),
+        "Plugin was invalidly relocated");
     Assertions.assertTrue(plugin.isEnabled(), "Plugin must be enabled");
   }
 }
