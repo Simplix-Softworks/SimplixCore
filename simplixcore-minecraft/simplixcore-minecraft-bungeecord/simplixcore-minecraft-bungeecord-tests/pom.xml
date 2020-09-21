@@ -10,18 +10,18 @@
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>simplixcore-minecraft-bungeecord-tests</artifactId>
-
   <dependencies>
     <dependency>
       <groupId>dev.simplix.core</groupId>
       <artifactId>simplixcore-minecraft-bungeecord-plugin</artifactId>
       <version>1.0.${build.number}</version>
-      <scope>provided</scope>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>dev.simplix.core</groupId>
       <artifactId>simplixcore-minecraft-bungeecord-quickstart</artifactId>
       <version>1.0-SNAPSHOT</version>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>

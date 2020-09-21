@@ -12,7 +12,9 @@ import java.util.logging.Level;
 import lombok.extern.slf4j.Slf4j;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.java.JavaPluginLoader;
 import org.jetbrains.annotations.Nullable;
 
 @SimplixApplication(name = "SimplixCore", authors = "Simplix Softworks",
@@ -20,6 +22,14 @@ import org.jetbrains.annotations.Nullable;
 @ScanComponents("dev.simplix.core")
 @Slf4j
 public final class SimplixPlugin extends JavaPlugin {
+
+  public SimplixPlugin(
+      JavaPluginLoader loader,
+      PluginDescriptionFile description,
+      File dataFolder,
+      File file) {
+    super(loader, description, dataFolder, file);
+  }
 
   @Override
   public void onLoad() {

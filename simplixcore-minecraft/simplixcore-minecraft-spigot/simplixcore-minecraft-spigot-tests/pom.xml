@@ -17,18 +17,6 @@
   <dependencies>
     <dependency>
       <groupId>dev.simplix.core</groupId>
-      <artifactId>simplixcore-common-api</artifactId>
-      <version>1.0.0-SNAPSHOT</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>dev.simplix.core</groupId>
-      <artifactId>simplixcore-common-implementation</artifactId>
-      <version>1.0.0-SNAPSHOT</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>dev.simplix.core</groupId>
       <artifactId>simplixcore-minecraft-spigot-implementation</artifactId>
       <version>1.0-SNAPSHOT</version>
       <scope>test</scope>
@@ -40,21 +28,22 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-jdk14</artifactId>
-      <version>1.8.0-alpha2</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
       <groupId>dev.simplix.core</groupId>
       <artifactId>simplixcore-minecraft-spigot-quickstart</artifactId>
       <version>1.0-SNAPSHOT</version>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>dev.simplix.core</groupId>
       <artifactId>simplixcore-minecraft-spigot-plugin</artifactId>
-      <version>1.0-SNAPSHOT</version>
-      <scope>provided</scope>
+      <version>1.0.${build.number}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.github.seeseemelk</groupId>
+      <artifactId>MockBukkit-v1.16</artifactId>
+      <version>0.5.0</version>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 

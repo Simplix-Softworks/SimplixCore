@@ -15,21 +15,32 @@ import dev.simplix.core.minecraft.spigot.SpigotSimplixModule;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 public class GuiceSpigotTest {
 
+  private static SimplixInstaller SIMPLIX_INSTALLER;
+
+  @BeforeAll
+  @Test
+  static void setUp() {
+    // We need a new instance of the SimplixInstaller since it might already be installed by the plugin test
+    SIMPLIX_INSTALLER = new SimplixInstaller();
+  }
+
   @Test
   public void testInstall() {
-    SimplixInstaller.instance().register(DependTestApplication.class);
-    SimplixInstaller.instance().register(TestApplication.class, new PrivacyTestModule(),
+    SIMPLIX_INSTALLER.register(DependTestApplication.class);
+    SIMPLIX_INSTALLER.register(TestApplication.class, new PrivacyTestModule(),
         new CommonSimplixModule(), new SpigotSimplixModule());
-    SimplixInstaller.instance().install();
 
-    Injector unitTestInjector = SimplixInstaller.instance().injector(TestApplication.class);
+    SIMPLIX_INSTALLER.install();
+
+    Injector unitTestInjector = SIMPLIX_INSTALLER.injector(TestApplication.class);
     Assertions.assertNotNull(unitTestInjector);
 
-    Injector dependTestInjector = SimplixInstaller.instance().injector(DependTestApplication.class);
+    Injector dependTestInjector = SIMPLIX_INSTALLER.injector(DependTestApplication.class);
     Assertions.assertNotNull(dependTestInjector);
 
     PluginManager pluginManager = unitTestInjector.getInstance(PluginManager.class);

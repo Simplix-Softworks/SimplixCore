@@ -1,22 +1,27 @@
 package dev.simplix.core.minecraft.spigot.tests.stub;
 
-import com.avaje.ebean.config.ServerConfig;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.logging.Logger;
 import org.bukkit.*;
 import org.bukkit.BanList.Type;
 import org.bukkit.Warning.WarningState;
+import org.bukkit.advancement.Advancement;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.boss.*;
 import org.bukkit.command.CommandException;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.PluginCommand;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.generator.ChunkGenerator.ChunkData;
 import org.bukkit.help.HelpMap;
 import org.bukkit.inventory.*;
+import org.bukkit.loot.LootTable;
 import org.bukkit.map.MapView;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
@@ -25,6 +30,8 @@ import org.bukkit.plugin.messaging.Messenger;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scoreboard.ScoreboardManager;
 import org.bukkit.util.CachedServerIcon;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class FakeServer implements Server {
 
@@ -41,11 +48,6 @@ public class FakeServer implements Server {
   @Override
   public String getBukkitVersion() {
     throw new AbstractMethodError("Not implemented");
-  }
-
-  @Override
-  public Player[] _INVALID_getOnlinePlayers() {
-    return new Player[0];
   }
 
   @Override
@@ -70,16 +72,6 @@ public class FakeServer implements Server {
 
   @Override
   public String getIp() {
-    throw new AbstractMethodError("Not implemented");
-  }
-
-  @Override
-  public String getServerName() {
-    throw new AbstractMethodError("Not implemented");
-  }
-
-  @Override
-  public String getServerId() {
     throw new AbstractMethodError("Not implemented");
   }
 
@@ -154,6 +146,21 @@ public class FakeServer implements Server {
   }
 
   @Override
+  public int getTicksPerWaterSpawns() {
+    return 0;
+  }
+
+  @Override
+  public int getTicksPerWaterAmbientSpawns() {
+    return 0;
+  }
+
+  @Override
+  public int getTicksPerAmbientSpawns() {
+    return 0;
+  }
+
+  @Override
   public Player getPlayer(String name) {
     throw new AbstractMethodError("Not implemented");
   }
@@ -219,8 +226,8 @@ public class FakeServer implements Server {
   }
 
   @Override
-  public MapView getMap(short id) {
-    throw new AbstractMethodError("Not implemented");
+  public @Nullable MapView getMap(int i) {
+    return null;
   }
 
   @Override
@@ -229,7 +236,28 @@ public class FakeServer implements Server {
   }
 
   @Override
+  public @NotNull ItemStack createExplorerMap(
+      @NotNull World world, @NotNull Location location, @NotNull StructureType structureType) {
+    return null;
+  }
+
+  @Override
+  public @NotNull ItemStack createExplorerMap(
+      @NotNull World world,
+      @NotNull Location location,
+      @NotNull StructureType structureType,
+      int i,
+      boolean b) {
+    return null;
+  }
+
+  @Override
   public void reload() {
+
+  }
+
+  @Override
+  public void reloadData() {
 
   }
 
@@ -255,11 +283,6 @@ public class FakeServer implements Server {
   }
 
   @Override
-  public void configureDbConfig(ServerConfig config) {
-
-  }
-
-  @Override
   public boolean addRecipe(Recipe recipe) {
     return false;
   }
@@ -267,6 +290,11 @@ public class FakeServer implements Server {
   @Override
   public List<Recipe> getRecipesFor(ItemStack result) {
     throw new AbstractMethodError("Not implemented");
+  }
+
+  @Override
+  public @Nullable Recipe getRecipe(@NotNull NamespacedKey namespacedKey) {
+    return null;
   }
 
   @Override
@@ -282,6 +310,11 @@ public class FakeServer implements Server {
   @Override
   public void resetRecipes() {
 
+  }
+
+  @Override
+  public boolean removeRecipe(@NotNull NamespacedKey namespacedKey) {
+    return false;
   }
 
   @Override
@@ -311,11 +344,6 @@ public class FakeServer implements Server {
 
   @Override
   public boolean isHardcore() {
-    return false;
-  }
-
-  @Override
-  public boolean useExactLoginLocation() {
     return false;
   }
 
@@ -429,6 +457,11 @@ public class FakeServer implements Server {
   }
 
   @Override
+  public @NotNull Merchant createMerchant(@Nullable String s) {
+    return null;
+  }
+
+  @Override
   public int getMonsterSpawnLimit() {
     return 0;
   }
@@ -440,6 +473,11 @@ public class FakeServer implements Server {
 
   @Override
   public int getWaterAnimalSpawnLimit() {
+    return 0;
+  }
+
+  @Override
+  public int getWaterAmbientSpawnLimit() {
     return 0;
   }
 
@@ -507,6 +545,100 @@ public class FakeServer implements Server {
   @Override
   public ChunkData createChunkData(World world) {
     throw new AbstractMethodError("Not implemented");
+  }
+
+  @Override
+  public @NotNull BossBar createBossBar(
+      @Nullable String s,
+      @NotNull BarColor barColor,
+      @NotNull BarStyle barStyle,
+      @NotNull BarFlag... barFlags) {
+    return null;
+  }
+
+  @Override
+  public @NotNull KeyedBossBar createBossBar(
+      @NotNull NamespacedKey namespacedKey,
+      @Nullable String s,
+      @NotNull BarColor barColor,
+      @NotNull BarStyle barStyle,
+      @NotNull BarFlag... barFlags) {
+    return null;
+  }
+
+  @Override
+  public @NotNull Iterator<KeyedBossBar> getBossBars() {
+    return null;
+  }
+
+  @Override
+  public @Nullable KeyedBossBar getBossBar(@NotNull NamespacedKey namespacedKey) {
+    return null;
+  }
+
+  @Override
+  public boolean removeBossBar(@NotNull NamespacedKey namespacedKey) {
+    return false;
+  }
+
+  @Override
+  public @Nullable Entity getEntity(@NotNull UUID uuid) {
+    return null;
+  }
+
+  @Override
+  public @Nullable Advancement getAdvancement(@NotNull NamespacedKey namespacedKey) {
+    return null;
+  }
+
+  @Override
+  public @NotNull Iterator<Advancement> advancementIterator() {
+    return null;
+  }
+
+  @Override
+  public @NotNull BlockData createBlockData(@NotNull Material material) {
+    return null;
+  }
+
+  @Override
+  public @NotNull BlockData createBlockData(
+      @NotNull Material material, @Nullable Consumer<BlockData> consumer) {
+    return null;
+  }
+
+  @Override
+  public @NotNull BlockData createBlockData(@NotNull String s) throws IllegalArgumentException {
+    return null;
+  }
+
+  @Override
+  public @NotNull BlockData createBlockData(
+      @Nullable Material material, @Nullable String s) throws IllegalArgumentException {
+    return null;
+  }
+
+  @Override
+  public @Nullable <T extends Keyed> Tag<T> getTag(
+      @NotNull String s, @NotNull NamespacedKey namespacedKey, @NotNull Class<T> aClass) {
+    return null;
+  }
+
+  @Override
+  public @NotNull <T extends Keyed> Iterable<Tag<T>> getTags(
+      @NotNull String s, @NotNull Class<T> aClass) {
+    return null;
+  }
+
+  @Override
+  public @Nullable LootTable getLootTable(@NotNull NamespacedKey namespacedKey) {
+    return null;
+  }
+
+  @Override
+  public @NotNull List<Entity> selectEntities(
+      @NotNull CommandSender commandSender, @NotNull String s) throws IllegalArgumentException {
+    return null;
   }
 
   @Override

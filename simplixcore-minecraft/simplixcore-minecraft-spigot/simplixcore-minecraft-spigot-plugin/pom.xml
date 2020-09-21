@@ -37,14 +37,7 @@
       <version>1.0.0-SNAPSHOT</version>
     </dependency>
 
-    <!-- MC API -->
-    <dependency>
-      <groupId>dev.simplix.core</groupId>
-      <artifactId>simplixcore-minecraft-api</artifactId>
-      <version>1.0-SNAPSHOT</version>
-    </dependency>
-
-    <!-- Implementation of the bungeecord api -->
+    <!-- Implementation of the spigot api -->
     <dependency>
       <groupId>dev.simplix.core</groupId>
       <artifactId>simplixcore-minecraft-spigot-implementation</artifactId>
