@@ -227,7 +227,7 @@ public class SimplixInstaller {
     if (this.bossInjector != null) {
       throw new IllegalStateException("Already installed");
     }
-    this.bossInjector = Guice.createInjector();
+    this.bossInjector = Guice.createInjector(Stage.PRODUCTION);
 
     for (String name : this.toInstall.keySet()) {
       InstallationContext context = this.toInstall.get(name);

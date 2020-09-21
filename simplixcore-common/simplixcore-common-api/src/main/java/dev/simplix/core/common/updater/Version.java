@@ -79,7 +79,7 @@ public class Version implements Comparable<Version> {
   }
 
   public static Version parse(String version) {
-    return parse("^(\\d+\\.)?(\\d+\\.)?(\\*|\\d+)$", version);
+    return parse("^(\\d+\\.)?(\\d+\\.)|(\\*|\\d+)$", version);
   }
 
   public static Version parse(String pattern, String versionString) {

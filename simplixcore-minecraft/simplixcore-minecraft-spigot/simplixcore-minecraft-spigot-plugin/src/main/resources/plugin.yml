@@ -1,4 +1,4 @@
 name: SimplixCore
 main: dev.simplix.core.minecraft.spigot.plugin.SimplixPlugin
-version: '${project.version}:${build.number}'
+version: '${project.version}'
 author: SimplixSoftworks
