@@ -40,6 +40,8 @@ public class SimplixInstaller {
   private static final String SIMPLIX_BOOTSTRAP = "[Simplix | Bootstrap] ";
   private static final SimplixInstaller INSTANCE = new SimplixInstaller();
   private final Map<Class<?>, Injector> injectorMap = new HashMap<>();
+  private final Map<Class<?>, Dependencies> dependenciesMap = new HashMap<>();
+
   private final Map<String, InstallationContext> toInstall = new HashMap<>();
   private final Map<String, UpdatePolicy> updatePolicyMap = new HashMap<>();
   private final Gson gson = new GsonBuilder()
@@ -139,6 +141,10 @@ public class SimplixInstaller {
 
   public Optional<Injector> findInjector(@NonNull Class<?> owner) {
     return Optional.ofNullable(injectorMap.get(owner));
+  }
+
+  public Optional<Dependencies> findDependencies(@NonNull Class<?> owner) {
+    return Optional.ofNullable(dependenciesMap.get(owner));
   }
 
   /**
@@ -349,6 +355,7 @@ public class SimplixInstaller {
     }
 
     Dependencies dependencies = optionalDependencies.get();
+    dependenciesMap.put(appOwner, dependencies);
 
     List<Repository> repositories = Arrays.asList(dependencies.repositories());
     for (Dependency dependency : dependencies.dependencies()) {
