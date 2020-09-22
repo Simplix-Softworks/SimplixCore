@@ -81,9 +81,11 @@ public final class ArtifactDependencyLoader implements DependencyLoader {
               "[Simplix | DependencyLoader] Unable to resolve dependency " + dependency));
         }
         if (!result.getExceptions().isEmpty()) {
-          for (Exception exception : result.getExceptions()) {
-            return Optional.of(new DependencyLoadingException(dependency, exception));
-          }
+          return result
+              .getExceptions()
+              .stream()
+              .findFirst()
+              .map(exception -> new DependencyLoadingException(dependency, exception));
         }
       }
     } catch (Exception exception) {
