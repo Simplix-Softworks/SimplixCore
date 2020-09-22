@@ -24,7 +24,8 @@ import org.bukkit.plugin.java.JavaPluginLoader;
 @Slf4j
 public final class PluginClassLoaderFabricator implements Function<File, ClassLoader> {
 
-  private void unfinalize(Field loadersField) throws NoSuchFieldException, IllegalAccessException {
+  private void unfinalize(@NonNull Field loadersField)
+      throws NoSuchFieldException, IllegalAccessException {
     Field modifiersField = Field.class.getDeclaredField("modifiers");
     modifiersField.setAccessible(true);
     modifiersField.set(loadersField, loadersField.getModifiers() & ~Modifier.FINAL);

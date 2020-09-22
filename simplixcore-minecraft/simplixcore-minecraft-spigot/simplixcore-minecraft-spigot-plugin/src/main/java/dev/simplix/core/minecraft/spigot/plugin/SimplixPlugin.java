@@ -28,7 +28,7 @@ public final class SimplixPlugin extends JavaPlugin {
       @NonNull JavaPluginLoader loader,
       @NonNull PluginDescriptionFile description,
       @NonNull File dataFolder,
-      @NonNull File file) {
+      File file) {
     super(loader, description, dataFolder, file);
   }
 

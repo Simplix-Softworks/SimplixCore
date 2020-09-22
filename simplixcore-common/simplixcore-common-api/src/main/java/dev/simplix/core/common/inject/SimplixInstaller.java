@@ -327,63 +327,45 @@ public class SimplixInstaller {
   }
 
   private Optional<DependencyLoadingException> processRemoteDependencies(
-      Class<?> appOwner,
-      ApplicationInfo info) {
-    InputStream inputStream = null;
-    InputStreamReader reader = null;
+      @NonNull Class<?> appOwner,
+      @NonNull ApplicationInfo info) {
+    if (this.dependencyLoader == null) {
+      initDependencyLoader();
+    }
+
+    Optional<Dependencies> optionalDependencies;
+
     try {
-      inputStream = appOwner.getResourceAsStream("/dependencies.json");
-      if (inputStream == null) {
-        return Optional.empty();
-      }
+      optionalDependencies = Dependencies.loadDependencies(appOwner);
+    } catch (JsonParseException jsonParseException) {
+      log.error(
+          SIMPLIX_BOOTSTRAP + info.name() + ": Cannot parse dependencies.json",
+          jsonParseException);
+      optionalDependencies = Optional.empty();
+    }
 
-      reader = new InputStreamReader(
-          inputStream,
-          StandardCharsets.UTF_8);
-      Dependencies dependencies = this.gson.fromJson(reader, Dependencies.class);
-      if (this.dependencyLoader == null) {
-        initDependencyLoader();
-      }
-      if (dependencies == null) {
-        return Optional.empty();
-      }
+    if (!optionalDependencies.isPresent()) {
+      return Optional.empty();
+    }
 
-      List<Repository> repositories = Arrays.asList(dependencies.repositories());
-      for (Dependency dependency : dependencies.dependencies()) {
-        log.info(SIMPLIX_BOOTSTRAP
-                 + info.name()
-                 + ": Load dependency "
-                 + dependency
-                 + " from repository...");
-        dependency.applicationName(info.name());
-        dependency.applicationClass(appOwner);
-        final Optional<DependencyLoadingException> load = this.dependencyLoader.load(
-            dependency,
-            repositories);
-        if (load.isPresent()) {
-          log.error(SIMPLIX_BOOTSTRAP
-                    + info.name() + ": Unable to load dependency " + dependency);
-          return load;
-        }
-      }
-    } catch (JsonParseException exception) {
-      log.error(SIMPLIX_BOOTSTRAP
-                + info.name() + ": Cannot parse dependencies.json", exception);
-    } finally {
-      if (inputStream != null) {
-        try {
-          inputStream.close();
-        } catch (IOException ignored) {
-          // Ignored
-        }
-      }
+    Dependencies dependencies = optionalDependencies.get();
 
-      if (reader != null) {
-        try {
-          reader.close();
-        } catch (IOException ignored) {
-          // Ignored
-        }
+    List<Repository> repositories = Arrays.asList(dependencies.repositories());
+    for (Dependency dependency : dependencies.dependencies()) {
+      log.info(SIMPLIX_BOOTSTRAP
+               + info.name()
+               + ": Load dependency "
+               + dependency
+               + " from repository...");
+      dependency.applicationName(info.name());
+      dependency.applicationClass(appOwner);
+      final Optional<DependencyLoadingException> load = this.dependencyLoader.load(
+          dependency,
+          repositories);
+      if (load.isPresent()) {
+        log.error(SIMPLIX_BOOTSTRAP
+                  + info.name() + ": Unable to load dependency " + dependency);
+        return load;
       }
     }
     return Optional.empty();

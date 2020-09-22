@@ -65,6 +65,7 @@ public class SimpleLocalizationManagerFactory implements LocalizationManagerFact
             .replace("\\", "/")
             .replace(" ", "%20"));
       }
+
       try (
           FileSystem fileSystem = FileSystems.newFileSystem(
               uri,
@@ -84,10 +85,10 @@ public class SimpleLocalizationManagerFactory implements LocalizationManagerFact
             }
           });
         }
-      } catch (IOException ex) {
-        log.warn("[Simplix] Cannot load language files from resource: ", ex);
+      } catch (IOException ioException) {
+        log.warn("[Simplix] Cannot load language files from resource: ", ioException);
       }
-    } catch (URISyntaxException ex) {
+    } catch (URISyntaxException uriSyntaxException) {
       // bug??
     }
     return create0(propertiesMap);
