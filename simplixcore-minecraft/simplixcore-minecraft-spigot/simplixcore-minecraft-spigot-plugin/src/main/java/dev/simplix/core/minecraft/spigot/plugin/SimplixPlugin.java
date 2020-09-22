@@ -9,6 +9,7 @@ import dev.simplix.core.minecraft.spigot.plugin.deploader.PluginTypeHandler;
 import dev.simplix.core.minecraft.spigot.plugin.listeners.ApplicationPreInstallListener;
 import java.io.File;
 import java.util.logging.Level;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
@@ -24,10 +25,10 @@ import org.jetbrains.annotations.Nullable;
 public final class SimplixPlugin extends JavaPlugin {
 
   public SimplixPlugin(
-      JavaPluginLoader loader,
-      PluginDescriptionFile description,
-      File dataFolder,
-      File file) {
+      @NonNull JavaPluginLoader loader,
+      @NonNull PluginDescriptionFile description,
+      @NonNull File dataFolder,
+      @NonNull File file) {
     super(loader, description, dataFolder, file);
   }
 

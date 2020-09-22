@@ -4,6 +4,7 @@ import com.google.common.io.Files;
 import dev.simplix.core.common.deploader.Dependency;
 import java.io.File;
 import java.util.function.BiConsumer;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.bukkit.Bukkit;
 
@@ -11,7 +12,7 @@ import org.bukkit.Bukkit;
 public class PluginTypeHandler implements BiConsumer<Dependency, File> {
 
   @Override
-  public void accept(Dependency dependency, File file) {
+  public void accept(@NonNull Dependency dependency,@NonNull  File file) {
     File target = new File("plugins", file.getName());
     try {
       Files.copy(file, target);

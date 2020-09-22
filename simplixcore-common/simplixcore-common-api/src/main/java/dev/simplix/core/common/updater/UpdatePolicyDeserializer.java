@@ -4,6 +4,7 @@ import com.google.gson.*;
 import java.lang.reflect.Type;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
+import lombok.NonNull;
 
 public final class UpdatePolicyDeserializer implements JsonDeserializer<UpdatePolicy> {
 
@@ -59,7 +60,7 @@ public final class UpdatePolicyDeserializer implements JsonDeserializer<UpdatePo
     }
   }
 
-  private Optional<JsonElement> optional(JsonObject object, String name) {
+  private Optional<JsonElement> optional(@NonNull JsonObject object, @NonNull String name) {
     return Optional.ofNullable(object.get(name));
   }
 

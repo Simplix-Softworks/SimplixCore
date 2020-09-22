@@ -21,7 +21,7 @@ public class Durations {
     return new SimpleDuration(Long.MIN_VALUE);
   }
 
-  public Duration of(@NonNull final Timestamp timestamp) {
+  public Duration of(@NonNull Timestamp timestamp) {
     return of(timestamp.getTime());
   }
 
@@ -31,7 +31,7 @@ public class Durations {
     }
 
     // Converting to seconds
-    final long milliseconds = TimeFormatUtil.parseToMilliseconds(humanReadableTime);
+    long milliseconds = TimeFormatUtil.parseToMilliseconds(humanReadableTime);
 
     //Invalid format
     if (milliseconds == Long.MIN_VALUE) {

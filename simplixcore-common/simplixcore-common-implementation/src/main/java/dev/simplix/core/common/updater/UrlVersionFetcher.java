@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -15,15 +16,15 @@ public final class UrlVersionFetcher implements VersionFetcher {
   private String url;
 
   @Override
-  public Version fetchLatestVersion(ApplicationInfo applicationInfo, UpdatePolicy updatePolicy)
+  public Version fetchLatestVersion(@NonNull ApplicationInfo applicationInfo,@NonNull  UpdatePolicy updatePolicy)
       throws IOException {
     URL url = new URL(this.url.replace("{name}", applicationInfo.name()));
     String latestVersion;
     try (
-        BufferedReader r = new BufferedReader(new InputStreamReader(url
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(url
             .openConnection()
             .getInputStream()))) {
-      latestVersion = r.readLine();
+      latestVersion = bufferedReader.readLine();
     }
     Version version;
     if (updatePolicy.versionPattern() != null) {

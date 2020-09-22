@@ -4,6 +4,7 @@ import dev.simplix.core.common.event.Events;
 import dev.simplix.core.minecraft.api.events.ChatEvent;
 import dev.simplix.core.minecraft.api.events.JoinEvent;
 import dev.simplix.core.minecraft.api.events.QuitEvent;
+import lombok.NonNull;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.PlayerDisconnectEvent;
 import net.md_5.bungee.api.event.PostLoginEvent;
@@ -17,7 +18,7 @@ public class BungeeCordListenerImpl implements Listener {
   }
 
   @EventHandler
-  public void login(final PostLoginEvent playerPostLoginEvent) {
+  public void login(@NonNull PostLoginEvent playerPostLoginEvent) {
     final JoinEvent joinEvent = Events.call(
         JoinEvent.create(
             playerPostLoginEvent.getPlayer().getUniqueId(),
@@ -35,7 +36,7 @@ public class BungeeCordListenerImpl implements Listener {
   }
 
   @EventHandler
-  public void chat(final net.md_5.bungee.api.event.ChatEvent playerChatEvent) {
+  public void chat(@NonNull net.md_5.bungee.api.event.ChatEvent playerChatEvent) {
     final ProxiedPlayer sender = (ProxiedPlayer) playerChatEvent.getSender();
     final ChatEvent chatEvent = Events.call(
         ChatEvent.create(
@@ -49,7 +50,7 @@ public class BungeeCordListenerImpl implements Listener {
   }
 
   @EventHandler
-  public void quit(final PlayerDisconnectEvent playerDisconnectEvent) {
+  public void quit(@NonNull PlayerDisconnectEvent playerDisconnectEvent) {
     final QuitEvent quitEvent =
         Events.call(
             QuitEvent.create(playerDisconnectEvent.getPlayer().getUniqueId())

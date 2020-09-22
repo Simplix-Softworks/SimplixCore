@@ -8,7 +8,7 @@ public interface Event {
 
   boolean canceled();
 
-  void cancelReason(@NonNull final String cancelReason);
+  void cancelReason(@NonNull String cancelReason);
 
   String cancelReason();
 }

@@ -6,12 +6,13 @@ import java.io.InputStream;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.logging.Level;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginDescriptionFile;
 
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public final class PluginDescriptionUtil {
-
-  private PluginDescriptionUtil() {}
 
   public static PluginDescriptionFile loadPluginYml(File target) {
     try (JarFile jar = new JarFile(target)) {
@@ -24,10 +25,10 @@ public final class PluginDescriptionUtil {
         Preconditions.checkNotNull(desc.getMain(), "Plugin from %s has no main", target);
         return desc;
       }
-    } catch (Exception ex) {
+    } catch (Exception exception) {
       Bukkit
           .getLogger()
-          .log(Level.WARNING, "Could not load plugin from file " + target, ex);
+          .log(Level.WARNING, "Could not load plugin from file " + target, exception);
     }
     return null;
   }

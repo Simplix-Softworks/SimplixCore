@@ -6,5 +6,5 @@ import lombok.NonNull;
 
 public interface BatchFiller<T> {
 
-  void fill(@NonNull PreparedStatement preparedStatement, T type) throws SQLException;
+  void fill(@NonNull PreparedStatement preparedStatement, @NonNull T type) throws SQLException;
 }

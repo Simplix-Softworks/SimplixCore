@@ -4,7 +4,6 @@ import com.google.common.collect.Sets;
 import dev.simplix.core.minecraft.spigot.plugin.SpigotListenerImpl;
 import dev.simplix.core.minecraft.spigot.tests.stub.StubPlayer;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.UUID;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
@@ -27,7 +26,7 @@ class SpigotListenerImplTest {
   }
 
   @Test
-  void login() throws UnknownHostException {
+  void login() {
     try {
       spigotListener.login(new AsyncPlayerPreLoginEvent(
           "KotlinFactory",

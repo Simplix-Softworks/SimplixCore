@@ -170,7 +170,7 @@ public class SimplixInstaller {
       Class<?> clazz = Class.forName(libLoaderClass);
       this.updater = (Updater) clazz.newInstance();
     } catch (Exception exception) {
-//      throw new RuntimeException("Unable to initialize updater", exception);
+      // Do nothing
     }
   }
 
@@ -492,17 +492,6 @@ public class SimplixInstaller {
         Component component = componentClass.getAnnotation(Component.class);
         AbstractSimplixModule simplixModule = findAbstractSimplixModule(modules, component.value());
         if (simplixModule == null) {
-//          log.warn(SIMPLIX_BOOTSTRAP
-//                   + context.applicationInfo.name()
-//                   + ": Component "
-//                   + componentClass.getName()
-//                   + " referenced module "
-//                   + component.value().getName()
-//                   + " which is not available in this context.");
-//          log.warn(SIMPLIX_BOOTSTRAP
-//                   + context.applicationInfo.name()
-//                   + ": Available modules in this context: "
-//                   + modules);
           continue;
         }
         simplixModule.components().put(componentClass, component);

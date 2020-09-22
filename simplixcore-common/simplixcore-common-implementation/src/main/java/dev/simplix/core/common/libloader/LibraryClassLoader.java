@@ -22,7 +22,7 @@ public final class LibraryClassLoader extends URLClassLoader {
   @Getter
   private final File file;
 
-  public LibraryClassLoader(File file, @NonNull URL... urls) {
+  public LibraryClassLoader(@NonNull File file, @NonNull URL... urls) {
     super(urls, SimplixApplication.class.getClassLoader());
     LOADERS.add(this);
     this.file = file;

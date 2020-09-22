@@ -44,6 +44,7 @@ public class PluginClassLoaderFabricator implements Function<File, ClassLoader> 
           null,
           ""
       );
+
       Object loader = constructor.newInstance(
           ProxyServer.getInstance(),
           pluginDescription,

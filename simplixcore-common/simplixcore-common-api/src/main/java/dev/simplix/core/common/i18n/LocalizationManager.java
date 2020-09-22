@@ -14,7 +14,7 @@ public interface LocalizationManager {
    *
    * @param string The fallback string
    */
-  void fallbackString(String string);
+  void fallbackString(@NonNull String string);
 
   /**
    * The string used when some string isn't localized in any language.

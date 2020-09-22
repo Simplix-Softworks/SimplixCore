@@ -19,7 +19,7 @@ public final class SimplixQuickStart {
    * @param plugin The plugin main class of the caller plugin
    * @return true if SimplixCore is installed or false otherwise
    */
-  public static boolean ensureSimplixCore(Plugin plugin) {
+  public static boolean ensureSimplixCore(@NonNull Plugin plugin) {
     if (ProxyServer.getInstance().getPluginManager().getPlugin("SimplixCore") == null) {
       registerInstaller(plugin);
       return false;

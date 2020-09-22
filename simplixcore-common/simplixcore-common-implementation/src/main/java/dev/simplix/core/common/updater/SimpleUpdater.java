@@ -4,6 +4,7 @@ import dev.simplix.core.common.ApplicationInfo;
 import dev.simplix.core.common.inject.SimplixInstaller;
 import java.io.File;
 import java.net.URISyntaxException;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -25,7 +26,7 @@ public final class SimpleUpdater implements Updater {
     }
   }
 
-  private void installUpdates(File directory, String path) {
+  private void installUpdates(@NonNull File directory, @NonNull String path) {
     for (File file : directory.listFiles()) {
       if (file.isDirectory()) {
         continue;
@@ -41,7 +42,9 @@ public final class SimpleUpdater implements Updater {
   }
 
   @Override
-  public void checkForUpdates(ApplicationInfo applicationInfo, UpdatePolicy updatePolicy) {
+  public void checkForUpdates(
+      @NonNull ApplicationInfo applicationInfo,
+      @NonNull UpdatePolicy updatePolicy) {
     Class<?> appClass = SimplixInstaller.instance().applicationClass(applicationInfo.name());
     try {
       File toReplace = new File(appClass

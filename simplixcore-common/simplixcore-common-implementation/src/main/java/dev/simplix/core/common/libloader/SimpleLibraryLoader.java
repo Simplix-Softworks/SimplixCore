@@ -30,11 +30,12 @@ public class SimpleLibraryLoader implements LibraryLoader {
     try {
       addMethod = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
       addMethod.setAccessible(true);
-    } catch (Exception e) {
-      log.error("Cannot initialize LibraryLoader", e);
+    } catch (Exception exception) {
+      log.error("Cannot initialize LibraryLoader", exception);
     }
   }
 
+  @Override
   public void loadLibraries(@NonNull File directory) {
     if (!directory.exists()) {
       directory.mkdirs();
@@ -45,6 +46,7 @@ public class SimpleLibraryLoader implements LibraryLoader {
     }
   }
 
+  @Override
   public void loadLibrary(File file) {
     try {
       if (files.contains(file)) {

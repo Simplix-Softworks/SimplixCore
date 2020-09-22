@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
 import java.util.function.BiConsumer;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.PluginDescription;
@@ -36,7 +37,7 @@ public class PluginTypeHandler implements BiConsumer<Dependency, File> {
   }
 
   @Override
-  public void accept(Dependency dependency, File file) {
+  public void accept(@NonNull Dependency dependency,@NonNull  File file) {
     File target = new File("plugins", file.getName());
     try {
       Files.copy(file, target);
@@ -47,12 +48,12 @@ public class PluginTypeHandler implements BiConsumer<Dependency, File> {
       if (willBeAutomaticallyLoaded(pluginDescription.getName())) {
         return;
       }
-      boolean b = (boolean) enable.invoke(
+      boolean invoke = (boolean) enable.invoke(
           ProxyServer.getInstance().getPluginManager(),
           new HashMap<>(),
           new Stack<>(),
           pluginDescription);
-      if (!b) {
+      if (!invoke) {
         return;
       }
       ProxyServer

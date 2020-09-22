@@ -25,7 +25,7 @@ public final class SimplixQuickStart {
    * @param plugin The plugin main class of the caller plugin
    * @return true if SimplixCore is installed or false otherwise
    */
-  public static boolean ensureSimplixCore(JavaPlugin plugin) {
+  public static boolean ensureSimplixCore(@NonNull JavaPlugin plugin) {
     if (Bukkit.getPluginManager().getPlugin("SimplixCore") == null) {
       registerInstaller(plugin);
       return false;

@@ -6,6 +6,7 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.experimental.Accessors;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 public class Version implements Comparable<Version> {
 
   private final String pattern;
-  
+
   private final String representation;
   private final List<Integer> values = new ArrayList<>(3);
 
@@ -23,15 +24,40 @@ public class Version implements Comparable<Version> {
     this.representation = representation;
   }
 
+  public static Version parse(String version) {
+    return parse("^(\\d+\\.)?(\\d+\\.)|(\\*|\\d+)$", version);
+  }
+
+  public static Version parse(String pattern, String versionString) {
+    Version version = new Version(pattern, versionString);
+    Pattern regex = Pattern.compile(pattern);
+    Matcher matcher = regex.matcher(versionString);
+    int group = 0;
+    while (matcher.find()) {
+      for (int i = 1; i <= matcher.groupCount(); i++) {
+        String match = matcher.group(i);
+        if (match == null) {
+          continue;
+        }
+        match = match.replaceAll("\\D+", "");
+        if (match.matches("\\d+")) {
+          version.values.add(Integer.parseInt(match));
+        }
+        group++;
+      }
+    }
+    return version;
+  }
+
   public void value(int pos, int value) {
     values.add(pos, value);
   }
 
-  public boolean newerThen(Version version) {
+  public boolean newerThen(@NonNull Version version) {
     return compareTo(version) < 0;
   }
 
-  public boolean olderThen(Version version) {
+  public boolean olderThen(@NonNull Version version) {
     return compareTo(version) > 0;
   }
 
@@ -76,31 +102,6 @@ public class Version implements Comparable<Version> {
   @Override
   public String toString() {
     return representation;
-  }
-
-  public static Version parse(String version) {
-    return parse("^(\\d+\\.)?(\\d+\\.)|(\\*|\\d+)$", version);
-  }
-
-  public static Version parse(String pattern, String versionString) {
-    Version version = new Version(pattern, versionString);
-    Pattern regex = Pattern.compile(pattern);
-    Matcher matcher = regex.matcher(versionString);
-    int group = 0;
-    while (matcher.find()) {
-      for (int i = 1; i <= matcher.groupCount(); i++) {
-        String match = matcher.group(i);
-        if (match == null) {
-          continue;
-        }
-        match = match.replaceAll("\\D+", "");
-        if (match.matches("\\d+")) {
-          version.values.add(Integer.parseInt(match));
-        }
-        group++;
-      }
-    }
-    return version;
   }
 
 }

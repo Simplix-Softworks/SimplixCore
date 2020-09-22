@@ -17,5 +17,5 @@ public interface ConnectionHandler {
 
   Connection connection();
 
-  void finishConnection(Connection connection);
+  void finishConnection(@NonNull Connection connection);
 }
