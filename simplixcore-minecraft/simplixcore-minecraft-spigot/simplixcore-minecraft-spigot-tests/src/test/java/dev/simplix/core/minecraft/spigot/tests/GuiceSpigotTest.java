@@ -23,7 +23,6 @@ public class GuiceSpigotTest {
   private static SimplixInstaller SIMPLIX_INSTALLER;
 
   @BeforeAll
-  @Test
   static void setUp() {
     // We need a new instance of the SimplixInstaller since it might already be installed by the plugin test
     SIMPLIX_INSTALLER = new SimplixInstaller();

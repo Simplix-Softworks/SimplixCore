@@ -23,19 +23,31 @@ class BungeeCordListenerImplTest {
 
   @Test
   void login() {
-    bungeeCordListenerImpl.login(new PostLoginEvent(new StubProxiedPlayer()));
+    try {
+      bungeeCordListenerImpl.login(new PostLoginEvent(new StubProxiedPlayer()));
+    } catch (Throwable throwable) {
+      Assertions.fail(throwable);
+    }
   }
 
   @Test
   void chat() {
-    bungeeCordListenerImpl.chat(new ChatEvent(
-        new StubProxiedPlayer(),
-        new StubProxiedPlayer(),
-        "Example message"));
+    try{
+      bungeeCordListenerImpl.chat(new ChatEvent(
+          new StubProxiedPlayer(),
+          new StubProxiedPlayer(),
+          "Example message"));
+    }catch(Throwable throwable){
+      Assertions.fail(throwable);
+    }
   }
 
   @Test
   void quit() {
-    bungeeCordListenerImpl.quit(new PlayerDisconnectEvent(new StubProxiedPlayer()));
+    try{
+      bungeeCordListenerImpl.quit(new PlayerDisconnectEvent(new StubProxiedPlayer()));
+    }catch(Throwable throwable){
+      Assertions.fail(throwable);
+    }
   }
 }

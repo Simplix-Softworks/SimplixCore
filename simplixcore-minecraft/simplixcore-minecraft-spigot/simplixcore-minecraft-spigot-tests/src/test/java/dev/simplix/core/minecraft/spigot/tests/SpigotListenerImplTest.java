@@ -28,33 +28,49 @@ class SpigotListenerImplTest {
 
   @Test
   void login() throws UnknownHostException {
-    spigotListener.login(new AsyncPlayerPreLoginEvent(
-        "KotlinFactory",
-        InetAddress.getLocalHost(),
-        UUID.randomUUID()));
+    try {
+      spigotListener.login(new AsyncPlayerPreLoginEvent(
+          "KotlinFactory",
+          InetAddress.getLocalHost(),
+          UUID.randomUUID()));
+    } catch (Throwable throwable) {
+      Assertions.fail(throwable);
+    }
   }
 
   @Test
   void chat() {
-    spigotListener.chat(new AsyncPlayerChatEvent(
-        false,
-        new StubPlayer(),
-        "Example message",
-        Sets.newHashSet()));
+    try {
+      spigotListener.chat(new AsyncPlayerChatEvent(
+          false,
+          new StubPlayer(),
+          "Example message",
+          Sets.newHashSet()));
+    } catch (Throwable throwable) {
+      Assertions.fail(throwable);
+    }
   }
 
   @Test
   void chat2() {
-    spigotListener.chat2(new PlayerCommandPreprocessEvent(
-        new StubPlayer(),
-        "/example",
-        // Recipients must be given or the test will fail due to the MockPlayer#getServer returning null
-        Sets.newHashSet()));
+    try {
+      spigotListener.chat2(new PlayerCommandPreprocessEvent(
+          new StubPlayer(),
+          "/example",
+          // Recipients must be given or the test will fail due to the MockPlayer#getServer returning null
+          Sets.newHashSet()));
+    } catch (Throwable throwable) {
+      Assertions.fail(throwable);
+    }
   }
 
   @Test
   void quit() {
-    spigotListener.quit(new PlayerQuitEvent(new StubPlayer(), "Quitted"));
+    try {
+      spigotListener.quit(new PlayerQuitEvent(new StubPlayer(), "Quitted"));
+    } catch (Throwable throwable) {
+      Assertions.fail(throwable);
+    }
   }
 }
 

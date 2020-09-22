@@ -28,7 +28,6 @@ class SimplixInstallerTest {
     Assertions.assertEquals("com.google.inject", injector.getClass().getName());
   }
 
-  @Test
   @BeforeEach
   void register() {
     SimplixInstaller.instance().register(this.getClass());
@@ -59,7 +58,11 @@ class SimplixInstallerTest {
 
   @Test
   void install() {
-    SimplixInstaller.instance().install();
+    try {
+      SimplixInstaller.instance().install();
+    } catch (Throwable throwable) {
+      Assertions.fail(throwable);
+    }
   }
 
   @Test

@@ -8,9 +8,8 @@ import org.junit.jupiter.api.Test;
 
 class ConvertersTest {
 
-  @Test
   @BeforeAll
-  static void register() {
+  static void setUp() {
     Converters.register(Car.class, AnotherCar.class,
         (Converter<Car, AnotherCar>) src -> new AnotherCar(src.name, src.age));
   }

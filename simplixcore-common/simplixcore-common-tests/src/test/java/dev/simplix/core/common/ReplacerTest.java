@@ -13,6 +13,7 @@ class ReplacerTest {
   @BeforeAll
   static void setUp() {
     replacer = Replacer.of("I am a {replace-me}");
+    Assertions.assertEquals("I am a {replace-me}", replacer.messages().get(0));
   }
 
   @Test

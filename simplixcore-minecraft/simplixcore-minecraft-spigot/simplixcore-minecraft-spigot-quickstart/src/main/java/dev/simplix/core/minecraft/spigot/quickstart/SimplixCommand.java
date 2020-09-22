@@ -41,7 +41,6 @@ public final class SimplixCommand extends Command {
         commandSender.sendMessage(
             "§cException while downloading SimplixCore! Check console for details.");
         log.error("Exception while downloading SimplixCore", exception);
-        exception.printStackTrace();
       }
     }
     return false;
