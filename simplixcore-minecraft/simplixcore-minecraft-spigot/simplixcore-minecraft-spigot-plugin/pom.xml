@@ -21,7 +21,6 @@
       <id>github-rjenkinsjr</id>
       <url>https://raw.github.com/rjenkinsjr/maven2/repo</url>
     </repository>
-
   </repositories>
 
   <dependencies>

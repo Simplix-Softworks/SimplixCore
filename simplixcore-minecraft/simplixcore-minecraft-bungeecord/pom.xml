@@ -29,6 +29,7 @@
   </repositories>
 
   <dependencies>
+    <!-- Modules required by all submodules -->
     <dependency>
       <groupId>dev.simplix.core</groupId>
       <artifactId>simplixcore-minecraft-api</artifactId>

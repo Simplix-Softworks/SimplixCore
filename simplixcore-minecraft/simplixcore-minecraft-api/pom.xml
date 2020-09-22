@@ -11,6 +11,7 @@
 
   <artifactId>simplixcore-minecraft-api</artifactId>
   <dependencies>
+    <!-- Included modules -->
     <dependency>
       <groupId>dev.simplix.core</groupId>
       <artifactId>simplixcore-common-api</artifactId>

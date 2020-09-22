@@ -3,6 +3,13 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
+  <dependencies>
+    <dependency>
+      <groupId>net.neruxvace.bungee</groupId>
+      <artifactId>bungeecord-api</artifactId>
+      <version>1.14-SNAPSHOT</version>
+    </dependency>
+  </dependencies>
 
   <parent>
     <groupId>dev.simplix.core</groupId>
@@ -10,7 +17,6 @@
     <version>1.0-SNAPSHOT</version>
   </parent>
 
-  <groupId>dev.simplix.core</groupId>
   <artifactId>simplixcore-minecraft-bungeecord-slf4j</artifactId>
   <version>1.0-SNAPSHOT</version>
 

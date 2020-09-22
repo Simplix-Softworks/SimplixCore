@@ -1,7 +1,6 @@
 package dev.simplix.core.minecraft.bungeecord.tests.stub;
 
 import java.net.InetSocketAddress;
-import java.net.SocketAddress;
 import java.util.Collection;
 import java.util.Locale;
 import java.util.Map;
@@ -114,6 +113,11 @@ public class FakeProxiedPlayer implements ProxiedPlayer {
   @Override
   public Locale getLocale() {
     throw new IllegalStateException("Not implemented");
+  }
+
+  @Override
+  public void setLocale(Locale locale) {
+
   }
 
   @Override
@@ -239,11 +243,6 @@ public class FakeProxiedPlayer implements ProxiedPlayer {
 
   @Override
   public InetSocketAddress getAddress() {
-    throw new IllegalStateException("Not implemented");
-  }
-
-  @Override
-  public SocketAddress getSocketAddress() {
     throw new IllegalStateException("Not implemented");
   }
 

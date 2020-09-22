@@ -11,6 +11,7 @@
 
   <artifactId>simplixcore-minecraft-bungeecord-tests</artifactId>
   <dependencies>
+    <!-- Included modules -->
     <dependency>
       <groupId>dev.simplix.core</groupId>
       <artifactId>simplixcore-minecraft-bungeecord-plugin</artifactId>
@@ -23,6 +24,7 @@
       <version>1.0-SNAPSHOT</version>
       <scope>test</scope>
     </dependency>
+    <!-- Junit to run our tests -->
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-engine</artifactId>

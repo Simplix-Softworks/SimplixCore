@@ -20,6 +20,7 @@
   <version>1.0-SNAPSHOT</version>
 
   <dependencies>
+    <!-- Libraries used in both common-api & common-implementation -->
     <dependency>
       <groupId>com.google.inject</groupId>
       <artifactId>guice</artifactId>
@@ -31,5 +32,4 @@
       <version>0.9.10</version>
     </dependency>
   </dependencies>
-
 </project>

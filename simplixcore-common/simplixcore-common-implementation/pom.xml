@@ -19,12 +19,14 @@
   </properties>
 
   <dependencies>
+    <!-- Included modules -->
     <dependency>
       <groupId>dev.simplix.core</groupId>
       <artifactId>simplixcore-common-api</artifactId>
       <version>1.0.0-SNAPSHOT</version>
-      <scope>compile</scope>
     </dependency>
+
+    <!-- Libraries used -->
     <dependency>
       <groupId>org.eclipse.aether</groupId>
       <artifactId>aether-api</artifactId>
@@ -105,5 +107,4 @@
       </plugin>
     </plugins>
   </build>
-
 </project>

@@ -10,16 +10,8 @@
     <version>1.0-SNAPSHOT</version>
   </parent>
 
-  <groupId>dev.simplix.core</groupId>
   <artifactId>simplixcore-minecraft-spigot-implementation</artifactId>
   <version>1.0-SNAPSHOT</version>
-
-  <repositories>
-    <repository>
-      <id>spigot-repo</id>
-      <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots</url>
-    </repository>
-  </repositories>
 
   <build>
     <plugins>
@@ -70,64 +62,6 @@
                   <exclude>com.google.code.findbugs:annotations</exclude>
                 </excludes>
               </artifactSet>
-              <!--              <relocations>-->
-              <!--                <relocation>-->
-              <!--                  <pattern>de.leonhard.storage</pattern>-->
-              <!--                  <shadedPattern>dev.simplix.core.libs.storage</shadedPattern>-->
-              <!--                </relocation>-->
-              <!--                <relocation>-->
-              <!--                  <pattern>com.esotericsoftware.yamlbeans</pattern>-->
-              <!--                  <shadedPattern>dev.simplix.core.libs.yamlbeans</shadedPattern>-->
-              <!--                </relocation>-->
-              <!--                <relocation>-->
-              <!--                  <pattern>org.json</pattern>-->
-              <!--                  <shadedPattern>dev.simplix.core.libs.json</shadedPattern>-->
-              <!--                </relocation>-->
-              <!--                <relocation>-->
-              <!--                  <pattern>com.google.inject</pattern>-->
-              <!--                  <shadedPattern>dev.simplix.core.libs.guice</shadedPattern>-->
-              <!--                </relocation>-->
-              <!--                <relocation>-->
-              <!--                  <pattern>javax.inject</pattern>-->
-              <!--                  <shadedPattern>dev.simplix.core.libs.inject</shadedPattern>-->
-              <!--                </relocation>-->
-              <!--                <relocation>-->
-              <!--                  <pattern>org.aopalliance</pattern>-->
-              <!--                  <shadedPattern>dev.simplix.core.libs.aopalliance</shadedPattern>-->
-              <!--                </relocation>-->
-              <!--                <relocation>-->
-              <!--                  <pattern>org.reflections</pattern>-->
-              <!--                  <shadedPattern>dev.simplix.core.libs.reflections</shadedPattern>-->
-              <!--                </relocation>-->
-              <!--                <relocation>-->
-              <!--                  <pattern>javassist</pattern>-->
-              <!--                  <shadedPattern>dev.simplix.core.libs.javassist</shadedPattern>-->
-              <!--                </relocation>-->
-              <!--                <relocation>-->
-              <!--                  <pattern>org.codehaus.mojo</pattern>-->
-              <!--                  <shadedPattern>dev.simplix.core.libs.codehaus.mojo</shadedPattern>-->
-              <!--                </relocation>-->
-              <!--                <relocation>-->
-              <!--                  <pattern>org.checkerframework</pattern>-->
-              <!--                  <shadedPattern>dev.simplix.core.libs.checkerframework</shadedPattern>-->
-              <!--                </relocation>-->
-              <!--                <relocation>-->
-              <!--                  <pattern>com.google.errorprone</pattern>-->
-              <!--                  <shadedPattern>dev.simplix.core.libs.errorprone</shadedPattern>-->
-              <!--                </relocation>-->
-              <!--                <relocation>-->
-              <!--                  <pattern>com.google.j2objc</pattern>-->
-              <!--                  <shadedPattern>dev.simplix.core.libs.j2objc</shadedPattern>-->
-              <!--                </relocation>-->
-              <!--                <relocation>-->
-              <!--                  <pattern>afu.plume</pattern>-->
-              <!--                  <shadedPattern>dev.simplix.core.libs.plume</shadedPattern>-->
-              <!--                </relocation>-->
-              <!--                <relocation>-->
-              <!--                  <pattern>afu.org</pattern>-->
-              <!--                  <shadedPattern>dev.simplix.core.libs.plume.checkerframework</shadedPattern>-->
-              <!--                </relocation>-->
-              <!--              </relocations>-->
               <filters>
                 <filter>
                   <artifact>*:*</artifact>
