@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.Map.Entry;
 import lombok.NonNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Central registration class for {@link Converter}s.
@@ -113,6 +114,7 @@ public final class Converters {
    * @param <T>        The target type
    * @return The converter instance or null if no such converter exists
    */
+  @Nullable
   public static <S, T> Converter<S, T> getConverter(
       final Class<S> sourceType,
       final Class<T> targetType) {

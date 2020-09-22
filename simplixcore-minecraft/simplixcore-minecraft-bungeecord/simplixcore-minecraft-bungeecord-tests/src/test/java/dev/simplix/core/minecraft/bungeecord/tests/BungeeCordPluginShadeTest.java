@@ -1,5 +1,6 @@
-package dev.simplix.core.common;
+package dev.simplix.core.minecraft.bungeecord.tests;
 
+import dev.simplix.core.common.ApplicationInfo;
 import lombok.NonNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -7,7 +8,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Test to shade whether everything was shaded correctly
  */
-public class ShadeTest {
+public class BungeeCordPluginShadeTest {
 
   @Test
   void testClassPresence() {
@@ -17,8 +18,19 @@ public class ShadeTest {
     assertPresent("dev.simplix.core.common.CommonSimplixModule");
     // Database-SQL
     assertPresent("dev.simplix.core.database.sql.HikariDataSourceCreator");
+
+    assertPackageEquals(ApplicationInfo.class, "dev.simplix.core.common");
   }
 
+  private void assertPackageEquals(Class<?> classRef, String packageName) {
+    assertPackageEquals(
+        classRef,
+        packageName,
+        classRef.getSimpleName() + " should not be relocated");
+
+  }
+
+  // This method will work since the maven relocation won't run over strings in the tests directory
   public void assertPackageEquals(
       @NonNull Class<?> classRef,
       @NonNull String packageName,

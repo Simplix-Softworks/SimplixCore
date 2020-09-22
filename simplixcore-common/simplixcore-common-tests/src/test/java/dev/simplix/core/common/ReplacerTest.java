@@ -30,4 +30,5 @@ class ReplacerTest {
         .replacedMessageJoined();
     Assertions.assertEquals("I am a Replacer", replacedMessageJoined);
   }
+
 }

@@ -46,15 +46,19 @@ public class Permissions {
    */
   @SneakyThrows
   public void addFromClass(final Class<?> clazz) {
-    for (final Field field : clazz.getFields()) {
+    for (final Field field : clazz.getDeclaredFields()) {
       if (field.getType() != Permission.class) {
         continue;
       }
-
+      boolean accessible = field.isAccessible();
+      if(!accessible) {
+        field.setAccessible(true);
+      }
       final Permission perm = (Permission) field.get(null);
       if (perm == null) {
         continue;
       }
+      field.setAccessible(accessible);
       Permissions.register(perm);
     }
   }

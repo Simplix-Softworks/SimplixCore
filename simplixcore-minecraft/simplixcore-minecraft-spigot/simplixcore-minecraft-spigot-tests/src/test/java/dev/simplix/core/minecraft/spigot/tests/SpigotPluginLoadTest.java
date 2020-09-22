@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-public class PluginTest {
+public class SpigotPluginLoadTest {
 
   private static SimplixPlugin plugin;
 

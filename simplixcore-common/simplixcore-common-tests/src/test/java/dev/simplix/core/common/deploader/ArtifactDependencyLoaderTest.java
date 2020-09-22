@@ -6,16 +6,16 @@ import org.junit.jupiter.api.Test;
 
 class ArtifactDependencyLoaderTest {
 
+  private static ArtifactDependencyLoader artifactDependencyLoader;
+
   @BeforeEach
   void setUp() {
+    artifactDependencyLoader = new ArtifactDependencyLoader();
   }
 
   @AfterEach
   void tearDown() {
-  }
-
-  @Test
-  void registerTypeHandler() {
+    artifactDependencyLoader = null;
   }
 
   @Test

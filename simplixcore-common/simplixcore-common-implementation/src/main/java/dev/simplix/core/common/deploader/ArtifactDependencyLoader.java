@@ -59,7 +59,10 @@ public final class ArtifactDependencyLoader implements DependencyLoader {
     RepositorySystem repositorySystem = newRepositorySystem();
     RepositorySystemSession session = newSession(repositorySystem, this.localRepositoryFile);
 
-    Artifact artifact = new DefaultArtifact(dependency.groupId(), dependency.artifactId(), "jar",
+    Artifact artifact = new DefaultArtifact(
+        dependency.groupId(),
+        dependency.artifactId(),
+        "jar",
         dependency.version());
     ArtifactRequest request = new ArtifactRequest();
     request.setArtifact(artifact);

@@ -1,29 +1,23 @@
 package dev.simplix.core.common.event;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class EventsTest {
 
-  @BeforeEach
-  void setUp() {
-
-  }
-
-  @AfterEach
-  void tearDown() {
-  }
-
-  @Test
-  void add() {
-  }
-
   @Test
   void registeredEvents() {
+    Assertions.assertTrue(Events.registeredEvents().contains(new TestEvent()));
   }
 
   @Test
   void call() {
+    TestEvent call = Events.call(new TestEvent());
+    Assertions.assertFalse(call.canceled());
   }
+
+  private static class TestEvent extends AbstractEvent {
+
+  }
+
 }
