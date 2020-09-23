@@ -10,7 +10,6 @@
     <version>1.0-SNAPSHOT</version>
   </parent>
 
-  <groupId>dev.simplix.core</groupId>
   <artifactId>simplixcore-minecraft-spigot-tests</artifactId>
   <version>1.0-SNAPSHOT</version>
 
@@ -63,5 +62,4 @@
       </plugin>
     </plugins>
   </build>
-
 </project>

@@ -4,6 +4,7 @@ import com.google.common.collect.Sets;
 import dev.simplix.core.minecraft.spigot.plugin.SpigotListenerImpl;
 import dev.simplix.core.minecraft.spigot.tests.stub.StubPlayer;
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.UUID;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
@@ -26,50 +27,35 @@ class SpigotListenerImplTest {
   }
 
   @Test
-  void login() {
-    try {
-      spigotListener.login(new AsyncPlayerPreLoginEvent(
-          "KotlinFactory",
-          InetAddress.getLocalHost(),
-          UUID.randomUUID()));
-    } catch (Throwable throwable) {
-      Assertions.fail(throwable);
-    }
+  void login() throws UnknownHostException {
+    spigotListener.login(new AsyncPlayerPreLoginEvent(
+        "KotlinFactory",
+        InetAddress.getLocalHost(),
+        UUID.randomUUID()));
   }
 
   @Test
   void chat() {
-    try {
-      spigotListener.chat(new AsyncPlayerChatEvent(
-          false,
-          new StubPlayer(),
-          "Example message",
-          Sets.newHashSet()));
-    } catch (Throwable throwable) {
-      Assertions.fail(throwable);
-    }
+    spigotListener.chat(new AsyncPlayerChatEvent(
+        false,
+        new StubPlayer(),
+        "Example message",
+        Sets.newHashSet()));
   }
 
   @Test
   void chat2() {
-    try {
-      spigotListener.chat2(new PlayerCommandPreprocessEvent(
-          new StubPlayer(),
-          "/example",
-          // Recipients must be given or the test will fail due to the MockPlayer#getServer returning null
-          Sets.newHashSet()));
-    } catch (Throwable throwable) {
-      Assertions.fail(throwable);
-    }
+    spigotListener.chat2(new PlayerCommandPreprocessEvent(
+        new StubPlayer(),
+        "/example",
+        // Recipients must be given or the test will fail due to the MockPlayer#getServer returning null
+        Sets.newHashSet()));
+
   }
 
   @Test
   void quit() {
-    try {
-      spigotListener.quit(new PlayerQuitEvent(new StubPlayer(), "Quitted"));
-    } catch (Throwable throwable) {
-      Assertions.fail(throwable);
-    }
+    spigotListener.quit(new PlayerQuitEvent(new StubPlayer(), "Quitted"));
   }
 }
 
