@@ -2,6 +2,7 @@ package dev.simplix.core.minecraft.bungeecord.tests.stub;
 
 import java.io.File;
 import java.net.InetSocketAddress;
+import java.net.SocketAddress;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
@@ -128,6 +129,15 @@ public class FakeProxyServer extends ProxyServer {
   public ServerInfo constructServerInfo(
       String s, InetSocketAddress inetSocketAddress, String s1, boolean b) {
     throw new IllegalStateException("Not implemented");
+  }
+
+  @Override
+  public ServerInfo constructServerInfo(
+      String s,
+      SocketAddress socketAddress,
+      String s1,
+      boolean b) {
+    return null;
   }
 
   @Override
