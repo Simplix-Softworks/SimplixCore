@@ -51,7 +51,7 @@ public final class SimplixCommand extends Command {
     if (!(urlConnection instanceof HttpURLConnection)) {
       throw new IllegalArgumentException("Unsupported protocol " + url.getProtocol());
     }
-
+    file.getParentFile().mkdirs();
     HttpURLConnection httpURLConnection = (HttpURLConnection) urlConnection;
     if (file.exists()) {
       return;
