@@ -24,4 +24,4 @@ preferable to writing your own utilities. The final paragraph bears repeating:
 
 
 ## Download builds
-You can find all builds on our [repository server](https://repo.simplix.dev/#browse/search=attributes.maven2.groupId%3Ddev.simplix.core)
+You can find all builds on our [CI server](https://ci.exceptionflug.de/job/SimplixCore/)
