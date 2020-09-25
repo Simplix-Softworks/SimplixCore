@@ -7,6 +7,7 @@ import com.google.inject.*;
 import com.google.inject.spi.ElementSource;
 import dev.simplix.core.common.ApplicationInfo;
 import dev.simplix.core.common.aop.*;
+import dev.simplix.core.common.aop.SuppressWarnings;
 import dev.simplix.core.common.deploader.*;
 import dev.simplix.core.common.event.Events;
 import dev.simplix.core.common.events.ApplicationPreInstallEvent;
@@ -481,17 +482,19 @@ public class SimplixInstaller {
         Component component = componentClass.getAnnotation(Component.class);
         AbstractSimplixModule simplixModule = findAbstractSimplixModule(modules, component.value());
         if (simplixModule == null) {
-          log.warn(SIMPLIX_BOOTSTRAP
-                   + context.applicationInfo.name()
-                   + ": Component "
-                   + componentClass.getName()
-                   + " referenced module "
-                   + component.value().getName()
-                   + " which is not available in this context.");
-          log.warn(SIMPLIX_BOOTSTRAP
-                   + context.applicationInfo.name()
-                   + ": Available modules in this context: "
-                   + modules);
+          if(!suppressWarning(componentClass, "moduleNotAvailable")) {
+            log.warn(SIMPLIX_BOOTSTRAP
+                     + context.applicationInfo.name()
+                     + ": Component "
+                     + componentClass.getName()
+                     + " referenced module "
+                     + component.value().getName()
+                     + " which is not available in this context.");
+            log.warn(SIMPLIX_BOOTSTRAP
+                     + context.applicationInfo.name()
+                     + ": Available modules in this context: "
+                     + modules);
+          }
           continue;
         }
         simplixModule.components().put(componentClass, component);
@@ -500,13 +503,8 @@ public class SimplixInstaller {
                  + ": Detected "
                  + componentClass.getName());
       } catch (Throwable t) {
-        if (t instanceof TypeNotPresentException) {
-          /* Suppress some dependency problems here since some endusers would go crazy when they see
-              exceptions like this in normal production... */
-          log.debug(SIMPLIX_BOOTSTRAP
-                    + context.applicationInfo.name()
-                    + ": Cannot register "
-                    + componentClass.getName(), t);
+        if(suppressWarning(componentClass, "exception:*")
+           || suppressWarning(componentClass, "exception:" + t.getClass().getSimpleName())) {
           continue;
         }
         log.warn(SIMPLIX_BOOTSTRAP
@@ -515,6 +513,22 @@ public class SimplixInstaller {
                  + componentClass.getName(), t);
       }
     }
+  }
+
+  private boolean suppressWarning(Class<?> clazz, String warning) {
+    if(!clazz.isAnnotationPresent(SuppressWarnings.class)) {
+      return false;
+    }
+    return arrayContains(clazz.getAnnotation(SuppressWarnings.class).value(), warning);
+  }
+
+  private <T> boolean arrayContains(T[] value, T obj) {
+    for (T t : value) {
+      if (t.equals(obj)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   @Nullable
@@ -543,6 +557,10 @@ public class SimplixInstaller {
                  + ": Registered module "
                  + moduleClass.getSimpleName());
       } catch (Throwable throwable) {
+        if(suppressWarning(moduleClass, "exception:*")
+           || suppressWarning(moduleClass, "exception:" + throwable.getClass().getSimpleName())) {
+          continue;
+        }
         log.warn(SIMPLIX_BOOTSTRAP + "Unable to create module "
                  + moduleClass.getName()
                  + " for application "
