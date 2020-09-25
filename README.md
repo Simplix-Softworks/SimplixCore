@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://i.imgur.com/xV1BcQj.png" />
+  <img src="https://img.exceptionflug.de/simplixsmall.png" />
 </p>
 
 # SimplixCore
