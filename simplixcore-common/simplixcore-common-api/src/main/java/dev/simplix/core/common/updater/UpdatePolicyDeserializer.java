@@ -53,8 +53,11 @@ public final class UpdatePolicyDeserializer implements JsonDeserializer<UpdatePo
         throw atomicException.get();
       }
 
+      JsonElement versionPattern = object.get("versionPattern");
       return new UpdatePolicy(
-          object.get("versionPattern").getAsString(), atomicDownloader.get(), atomicFetcher.get());
+          versionPattern != null ? versionPattern.getAsString() : null,
+          atomicDownloader.get(),
+          atomicFetcher.get());
     } catch (Exception exception) {
       throw new JsonParseException(exception);
     }
