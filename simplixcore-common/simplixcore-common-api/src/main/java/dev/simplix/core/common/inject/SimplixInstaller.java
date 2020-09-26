@@ -481,8 +481,9 @@ public class SimplixInstaller {
       try {
         Component component = componentClass.getAnnotation(Component.class);
         AbstractSimplixModule simplixModule = findAbstractSimplixModule(modules, component.value());
+
         if (simplixModule == null) {
-          if(!suppressWarning(componentClass, "moduleNotAvailable")) {
+          if(!suppressWarning(context.owner, "moduleNotAvailable")) {
             log.warn(SIMPLIX_BOOTSTRAP
                      + context.applicationInfo.name()
                      + ": Component "
