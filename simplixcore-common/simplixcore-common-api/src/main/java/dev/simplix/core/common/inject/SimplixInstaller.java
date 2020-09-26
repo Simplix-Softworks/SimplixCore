@@ -6,8 +6,8 @@ import com.google.gson.JsonParseException;
 import com.google.inject.*;
 import com.google.inject.spi.ElementSource;
 import dev.simplix.core.common.ApplicationInfo;
-import dev.simplix.core.common.aop.*;
 import dev.simplix.core.common.aop.SuppressWarnings;
+import dev.simplix.core.common.aop.*;
 import dev.simplix.core.common.deploader.*;
 import dev.simplix.core.common.event.Events;
 import dev.simplix.core.common.events.ApplicationPreInstallEvent;
@@ -502,21 +502,23 @@ public class SimplixInstaller {
                  + context.applicationInfo.name()
                  + ": Detected "
                  + componentClass.getName());
-      } catch (Throwable t) {
+      } catch (Throwable throwable) {
         if(suppressWarning(componentClass, "exception:*")
-           || suppressWarning(componentClass, "exception:" + t.getClass().getSimpleName())) {
+           || suppressWarning(componentClass, "exception:" + throwable.getClass().getSimpleName())) {
           continue;
         }
         log.warn(SIMPLIX_BOOTSTRAP
                  + context.applicationInfo.name()
                  + ": Cannot register "
-                 + componentClass.getName(), t);
+                 + componentClass.getName(), throwable);
       }
     }
   }
 
   private boolean suppressWarning(Class<?> clazz, String warning) {
     if(!clazz.isAnnotationPresent(SuppressWarnings.class)) {
+      System.out.println(clazz.getSimpleName());
+      System.out.println(Arrays.toString(clazz.getAnnotations()));
       return false;
     }
     return arrayContains(clazz.getAnnotation(SuppressWarnings.class).value(), warning);
