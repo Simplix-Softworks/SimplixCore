@@ -32,7 +32,12 @@ public class SimpleLocalizationManagerFactory implements LocalizationManagerFact
       if (file.isDirectory()) {
         continue;
       }
-      Locale locale = new Locale(file.getName().substring(0, file.getName().length() - 11));
+      Optional<Locale> optionalLocale = findLocale(file.getName());
+      if (!optionalLocale.isPresent()) {
+        log.warn("'" + file.getName() + "' is not a valid localization file name!");
+        continue;
+      }
+      Locale locale = optionalLocale.get();
       try {
         Properties properties = loadPropertiesFromFile(file);
         propertiesMap.put(locale, properties);
@@ -72,9 +77,19 @@ public class SimpleLocalizationManagerFactory implements LocalizationManagerFact
               Collections.emptyMap())) {
         try (Stream<Path> listFiles = Files.list(fileSystem.getPath(translationResourcesDirectory))) {
           listFiles.forEach(path -> {
-            Locale locale = new Locale(path.getFileName().toString().substring(
+
+            String fileName = path.getFileName().toString().substring(
                 0,
-                path.getFileName().toString().length() - 11));
+                path.getFileName().toString().length() - 11);
+            Optional<Locale> optionalLocale = findLocale(fileName);
+
+            if (!optionalLocale.isPresent()) {
+              log.warn("'" + fileName + "' is not a valid localization file name!");
+              return;
+            }
+
+            Locale locale = optionalLocale.get();
+
             try {
               Properties properties = loadPropertiesFromReader(Files.newBufferedReader(
                   path,
@@ -128,6 +143,14 @@ public class SimpleLocalizationManagerFactory implements LocalizationManagerFact
       translations.put(locale, localized);
     }
     return new SimpleLocalizationManager(translations);
+  }
+
+  private Optional<Locale> findLocale(@NonNull String fileName) {
+    try {
+      return Optional.of(new Locale(fileName.substring(0, fileName.length() - 11)));
+    } catch (Exception exception) {
+      return Optional.empty();
+    }
   }
 
 }
