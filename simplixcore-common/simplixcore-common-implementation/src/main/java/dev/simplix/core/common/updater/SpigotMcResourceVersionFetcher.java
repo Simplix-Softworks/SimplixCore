@@ -6,12 +6,12 @@ import lombok.NonNull;
 
 public final class SpigotMcResourceVersionFetcher implements VersionFetcher {
 
-  private String projectId;
+  private String resourceId;
 
   @Override
   public Version fetchLatestVersion(@NonNull ApplicationInfo applicationInfo, @NonNull UpdatePolicy updatePolicy)
       throws IOException {
-    return new UrlVersionFetcher("https://api.spigotmc.org/legacy/update.php?resource=" + projectId)
+    return new UrlVersionFetcher("https://api.spigotmc.org/legacy/update.php?resource=" + resourceId)
         .fetchLatestVersion(applicationInfo, updatePolicy);
   }
 
