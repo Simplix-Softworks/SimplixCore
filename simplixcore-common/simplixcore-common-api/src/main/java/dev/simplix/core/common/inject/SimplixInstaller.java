@@ -517,8 +517,6 @@ public class SimplixInstaller {
 
   private boolean suppressWarning(Class<?> clazz, String warning) {
     if(!clazz.isAnnotationPresent(SuppressWarnings.class)) {
-      System.out.println(clazz.getSimpleName());
-      System.out.println(Arrays.toString(clazz.getAnnotations()));
       return false;
     }
     return arrayContains(clazz.getAnnotation(SuppressWarnings.class).value(), warning);
