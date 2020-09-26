@@ -3,8 +3,8 @@
   "versionFetcher": {
     "resourceId": "84206"
   },
-  "updateDownloaderClass": "dev.simplix.core.common.updater.UrlUpdateDownloader",
-  "updateDownloader": {
+  "downloaderClass": "dev.simplix.core.common.updater.UrlUpdateDownloader",
+  "downloader": {
     "url": "https://ci.exceptionflug.de/job/SimplixCore/lastSuccessfulBuild/artifact/simplixcore-minecraft/simplixcore-minecraft-bungeecord/simplixcore-minecraft-bungeecord-plugin/target/SimplixCore-BungeeCord.jar"
   }
 }
