@@ -19,6 +19,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class SimpleLocalizationManagerFactory implements LocalizationManagerFactory {
 
+  private static final String SIMPLIX = "[Simplix]";
+
   @Override
   public LocalizationManager create(File translationDirectory) {
     Map<Locale, Properties> propertiesMap = new HashMap<>();
@@ -34,7 +36,7 @@ public class SimpleLocalizationManagerFactory implements LocalizationManagerFact
       }
       Optional<Locale> optionalLocale = findLocale(file.getName());
       if (!optionalLocale.isPresent()) {
-        log.warn("'" + file.getName() + "' is not a valid localization file name!");
+        log.warn(SIMPLIX + " '" + file.getName() + "' is not a valid localization file name!");
         continue;
       }
       Locale locale = optionalLocale.get();
@@ -42,7 +44,7 @@ public class SimpleLocalizationManagerFactory implements LocalizationManagerFact
         Properties properties = loadPropertiesFromFile(file);
         propertiesMap.put(locale, properties);
       } catch (IOException ex) {
-        log.warn("[Simplix] Unable to load language file " + file.getAbsolutePath() + ": ", ex);
+        log.warn(SIMPLIX + " Unable to load language file " + file.getAbsolutePath() + ": ", ex);
       }
     }
     return create0(propertiesMap);
@@ -84,7 +86,7 @@ public class SimpleLocalizationManagerFactory implements LocalizationManagerFact
             Optional<Locale> optionalLocale = findLocale(fileName);
 
             if (!optionalLocale.isPresent()) {
-              log.warn("'" + fileName + "' is not a valid localization file name!");
+              log.warn(SIMPLIX + " '" + fileName + "' is not a valid localization file name!");
               return;
             }
 
@@ -96,12 +98,12 @@ public class SimpleLocalizationManagerFactory implements LocalizationManagerFact
                   StandardCharsets.UTF_8));
               propertiesMap.put(locale, properties);
             } catch (IOException ex) {
-              log.warn("[Simplix] Cannot load language file " + path + " from resource: ", ex);
+              log.warn(SIMPLIX + " Cannot load language file " + path + " from resource: ", ex);
             }
           });
         }
       } catch (IOException ioException) {
-        log.warn("[Simplix] Cannot load language files from resource: ", ioException);
+        log.warn(SIMPLIX + " Cannot load language files from resource: ", ioException);
       }
     } catch (URISyntaxException uriSyntaxException) {
       // bug??
