@@ -70,6 +70,10 @@ public final class SimpleUpdater implements Updater {
                   + " and installed version is "
                   + applicationInfo.version());
         if (latest.newerThen(currentVersion)) {
+          File target = new File(this.cacheDirectory, toReplace.getName() + ".update");
+          if(target.exists()) {
+            return;
+          }
           log.info(SIMPLIX_UPDATER + " "
                    + applicationInfo.name()
                    + ": A new version is available: "
@@ -79,7 +83,7 @@ public final class SimpleUpdater implements Updater {
             try {
               updatePolicy
                   .updateDownloader()
-                  .download(new File(this.cacheDirectory, toReplace.getName() + ".update"), latest);
+                  .download(target, latest);
               log.info(SIMPLIX_UPDATER + " "
                        + applicationInfo.name()
                        + ": Update downloaded. To install the update you have to restart your server.");

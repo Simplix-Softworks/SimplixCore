@@ -23,6 +23,9 @@ public class UrlUpdateDownloader implements UpdateDownloader {
         fileOutputStream.write(ByteStreams.toByteArray(bufferedInputStream));
         fileOutputStream.flush();
       }
+    } catch (Exception exception) {
+      try { target.delete(); } catch (Exception ignored) {}
+      throw exception;
     }
   }
 
