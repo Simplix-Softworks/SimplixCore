@@ -61,8 +61,8 @@ public class PluginTypeHandler implements BiConsumer<Dependency, File> {
           .getPluginManager()
           .getPlugin(pluginDescription.getName())
           .onEnable();
-    } catch (Exception e) {
-      log.error("[Simplix | DependencyLoader] Unable to load plugin " + file.getName(), e);
+    } catch (Exception exception) {
+      log.error("[Simplix | DependencyLoader] Unable to load plugin " + file.getName(), exception);
     }
   }
 

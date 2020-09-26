@@ -19,6 +19,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class SimpleLocalizationManagerFactory implements LocalizationManagerFactory {
 
+  private static final String SIMPLIX = "[Simplix]";
+
   @Override
   public LocalizationManager create(File translationDirectory) {
     Map<Locale, Properties> propertiesMap = new HashMap<>();
@@ -32,12 +34,17 @@ public class SimpleLocalizationManagerFactory implements LocalizationManagerFact
       if (file.isDirectory()) {
         continue;
       }
-      Locale locale = new Locale(file.getName().substring(0, file.getName().length() - 11));
+      Optional<Locale> optionalLocale = findLocale(file.getName());
+      if (!optionalLocale.isPresent()) {
+        log.warn(SIMPLIX + " '" + file.getName() + "' is not a valid localization file name!");
+        continue;
+      }
+      Locale locale = optionalLocale.get();
       try {
         Properties properties = loadPropertiesFromFile(file);
         propertiesMap.put(locale, properties);
       } catch (IOException ex) {
-        log.warn("[Simplix] Unable to load language file " + file.getAbsolutePath() + ": ", ex);
+        log.warn(SIMPLIX + " Unable to load language file " + file.getAbsolutePath() + ": ", ex);
       }
     }
     return create0(propertiesMap);
@@ -72,21 +79,31 @@ public class SimpleLocalizationManagerFactory implements LocalizationManagerFact
               Collections.emptyMap())) {
         try (Stream<Path> listFiles = Files.list(fileSystem.getPath(translationResourcesDirectory))) {
           listFiles.forEach(path -> {
-            Locale locale = new Locale(path.getFileName().toString().substring(
+
+            String fileName = path.getFileName().toString().substring(
                 0,
-                path.getFileName().toString().length() - 11));
+                path.getFileName().toString().length() - 11);
+            Optional<Locale> optionalLocale = findLocale(fileName);
+
+            if (!optionalLocale.isPresent()) {
+              log.warn(SIMPLIX + " '" + fileName + "' is not a valid localization file name!");
+              return;
+            }
+
+            Locale locale = optionalLocale.get();
+
             try {
               Properties properties = loadPropertiesFromReader(Files.newBufferedReader(
                   path,
                   StandardCharsets.UTF_8));
               propertiesMap.put(locale, properties);
             } catch (IOException ex) {
-              log.warn("[Simplix] Cannot load language file " + path + " from resource: ", ex);
+              log.warn(SIMPLIX + " Cannot load language file " + path + " from resource: ", ex);
             }
           });
         }
       } catch (IOException ioException) {
-        log.warn("[Simplix] Cannot load language files from resource: ", ioException);
+        log.warn(SIMPLIX + " Cannot load language files from resource: ", ioException);
       }
     } catch (URISyntaxException uriSyntaxException) {
       // bug??
@@ -128,6 +145,14 @@ public class SimpleLocalizationManagerFactory implements LocalizationManagerFact
       translations.put(locale, localized);
     }
     return new SimpleLocalizationManager(translations);
+  }
+
+  private Optional<Locale> findLocale(@NonNull String fileName) {
+    try {
+      return Optional.of(new Locale(fileName.substring(0, fileName.length() - 11)));
+    } catch (Exception exception) {
+      return Optional.empty();
+    }
   }
 
 }
