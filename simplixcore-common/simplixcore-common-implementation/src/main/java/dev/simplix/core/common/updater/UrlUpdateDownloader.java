@@ -16,7 +16,7 @@ public class UrlUpdateDownloader implements UpdateDownloader {
   @Override
   public void download(@NonNull File target,@NonNull  Version latest) throws IOException {
     URL url = new URL(this.url.replace("{latest}", latest.toString()));
-
+    target.getParentFile().mkdirs();
     URLConnection urlConnection = url.openConnection();
     try (BufferedInputStream bufferedInputStream = new BufferedInputStream(urlConnection.getInputStream())) {
       try (FileOutputStream fileOutputStream = new FileOutputStream(target)) {

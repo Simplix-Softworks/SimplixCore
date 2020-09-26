@@ -3,7 +3,10 @@ package dev.simplix.core.common.updater;
 import dev.simplix.core.common.ApplicationInfo;
 import dev.simplix.core.common.inject.SimplixInstaller;
 import java.io.File;
+import java.io.IOException;
 import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
@@ -19,24 +22,32 @@ public final class SimpleUpdater implements Updater {
 
   @Override
   public void installCachedUpdates() {
-    for (File file : this.cacheDirectory.listFiles()) {
-      if (file.isDirectory()) {
-        installUpdates(file, file.getName());
-      }
+    if (!new File(".").getAbsolutePath().startsWith("/")) {
+      // Not UNIX. Windows file locks make updating impossible.
+      log.warn(SIMPLIX_UPDATER
+               + " Running on Microsoft Windows. Automatic updating is not supported on this platform."
+               + " Please be sure you are using an unix system.");
+      return;
+    }
+    try {
+      moveDir(cacheDirectory, new File("."));
+    } catch (IOException exception) {
+      log.warn(SIMPLIX_UPDATER + " Cannot install update: ", exception);
     }
   }
 
-  private void installUpdates(@NonNull File directory, @NonNull String path) {
-    for (File file : directory.listFiles()) {
-      if (file.isDirectory()) {
-        continue;
-      }
-      if (!file.renameTo(new File(
-          path,
-          file.getName().substring(0, file.getName().length() - 7)))) {
-        log.warn(SIMPLIX_UPDATER + " Cannot update " + file.getName());
+  private void moveDir(File file, File target) throws IOException {
+    for (File f : file.listFiles()) {
+      File t = new File(target, f.getName());
+      if (f.isDirectory()) {
+        moveDir(f, t);
       } else {
-        log.info(SIMPLIX_UPDATER + " Installed update for " + file.getName());
+        f.getParentFile().mkdirs();
+        Files.move(
+            f.toPath(),
+            t.toPath(),
+            StandardCopyOption.REPLACE_EXISTING);
+        log.debug(SIMPLIX_UPDATER + " Moved " + f.getAbsolutePath() + " to " + t.getAbsolutePath());
       }
     }
   }
@@ -70,8 +81,10 @@ public final class SimpleUpdater implements Updater {
                   + " and installed version is "
                   + applicationInfo.version());
         if (latest.newerThen(currentVersion)) {
-          File target = new File(this.cacheDirectory, toReplace.getName() + ".update");
-          if(target.exists()) {
+          File target = new File(
+              cacheDirectory,
+              new File(".").toURI().relativize(toReplace.toURI()).getPath());
+          if (target.exists()) {
             return;
           }
           log.info(SIMPLIX_UPDATER + " "
@@ -79,6 +92,15 @@ public final class SimpleUpdater implements Updater {
                    + ": A new version is available: "
                    + latest
                    + " (currently installed: " + currentVersion + ")");
+          if (!new File(".").getAbsolutePath().startsWith("/")) {
+            // Not UNIX. Windows file locks make updating impossible.
+            log.warn(SIMPLIX_UPDATER
+                     + " Running on Microsoft Windows. Automatic updating is not supported on this platform."
+                     + " Please be sure you are using an unix system. Please update "
+                     + applicationInfo.name()
+                     + " manually.");
+            return;
+          }
           if (updatePolicy.updateDownloader() != null) {
             try {
               updatePolicy
@@ -96,7 +118,7 @@ public final class SimpleUpdater implements Updater {
             log.info(SIMPLIX_UPDATER + " You need to install this update manually.");
           }
         } else {
-          log.debug(SIMPLIX_UPDATER+" "+applicationInfo.name()+" is up-to-date.");
+          log.debug(SIMPLIX_UPDATER + " " + applicationInfo.name() + " is up-to-date.");
         }
       } catch (Exception exception) {
         log.warn(
