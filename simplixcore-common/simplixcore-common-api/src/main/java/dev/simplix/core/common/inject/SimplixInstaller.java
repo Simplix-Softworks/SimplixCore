@@ -504,8 +504,8 @@ public class SimplixInstaller {
                  + ": Detected "
                  + componentClass.getName());
       } catch (Throwable throwable) {
-        if(suppressWarning(componentClass, "exception:*")
-           || suppressWarning(componentClass, "exception:" + throwable.getClass().getSimpleName())) {
+        if(suppressWarning(context.owner, "exception:*")
+           || suppressWarning(context.owner, "exception:" + throwable.getClass().getSimpleName())) {
           continue;
         }
         log.warn(SIMPLIX_BOOTSTRAP
@@ -560,8 +560,8 @@ public class SimplixInstaller {
                  + ": Registered module "
                  + moduleClass.getSimpleName());
       } catch (Throwable throwable) {
-        if(suppressWarning(moduleClass, "exception:*")
-           || suppressWarning(moduleClass, "exception:" + throwable.getClass().getSimpleName())) {
+        if(suppressWarning(ctx.owner, "exception:*")
+           || suppressWarning(ctx.owner, "exception:" + throwable.getClass().getSimpleName())) {
           continue;
         }
         log.warn(SIMPLIX_BOOTSTRAP + "Unable to create module "
