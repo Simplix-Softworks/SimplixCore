@@ -1,5 +1,6 @@
 package dev.simplix.core.minecraft.spigot.tests;
 
+import be.seeseemelk.mockbukkit.MockBukkit;
 import com.google.inject.ConfigurationException;
 import com.google.inject.Injector;
 import com.google.inject.Key;
@@ -12,6 +13,7 @@ import dev.simplix.core.common.aop.SimplixApplication;
 import dev.simplix.core.common.inject.SimplixInstaller;
 import dev.simplix.core.minecraft.api.providers.PluginManager;
 import dev.simplix.core.minecraft.spigot.SpigotSimplixModule;
+import dev.simplix.core.minecraft.spigot.plugin.SimplixPlugin;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.junit.jupiter.api.Assertions;
@@ -26,6 +28,10 @@ public class GuiceSpigotTest {
   static void setUp() {
     // We need a new instance of the SimplixInstaller since it might already be installed by the plugin test
     SIMPLIX_INSTALLER = new SimplixInstaller();
+    if(!MockBukkit.isMocked()) {
+      MockBukkit.mock();
+    }
+    MockBukkit.load(SimplixPlugin.class);
   }
 
   @Test

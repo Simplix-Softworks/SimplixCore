@@ -63,6 +63,12 @@ public final class SimpleUpdater implements Updater {
         Version latest = updatePolicy
             .versionFetcher()
             .fetchLatestVersion(applicationInfo, updatePolicy);
+        log.debug(SIMPLIX_UPDATER + " "
+                  + applicationInfo.name()
+                  + ": Latest version is "
+                  + latest
+                  + " and installed version is "
+                  + applicationInfo.version());
         if (latest.newerThen(currentVersion)) {
           log.info(SIMPLIX_UPDATER + " "
                    + applicationInfo.name()
@@ -82,7 +88,11 @@ public final class SimpleUpdater implements Updater {
                   SIMPLIX_UPDATER + " " + applicationInfo.name() + ": Cannot download update",
                   exception);
             }
+          } else {
+            log.info(SIMPLIX_UPDATER + " You need to install this update manually.");
           }
+        } else {
+          log.debug(SIMPLIX_UPDATER+" "+applicationInfo.name()+" is up-to-date.");
         }
       } catch (Exception exception) {
         log.warn(
