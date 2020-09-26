@@ -24,6 +24,9 @@ import org.jetbrains.annotations.Nullable;
 @Slf4j
 public final class SimplixPlugin extends JavaPlugin {
 
+  public SimplixPlugin() {
+  }
+
   public SimplixPlugin(
       @NonNull JavaPluginLoader loader,
       @NonNull PluginDescriptionFile description,
