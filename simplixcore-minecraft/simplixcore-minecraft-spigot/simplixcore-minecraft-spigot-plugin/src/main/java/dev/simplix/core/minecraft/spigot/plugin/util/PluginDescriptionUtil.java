@@ -5,15 +5,14 @@ import java.io.InputStream;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.logging.Level;
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
+import lombok.experimental.UtilityClass;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginDescriptionFile;
 
-@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+@UtilityClass
 public final class PluginDescriptionUtil {
 
-  public static PluginDescriptionFile loadPluginYml(File target) {
+  public PluginDescriptionFile loadPluginYml(File target) {
     try (JarFile jar = new JarFile(target)) {
       JarEntry pdf = jar.getJarEntry("plugin.yml");
 

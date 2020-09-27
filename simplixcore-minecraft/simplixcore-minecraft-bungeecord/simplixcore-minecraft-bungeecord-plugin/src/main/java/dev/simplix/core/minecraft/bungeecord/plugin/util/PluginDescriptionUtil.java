@@ -6,24 +6,24 @@ import java.io.InputStream;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.logging.Level;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.PluginDescription;
 import org.yaml.snakeyaml.Yaml;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@UtilityClass
 public final class PluginDescriptionUtil {
 
-  private static final Yaml YAML = new Yaml();
+  private final Yaml YAML = new Yaml();
 
-  public static PluginDescription loadPluginYml(@NonNull File target) {
+  public PluginDescription loadPluginYml(@NonNull File target) {
     try (JarFile jar = new JarFile(target)) {
       JarEntry pdf = jar.getJarEntry("bungee.yml");
       if (pdf == null) {
         pdf = jar.getJarEntry("plugin.yml");
       }
+
       Preconditions.checkNotNull(pdf, "Plugin must have a plugin.yml or bungee.yml");
 
       try (InputStream inputStream = jar.getInputStream(pdf)) {
