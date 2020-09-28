@@ -4,6 +4,7 @@ import com.google.inject.Injector;
 import dev.simplix.core.common.aop.SimplixApplication;
 import dev.simplix.core.common.deploader.DependencyLoader;
 import dev.simplix.core.common.libloader.LibraryLoader;
+import dev.simplix.core.common.platform.Platform;
 import dev.simplix.core.common.updater.Updater;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -59,7 +60,7 @@ class SimplixInstallerTest {
   @Test
   void install() {
     try {
-      SimplixInstaller.instance().install();
+      SimplixInstaller.instance().install(Platform.STANDALONE);
     } catch (Throwable throwable) {
       Assertions.fail(throwable);
     }

@@ -7,6 +7,7 @@ import dev.simplix.core.common.event.Event;
 import dev.simplix.core.common.event.Events;
 import dev.simplix.core.common.inject.SimplixInstaller;
 import dev.simplix.core.common.listener.Listeners;
+import dev.simplix.core.common.platform.Platform;
 import dev.simplix.core.minecraft.bungeecord.plugin.deploader.PluginTypeHandler;
 import dev.simplix.core.minecraft.bungeecord.plugin.listeners.ApplicationPreInstallListener;
 import java.io.File;
@@ -62,7 +63,7 @@ public final class SimplixPlugin extends Plugin {
           Thread.currentThread().interrupt();
         }
       }
-      SimplixInstaller.instance().install();
+      SimplixInstaller.instance().install(Platform.BUNGEECORD);
     });
   }
 

@@ -11,6 +11,7 @@ import dev.simplix.core.common.aop.Private;
 import dev.simplix.core.common.aop.ScanComponents;
 import dev.simplix.core.common.aop.SimplixApplication;
 import dev.simplix.core.common.inject.SimplixInstaller;
+import dev.simplix.core.common.platform.Platform;
 import dev.simplix.core.minecraft.api.providers.PluginManager;
 import dev.simplix.core.minecraft.spigot.SpigotSimplixModule;
 import dev.simplix.core.minecraft.spigot.plugin.SimplixPlugin;
@@ -40,7 +41,7 @@ public class GuiceSpigotTest {
     SIMPLIX_INSTALLER.register(TestApplication.class, new PrivacyTestModule(),
         new CommonSimplixModule(), new SpigotSimplixModule());
 
-    SIMPLIX_INSTALLER.install();
+    SIMPLIX_INSTALLER.install(Platform.SPIGOT);
 
     Injector unitTestInjector = SIMPLIX_INSTALLER.injector(TestApplication.class);
     Assertions.assertNotNull(unitTestInjector);

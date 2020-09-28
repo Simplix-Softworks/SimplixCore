@@ -4,6 +4,7 @@ import dev.simplix.core.common.aop.ScanComponents;
 import dev.simplix.core.common.aop.SimplixApplication;
 import dev.simplix.core.common.deploader.ArtifactDependencyLoader;
 import dev.simplix.core.common.inject.SimplixInstaller;
+import dev.simplix.core.common.platform.Platform;
 import dev.simplix.core.minecraft.spigot.dynamiclisteners.DynamicListenersSimplixModule;
 import dev.simplix.core.minecraft.spigot.plugin.deploader.PluginTypeHandler;
 import dev.simplix.core.minecraft.spigot.plugin.listeners.ApplicationPreInstallListener;
@@ -80,7 +81,7 @@ public final class SimplixPlugin extends JavaPlugin {
           Thread.currentThread().interrupt();
         }
       }
-      SimplixInstaller.instance().install();
+      SimplixInstaller.instance().install(Platform.SPIGOT);
     });
   }
 

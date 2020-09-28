@@ -12,6 +12,8 @@ import dev.simplix.core.common.deploader.*;
 import dev.simplix.core.common.event.Events;
 import dev.simplix.core.common.events.ApplicationPreInstallEvent;
 import dev.simplix.core.common.libloader.LibraryLoader;
+import dev.simplix.core.common.platform.Platform;
+import dev.simplix.core.common.platform.PlatformDependent;
 import dev.simplix.core.common.updater.UpdatePolicy;
 import dev.simplix.core.common.updater.UpdatePolicyDeserializer;
 import dev.simplix.core.common.updater.Updater;
@@ -49,6 +51,7 @@ public class SimplixInstaller {
       .registerTypeAdapter(UpdatePolicy.class, new UpdatePolicyDeserializer())
       .create();
   private final Timer updateTimer = new Timer("UpdateTimer");
+  private Platform platform;
   private Injector bossInjector;
   private DependencyLoader dependencyLoader;
   private LibraryLoader libraryLoader;
@@ -149,6 +152,13 @@ public class SimplixInstaller {
   }
 
   /**
+   * @return The current platform.
+   */
+  public Platform platform() {
+    return platform;
+  }
+
+  /**
    * @return The dependency loader
    */
   public DependencyLoader dependencyLoader() {
@@ -230,10 +240,12 @@ public class SimplixInstaller {
    *
    * @throws IllegalStateException If installation was already done
    */
-  public void install() {
+  public void install(Platform platform) {
     if (this.bossInjector != null) {
       throw new IllegalStateException("Already installed");
     }
+    log.debug(SIMPLIX_BOOTSTRAP + " Installing application on platform " + platform.name());
+    this.platform = platform;
     this.bossInjector = Guice.createInjector(Stage.PRODUCTION);
 
     for (String name : this.toInstall.keySet()) {
@@ -399,6 +411,7 @@ public class SimplixInstaller {
     modules.addAll(Arrays.asList(context.modules));
     detectModules(modules, context);
     detectComponents(modules, context);
+    filterPlatformDependentModules(modules, context.applicationInfo.name());
     try {
       Injector injector = this.bossInjector.createChildInjector(modules);
       this.injectorMap.put(context.owner, injector);
@@ -418,6 +431,30 @@ public class SimplixInstaller {
     } catch (CreationException exception) {
       log.error(SIMPLIX_BOOTSTRAP + "Cannot create injector for application "
                 + context.applicationInfo.name(), exception);
+    }
+  }
+
+  private void filterPlatformDependentModules(Set<Module> modules, String appName) {
+    Iterator<Module> moduleIterator = modules.iterator();
+    while (moduleIterator.hasNext()) {
+      Module module = moduleIterator.next();
+      if (module.getClass().isAnnotationPresent(PlatformDependent.class)) {
+        PlatformDependent platform = module.getClass().getAnnotation(PlatformDependent.class);
+        if (platform.value() != this.platform) {
+          log.debug(SIMPLIX_BOOTSTRAP
+                    + " "
+                    + appName
+                    + ": Filter module "
+                    + module
+                        .getClass()
+                        .getName()
+                    + " from binding. Expected platform "
+                    + platform.value()
+                    + " but we are running on "
+                    + this.platform);
+          moduleIterator.remove();
+        }
+      }
     }
   }
 
@@ -482,7 +519,7 @@ public class SimplixInstaller {
         Component component = componentClass.getAnnotation(Component.class);
         AbstractSimplixModule simplixModule = findAbstractSimplixModule(modules, component.value());
         if (simplixModule == null) {
-          if(!suppressWarning(componentClass, "moduleNotAvailable")) {
+          if (!suppressWarning(componentClass, "moduleNotAvailable")) {
             log.warn(SIMPLIX_BOOTSTRAP
                      + context.applicationInfo.name()
                      + ": Component "
@@ -496,6 +533,15 @@ public class SimplixInstaller {
                      + modules);
           }
           continue;
+        } else {
+          if (simplixModule.getClass().isAnnotationPresent(PlatformDependent.class)) {
+            PlatformDependent platformDependent = simplixModule
+                .getClass()
+                .getAnnotation(PlatformDependent.class);
+            if (platformDependent.value() != this.platform) {
+              continue;
+            }
+          }
         }
         simplixModule.components().put(componentClass, component);
         log.info(SIMPLIX_BOOTSTRAP
@@ -503,8 +549,10 @@ public class SimplixInstaller {
                  + ": Detected "
                  + componentClass.getName());
       } catch (Throwable throwable) {
-        if(suppressWarning(componentClass, "exception:*")
-           || suppressWarning(componentClass, "exception:" + throwable.getClass().getSimpleName())) {
+        if (suppressWarning(componentClass, "exception:*")
+            || suppressWarning(
+            componentClass,
+            "exception:" + throwable.getClass().getSimpleName())) {
           continue;
         }
         log.warn(SIMPLIX_BOOTSTRAP
@@ -516,7 +564,7 @@ public class SimplixInstaller {
   }
 
   private boolean suppressWarning(Class<?> clazz, String warning) {
-    if(!clazz.isAnnotationPresent(SuppressWarnings.class)) {
+    if (!clazz.isAnnotationPresent(SuppressWarnings.class)) {
       return false;
     }
     return arrayContains(clazz.getAnnotation(SuppressWarnings.class).value(), warning);
@@ -557,8 +605,8 @@ public class SimplixInstaller {
                  + ": Registered module "
                  + moduleClass.getSimpleName());
       } catch (Throwable throwable) {
-        if(suppressWarning(moduleClass, "exception:*")
-           || suppressWarning(moduleClass, "exception:" + throwable.getClass().getSimpleName())) {
+        if (suppressWarning(moduleClass, "exception:*")
+            || suppressWarning(moduleClass, "exception:" + throwable.getClass().getSimpleName())) {
           continue;
         }
         log.warn(SIMPLIX_BOOTSTRAP + "Unable to create module "
