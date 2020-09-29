@@ -244,7 +244,7 @@ public class SimplixInstaller {
     if (this.bossInjector != null) {
       throw new IllegalStateException("Already installed");
     }
-    log.debug(SIMPLIX_BOOTSTRAP + " Installing application on platform " + platform.name());
+    log.debug(SIMPLIX_BOOTSTRAP + "Installing application on platform " + platform.name());
     this.platform = platform;
     this.bossInjector = Guice.createInjector(Stage.PRODUCTION);
 
