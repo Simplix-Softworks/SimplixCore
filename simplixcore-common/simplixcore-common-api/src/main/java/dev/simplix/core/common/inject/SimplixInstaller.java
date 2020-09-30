@@ -345,10 +345,10 @@ public class SimplixInstaller {
     }
   }
 
-  public void earlyLoadDependencies(Class<?> appClass) {
+  public Optional<DependencyLoadingException> earlyLoadDependencies(Class<?> appClass) {
     ApplicationInfo tempInfo = new ApplicationInfo(appClass.getSimpleName(),
         "1.0", new String[0], null, null);
-    processRemoteDependencies(appClass, tempInfo);
+    return processRemoteDependencies(appClass, tempInfo);
   }
 
   private Optional<DependencyLoadingException> processRemoteDependencies(

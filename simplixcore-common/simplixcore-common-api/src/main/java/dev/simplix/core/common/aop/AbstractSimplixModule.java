@@ -81,5 +81,4 @@ public abstract class AbstractSimplixModule implements Module {
   public boolean isPrivate() {
     return getClass().isAnnotationPresent(Private.class);
   }
-
 }
