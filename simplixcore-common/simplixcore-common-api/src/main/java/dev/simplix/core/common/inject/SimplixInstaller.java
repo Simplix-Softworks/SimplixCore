@@ -336,6 +336,7 @@ public class SimplixInstaller {
    * @return Optional if no dependencies.json could be found for the appOwner
    * @throws JsonParseException If the dependencies.json file is formatted invalidly
    */
+  @SneakyThrows
   private Optional<DependencyManifest> loadDependencies(@NonNull Class<?> appOwner)
       throws JsonParseException {
     @Cleanup
