@@ -27,7 +27,9 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
 import lombok.AllArgsConstructor;
+import lombok.Cleanup;
 import lombok.NonNull;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.Nullable;
 import org.reflections.Reflections;
@@ -43,7 +45,7 @@ public class SimplixInstaller {
   private static final String SIMPLIX_BOOTSTRAP = "[Simplix | Bootstrap] ";
   private static final SimplixInstaller INSTANCE = new SimplixInstaller();
   private final Map<Class<?>, Injector> injectorMap = new HashMap<>();
-  private final Map<Class<?>, Dependencies> dependenciesMap = new HashMap<>();
+  private final Map<Class<?>, DependencyManifest> dependenciesMap = new HashMap<>();
 
   private final Map<String, InstallationContext> toInstall = new HashMap<>();
   private final Map<String, UpdatePolicy> updatePolicyMap = new HashMap<>();
@@ -147,7 +149,7 @@ public class SimplixInstaller {
     return Optional.ofNullable(injectorMap.get(owner));
   }
 
-  public Optional<Dependencies> findDependencies(@NonNull Class<?> owner) {
+  public Optional<DependencyManifest> findDependencies(@NonNull Class<?> owner) {
     return Optional.ofNullable(dependenciesMap.get(owner));
   }
 
@@ -329,6 +331,27 @@ public class SimplixInstaller {
     return true;
   }
 
+  /**
+   * @param appOwner Class the app should be loaded from
+   * @return Optional if no dependencies.json could be found for the appOwner
+   * @throws JsonParseException If the dependencies.json file is formatted invalidly
+   */
+  private Optional<DependencyManifest> loadDependencies(@NonNull Class<?> appOwner)
+      throws JsonParseException {
+    @Cleanup
+    InputStream inputStream = appOwner.getResourceAsStream("/dependencies.json");
+
+    if (inputStream == null) {
+      return Optional.empty();
+    }
+    @Cleanup
+    InputStreamReader reader = new InputStreamReader(
+        inputStream,
+        StandardCharsets.UTF_8);
+
+    return Optional.ofNullable(new GsonBuilder().create().fromJson(reader, DependencyManifest.class));
+  }
+
   private void loadUpdatePolicy(InstallationContext context) throws IOException {
     InputStream stream = context.owner.getClassLoader().getResourceAsStream("updatepolicy.json");
     if (stream == null) {
@@ -361,10 +384,10 @@ public class SimplixInstaller {
       return Optional.empty();
     }
 
-    Optional<Dependencies> optionalDependencies;
+    Optional<DependencyManifest> optionalDependencies;
 
     try {
-      optionalDependencies = Dependencies.loadDependencies(appOwner);
+      optionalDependencies = loadDependencies(appOwner);
     } catch (JsonParseException jsonParseException) {
       log.error(
           SIMPLIX_BOOTSTRAP + info.name() + ": Cannot parse dependencies.json",
@@ -376,11 +399,11 @@ public class SimplixInstaller {
       return Optional.empty();
     }
 
-    Dependencies dependencies = optionalDependencies.get();
-    dependenciesMap.put(appOwner, dependencies);
+    DependencyManifest dependencyManifest = optionalDependencies.get();
+    dependenciesMap.put(appOwner, dependencyManifest);
 
-    List<Repository> repositories = Arrays.asList(dependencies.repositories());
-    for (Dependency dependency : dependencies.dependencies()) {
+    List<Repository> repositories = Arrays.asList(dependencyManifest.repositories());
+    for (Dependency dependency : dependencyManifest.dependencies()) {
       log.info(SIMPLIX_BOOTSTRAP
                + info.name()
                + ": Load dependency "
