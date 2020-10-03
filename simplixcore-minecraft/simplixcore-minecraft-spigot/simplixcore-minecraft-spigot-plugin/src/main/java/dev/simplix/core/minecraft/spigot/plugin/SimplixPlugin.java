@@ -65,7 +65,7 @@ public final class SimplixPlugin extends JavaPlugin {
       long started = System.currentTimeMillis();
       String blockingApp;
       while ((blockingApp = waitForRegistration()) != null) {
-        if (System.currentTimeMillis() - started > 2000) {
+        if (System.currentTimeMillis() - started > 5000) {
           getLogger().severe(
               "[Simplix] The following plugin takes to long for application registration: "
               + blockingApp);

@@ -3,10 +3,7 @@ package dev.simplix.core.minecraft.bungeecord.plugin;
 import dev.simplix.core.common.aop.ScanComponents;
 import dev.simplix.core.common.aop.SimplixApplication;
 import dev.simplix.core.common.deploader.ArtifactDependencyLoader;
-import dev.simplix.core.common.event.Event;
-import dev.simplix.core.common.event.Events;
 import dev.simplix.core.common.inject.SimplixInstaller;
-import dev.simplix.core.common.listener.Listeners;
 import dev.simplix.core.common.platform.Platform;
 import dev.simplix.core.minecraft.bungeecord.plugin.deploader.PluginTypeHandler;
 import dev.simplix.core.minecraft.bungeecord.plugin.listeners.ApplicationPreInstallListener;
@@ -47,7 +44,7 @@ public final class SimplixPlugin extends Plugin {
       long started = System.currentTimeMillis();
       String blockingApp;
       while ((blockingApp = waitForRegistration()) != null) {
-        if (System.currentTimeMillis() - started > 2000) {
+        if (System.currentTimeMillis() - started > 5000) {
           getLogger().severe(
               "[Simplix] The following plugin takes to long for application registration: "
               + blockingApp);
@@ -57,6 +54,7 @@ public final class SimplixPlugin extends Plugin {
               "[Simplix] SimplixCore will not wait any longer. Begin with installation...");
           break;
         }
+
         try {
           Thread.sleep(10);
         } catch (InterruptedException interruptedException) {
