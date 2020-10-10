@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.experimental.Accessors;
+import org.jetbrains.annotations.Nullable;
 
 @Data
 @EqualsAndHashCode
@@ -19,7 +20,13 @@ public class Dependency {
   private String artifactId;
   private String version;
   private String type = "library";
+  @Nullable
   private Platform platform;
+
+  @Nullable
+  public Platform platform() {
+    return this.platform;
+  }
 
   @Override
   public String toString() {
