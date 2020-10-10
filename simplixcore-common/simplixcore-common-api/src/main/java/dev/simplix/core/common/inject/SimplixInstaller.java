@@ -405,6 +405,9 @@ public class SimplixInstaller {
 
     List<Repository> repositories = Arrays.asList(dependencyManifest.repositories());
     for (Dependency dependency : dependencyManifest.dependencies()) {
+      if(dependency.platform() != null && dependency.platform() != platform) {
+        continue;
+      }
       log.info(SIMPLIX_BOOTSTRAP
                + info.name()
                + ": Load dependency "

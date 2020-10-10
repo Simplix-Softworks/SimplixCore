@@ -1,5 +1,6 @@
 package dev.simplix.core.common.deploader;
 
+import dev.simplix.core.common.platform.Platform;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
@@ -18,6 +19,7 @@ public class Dependency {
   private String artifactId;
   private String version;
   private String type = "library";
+  private Platform platform;
 
   @Override
   public String toString() {
