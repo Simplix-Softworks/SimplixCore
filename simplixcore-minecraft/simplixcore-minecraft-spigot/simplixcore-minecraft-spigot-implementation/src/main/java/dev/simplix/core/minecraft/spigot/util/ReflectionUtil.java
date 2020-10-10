@@ -1,5 +1,6 @@
 package dev.simplix.core.minecraft.spigot.util;
 
+import com.mojang.authlib.GameProfile;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -44,6 +45,13 @@ public final class ReflectionUtil {
 
   public static String serverVersion() {
     return Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
+  }
+
+  public static GameProfile gameProfile(@NonNull Player player)
+      throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    Object obcPlayer = obcPlayer(player);
+    Class<?> obcPlayerClass = obcPlayer.getClass();
+    return (GameProfile) obcPlayerClass.getMethod("getProfile").invoke(player);
   }
 
   public static Object nmsPlayer(@NonNull Player player)
