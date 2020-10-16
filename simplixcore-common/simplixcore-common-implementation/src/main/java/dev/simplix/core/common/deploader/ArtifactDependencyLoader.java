@@ -1,6 +1,7 @@
 package dev.simplix.core.common.deploader;
 
 import dev.simplix.core.common.libloader.LibraryTypeHandler;
+import dev.simplix.core.common.libloader.SharedLibraryTypeHandler;
 import java.io.File;
 import java.util.*;
 import java.util.function.BiConsumer;
@@ -30,6 +31,7 @@ public final class ArtifactDependencyLoader implements DependencyLoader {
 
   static {
     TYPE_HANDLER.put("library", new LibraryTypeHandler());
+    TYPE_HANDLER.put("shared-library", new SharedLibraryTypeHandler());
   }
 
   private final File localRepositoryFile = new File(
