@@ -23,6 +23,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
@@ -47,7 +48,7 @@ public class SimplixInstaller {
   private final Map<Class<?>, Injector> injectorMap = new HashMap<>();
   private final Map<Class<?>, DependencyManifest> dependenciesMap = new HashMap<>();
 
-  private final Map<String, InstallationContext> toInstall = new HashMap<>();
+  private final Map<String, InstallationContext> toInstall = new ConcurrentHashMap<>();
   private final Map<String, UpdatePolicy> updatePolicyMap = new HashMap<>();
   private final Gson gson = new GsonBuilder()
       .registerTypeAdapter(UpdatePolicy.class, new UpdatePolicyDeserializer())
