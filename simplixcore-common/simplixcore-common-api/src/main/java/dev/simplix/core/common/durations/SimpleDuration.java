@@ -1,6 +1,5 @@
 package dev.simplix.core.common.durations;
 
-import dev.simplix.core.common.TimeFormatUtil;
 import dev.simplix.core.common.duration.AbstractDuration;
 import dev.simplix.core.common.duration.Duration;
 import lombok.NonNull;
@@ -64,7 +63,7 @@ public final class SimpleDuration extends AbstractDuration {
     if (isEmpty()) {
       return "Empty";
     }
-    return TimeFormatUtil.formatDuration(this.ms);
+    return Long.toString(toMs());
   }
 
   @Override
