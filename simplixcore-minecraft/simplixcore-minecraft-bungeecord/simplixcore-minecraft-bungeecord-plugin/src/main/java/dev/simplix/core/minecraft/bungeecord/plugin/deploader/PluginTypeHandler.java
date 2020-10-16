@@ -37,7 +37,7 @@ public class PluginTypeHandler implements BiConsumer<Dependency, File> {
   }
 
   @Override
-  public void accept(@NonNull Dependency dependency,@NonNull  File file) {
+  public void accept(@NonNull Dependency dependency, @NonNull File file) {
     File target = new File("plugins", file.getName());
     try {
       Files.copy(file, target);
@@ -70,7 +70,16 @@ public class PluginTypeHandler implements BiConsumer<Dependency, File> {
       throws ReflectiveOperationException {
     Map<String, PluginDescription> toLoad = (Map<String, PluginDescription>) toLoadField.get(
         ProxyServer.getInstance().getPluginManager());
-    log.debug("[Simplix] Checking if "+name+" will be automatically enabled. Automatically enabled will be: "+toLoad.keySet());
+    if (toLoad == null) {
+      log.warn("[Simplix | DependencyLoader] Cannot check if "
+               + name
+               + " will be loaded by default plugin loader. This may occur when using outdated or unofficial BungeeCord versions.");
+      return false;
+    }
+    log.debug("[Simplix] Checking if "
+              + name
+              + " will be automatically enabled. Automatically enabled will be: "
+              + toLoad.keySet());
     return toLoad.containsKey(name);
   }
 
