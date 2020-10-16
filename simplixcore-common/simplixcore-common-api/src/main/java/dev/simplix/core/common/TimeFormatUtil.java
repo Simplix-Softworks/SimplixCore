@@ -2,8 +2,8 @@ package dev.simplix.core.common;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.util.OptionalInt;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
@@ -29,6 +29,7 @@ public class TimeFormatUtil {
   }
 
   public String calculateDateFormatted(@NonNull DateFormat dateFormat, final long time) {
+    Duration duration = Duration.ofMinutes(300);
     return dateFormat.format(time);
   }
 
@@ -86,7 +87,6 @@ public class TimeFormatUtil {
 
   // 10days becomes 10 days
   private String splitHumanToHumanReadable(@NonNull final String humanReadable) {
-
     // Already properly formatted
     if (humanReadable.contains(" ")) {
       return humanReadable;
@@ -107,60 +107,5 @@ public class TimeFormatUtil {
     }
 
     return numbers + " " + letters;
-  }
-
-  public String formatDuration(long duration) {
-    if (duration == -1 || duration == 0) {
-      return "Permanent";
-    }
-
-    if (duration == Long.MIN_VALUE) {
-      return "Empty";
-    }
-
-    long years = TimeUnit.MILLISECONDS.toDays(duration) / 365;
-    duration -= TimeUnit.DAYS.toMillis(years) * 365;
-    long month = TimeUnit.MILLISECONDS.toDays(duration) / 30;
-    duration -= TimeUnit.DAYS.toMillis(month) * 30;
-    long days = TimeUnit.MILLISECONDS.toDays(duration);
-    duration -= TimeUnit.DAYS.toMillis(days);
-    long hours = TimeUnit.MILLISECONDS.toHours(duration);
-
-    if (years < 0) {
-      years = 0;
-    }
-
-    if (month < 0) {
-      month = 0;
-    }
-
-    if (days < 0) {
-      days = 0;
-    }
-
-    if (hours < 0) {
-      hours = 0;
-    }
-
-    String preResult = " {years} year(s) {month} month {days} day(s) {hours} hour(s)"
-        .replace("{years}", years + "")
-        .replace("{month}", month + "")
-        .replace("{days}", days + "")
-        .replace("{hours}", hours + "");
-
-    preResult = preResult
-        .replace(" 0 year(s)", "")
-        .replace(" 0 month", "")
-        .replace(" 0 day(s)", "")
-        .replace(" 0 hour(s)", "");
-
-    //shortening
-
-    //we don't need years & hours
-    if (years != 0 && hours != 0) {
-      preResult = preResult.replace(hours + " hours", "");
-    }
-
-    return preResult.startsWith(" ") ? preResult.substring(1) : preResult;
   }
 }
