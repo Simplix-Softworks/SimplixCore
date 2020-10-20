@@ -27,7 +27,7 @@ import org.eclipse.aether.transport.http.HttpTransporterFactory;
 @Slf4j
 public final class ArtifactDependencyLoader implements DependencyLoader {
 
-  private final static Map<String, BiConsumer<Dependency, File>> TYPE_HANDLER = new HashMap<>();
+  private final static Map<String, DependencyTypeHandler> TYPE_HANDLER = new HashMap<>();
 
   static {
     TYPE_HANDLER.put("library", new LibraryTypeHandler());
@@ -40,7 +40,7 @@ public final class ArtifactDependencyLoader implements DependencyLoader {
 
   public static void registerTypeHandler(
       @NonNull String type,
-      @NonNull BiConsumer<Dependency, File> handler) {
+      @NonNull DependencyTypeHandler handler) {
     TYPE_HANDLER.put(type, handler);
   }
 
@@ -48,7 +48,7 @@ public final class ArtifactDependencyLoader implements DependencyLoader {
   public Optional<DependencyLoadingException> load(
       @NonNull Dependency dependency,
       @NonNull Iterable<Repository> repositories) {
-    BiConsumer<Dependency, File> handler = TYPE_HANDLER.get(dependency.type());
+    DependencyTypeHandler handler = TYPE_HANDLER.get(dependency.type());
     if (handler == null) {
       return Optional.of(new DependencyLoadingException(
           dependency,
@@ -56,6 +56,9 @@ public final class ArtifactDependencyLoader implements DependencyLoader {
           + dependency.type()
           + " for dependency "
           + dependency));
+    }
+    if(!handler.shouldInstall(dependency)) {
+      return Optional.empty();
     }
 
     RepositorySystem repositorySystem = newRepositorySystem();
@@ -74,7 +77,7 @@ public final class ArtifactDependencyLoader implements DependencyLoader {
       ArtifactResult result = repositorySystem.resolveArtifact(session, request);
       artifact = result.getArtifact();
       if (artifact != null) {
-        handler.accept(dependency, artifact.getFile());
+        handler.handle(dependency, artifact.getFile());
         return Optional.empty();
       } else {
         if (!result.isResolved()) {
