@@ -2,7 +2,7 @@
   <img src="https://img.exceptionflug.de/simplixsmall.png" />
 </p>
 
-[![Build Status](http://ci.exceptionflug.de/buildStatus/icon?job=SimplixCore)](http://ci.exceptionflug.de/job/SimplixCore/) [![Discord](https://img.shields.io/discord/752533664696369204?label=Discord)](https://discord.simplixsoft.com/) ![GitHub](https://img.shields.io/github/license/SimplixSoftworks/SimplixCore)
+[![Build Status](http://ci.exceptionflug.de/buildStatus/icon?job=SimplixCore)](http://ci.exceptionflug.de/job/SimplixCore/) [![Discord](https://img.shields.io/discord/752533664696369204?label=Discord)](https://discord.simplixsoft.com/) ![GitHub](https://img.shields.io/github/license/Simplix-Softworks/SimplixCore)
 # SimplixCore
 
 SimplixCore is a framework for java development. It includes a set of core Java libraries such as Googles Guava & LightningStorage. It also contains a streamlined Dependency Injection framework using Google Guice, an easy to use localization, configuration, a database framework as well as a set of utilities and a dynamic library loader. It is widely used on most Java & Kotlin projects within SimplixSoftworks.
