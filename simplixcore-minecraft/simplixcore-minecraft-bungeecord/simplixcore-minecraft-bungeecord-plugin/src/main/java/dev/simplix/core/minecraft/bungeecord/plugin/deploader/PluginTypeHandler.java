@@ -81,13 +81,13 @@ public class PluginTypeHandler implements DependencyTypeHandler {
     AtomicReference<File> atomicReference = new AtomicReference<>();
     FileUtils
         .context(new File("plugins"))
-        .whenExists(fileContext -> fileContext.subFiles(subFile -> {
+        .whenExists(fileContext -> fileContext.subFiles(fc -> fc.whenFile(subFile -> {
           File file = subFile.file();
           if (file.getName().startsWith(dependency.artifactId())
               && !file.getName().equals(dependency.artifactId() + "-" + dependency.version())) {
             atomicReference.set(file);
           }
-        }));
+        })));
     if (atomicReference.get() != null) {
       log.warn("[Simplix | DependencyLoader] "
                + dependency.applicationName()
