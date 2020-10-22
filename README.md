@@ -24,5 +24,12 @@ preferable to writing your own utilities. The final paragraph bears repeating:
 - #### [Example-Project](https://github.com/Simplix-Softworks/SimplixExample)
 
 
-## Download builds
+## How to install
+Installation is straight forward. Download the SimplixCore plugin for your platform, start your server and you are ready to go:
+
+[SimplixCore for BungeeCord](https://ci.exceptionflug.de/job/SimplixCore/lastSuccessfulBuild/artifact/simplixcore-minecraft/simplixcore-minecraft-bungeecord/simplixcore-minecraft-bungeecord-plugin/target/SimplixCore-BungeeCord.jar)
+
+[SimplixCore for Spigot](https://ci.exceptionflug.de/job/SimplixCore/lastSuccessfulBuild/artifact/simplixcore-minecraft/simplixcore-minecraft-bungeecord/simplixcore-minecraft-bungeecord-plugin/target/SimplixCore-BungeeCord.jar)
+
 You can find all builds from our [CI server](https://ci.exceptionflug.de/job/SimplixCore/)
+
