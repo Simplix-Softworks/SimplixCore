@@ -1,7 +1,3 @@
-<p align="center">
-  <img src="https://img.exceptionflug.de/simplixsmall.png" />
-</p>
-
 [![Build Status](http://ci.exceptionflug.de/buildStatus/icon?job=SimplixCore)](http://ci.exceptionflug.de/job/SimplixCore/) [![Discord](https://img.shields.io/discord/752533664696369204?label=Discord)](https://discord.simplixsoft.com/) ![GitHub](https://img.shields.io/github/license/Simplix-Softworks/SimplixCore)
 # SimplixCore
 
