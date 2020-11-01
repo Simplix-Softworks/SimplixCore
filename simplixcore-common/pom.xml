@@ -15,9 +15,9 @@
   <parent>
     <artifactId>simplixcore</artifactId>
     <groupId>dev.simplix.core</groupId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
   </parent>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.0.0-SNAPSHOT</version>
 
   <dependencies>
     <!-- Libraries used in both common-api & common-implementation -->
