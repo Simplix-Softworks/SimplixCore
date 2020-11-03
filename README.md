@@ -25,7 +25,7 @@ Installation is straight forward. Download the SimplixCore plugin for your platf
 
 [SimplixCore for BungeeCord](https://ci.exceptionflug.de/job/SimplixCore/lastSuccessfulBuild/artifact/simplixcore-minecraft/simplixcore-minecraft-bungeecord/simplixcore-minecraft-bungeecord-plugin/target/SimplixCore-BungeeCord.jar)
 
-[SimplixCore for Spigot](https://ci.exceptionflug.de/job/SimplixCore/lastSuccessfulBuild/artifact/simplixcore-minecraft/simplixcore-minecraft-bungeecord/simplixcore-minecraft-bungeecord-plugin/target/SimplixCore-BungeeCord.jar)
+[SimplixCore for Spigot](https://ci.exceptionflug.de/job/SimplixCore/lastSuccessfulBuild/artifact/simplixcore-minecraft/simplixcore-minecraft-bungeecord/simplixcore-minecraft-spigot-plugin/target/SimplixCore-Spigot.jar)
 
 You can find all builds from our [CI server](https://ci.exceptionflug.de/job/SimplixCore/)
 
