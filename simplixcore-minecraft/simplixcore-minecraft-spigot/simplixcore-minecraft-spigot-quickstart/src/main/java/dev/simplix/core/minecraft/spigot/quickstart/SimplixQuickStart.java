@@ -17,7 +17,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public final class SimplixQuickStart {
 
   public static final String SIMPLIX_DOWNLOAD_URL
-      = "https://github.com/Simplix-Softworks/SimplixCore/releases/latest/SimplixCore-Spigot.jar";
+      = "https://ci.exceptionflug.de/job/SimplixCore/lastSuccessfulBuild/artifact/simplixcore-minecraft/simplixcore-minecraft-spigot/simplixcore-minecraft-spigot-plugin/target/SimplixCore-Spigot.jar";
 
   /**
    * Ensures that SimplixCore is installed on this server.
