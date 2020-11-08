@@ -3,6 +3,7 @@ package dev.simplix.core.common;
 import dev.simplix.core.common.aop.SimplixApplication;
 import dev.simplix.core.common.inject.SimplixInstaller;
 import java.io.File;
+import java.util.function.Consumer;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NonNull;

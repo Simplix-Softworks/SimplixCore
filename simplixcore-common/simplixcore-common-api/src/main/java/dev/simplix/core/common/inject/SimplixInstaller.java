@@ -25,6 +25,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
 import lombok.AllArgsConstructor;
@@ -72,8 +73,23 @@ public class SimplixInstaller {
    * @throws IllegalArgumentException when the owner class is not annotated with {@link
    *                                  SimplixApplication}
    */
+  public Optional<DependencyLoadingException> register(@NonNull Class<?> owner,
+      @NonNull Module... modules) {
+    return register(owner, e -> {}, modules);
+  }
+
+  /**
+   * This will register a class annotated with {@link SimplixApplication}.
+   *
+   * @param owner   The main class of the application
+   * @param onException Will accept the exception if some exception occurs while installing
+   * @param modules Pre-constructed modules which shall be available in the injection context
+   * @throws IllegalArgumentException when the owner class is not annotated with {@link
+   *                                  SimplixApplication}
+   */
   public Optional<DependencyLoadingException> register(
       @NonNull Class<?> owner,
+      @NonNull Consumer<Exception> onException,
       @NonNull Module... modules) {
     if (!owner.isAnnotationPresent(SimplixApplication.class)) {
       throw new IllegalArgumentException("Owner class must be annotated with @SimplixApplication");
@@ -95,7 +111,7 @@ public class SimplixInstaller {
     this.toInstall.put(
         application.name(),
         new InstallationContext(owner, new Reflections(basePackages, owner.getClassLoader()),
-            info, detectReferencedModules(owner, modules, application.name())));
+            info, detectReferencedModules(owner, modules, application.name()), onException));
     final Optional<DependencyLoadingException> optionalDependencyLoadingException = processRemoteDependencies(
         owner,
         info);
@@ -302,6 +318,7 @@ public class SimplixInstaller {
                  + " of application "
                  + context.applicationInfo.name()
                  + " not found.");
+        context.onException.accept(new RuntimeException("Dependency "+dependency+" not found."));
         return false;
       }
       if (infoStack.contains(depContext.applicationInfo)) {
@@ -311,6 +328,7 @@ public class SimplixInstaller {
         }
         builder.append(context.applicationInfo.name()).append(" -> ").append(dependency);
         log.warn(SIMPLIX_BOOTSTRAP + "Circular dependencies detected: " + builder);
+        context.onException.accept(new RuntimeException("Circular dependencies detected: " + builder));
         return false;
       }
       infoStack.push(context.applicationInfo);
@@ -318,10 +336,17 @@ public class SimplixInstaller {
       infoStack.pop();
       if (!dependStatus) {
         log.warn(SIMPLIX_BOOTSTRAP + "Dependency " + dependency + " failed to load");
+        context.onException.accept(new RuntimeException("Dependency " + dependency + " failed to load"));
         return false;
       }
     }
-    createAppInjector(context);
+    try {
+      createAppInjector(context);
+    } catch (Exception exception) {
+      log.error(SIMPLIX_BOOTSTRAP+" Exception occurred while creating application injector", exception);
+      context.onException.accept(exception);
+      return false;
+    }
     try {
       loadUpdatePolicy(context);
     } catch (Exception exception) {
@@ -468,6 +493,7 @@ public class SimplixInstaller {
     } catch (CreationException exception) {
       log.error(SIMPLIX_BOOTSTRAP + "Cannot create injector for application "
                 + context.applicationInfo.name(), exception);
+      context.onException.accept(exception);
     }
   }
 
@@ -665,6 +691,7 @@ public class SimplixInstaller {
     private final Reflections reflections;
     private ApplicationInfo applicationInfo;
     private final Module[] modules;
+    private Consumer<Exception> onException;
 
   }
 
