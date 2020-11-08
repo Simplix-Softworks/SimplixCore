@@ -9,7 +9,7 @@ import lombok.experimental.Accessors;
 public abstract class AbstractEvent implements Event {
 
   private boolean canceled;
-  private String cancelReason;
+  private String cancelReason = "";
 
   protected AbstractEvent() {
     Events.add(this);
