@@ -11,7 +11,7 @@ import net.md_5.bungee.api.plugin.Plugin;
 public final class SimplixQuickStart {
 
   public static final String SIMPLIX_DOWNLOAD_URL
-      = "https://github.com/Simplix-Softworks/SimplixCore/releases/latest/SimplixCore-BungeeCord.jar";
+      = "https://ci.exceptionflug.de/job/SimplixCore/lastSuccessfulBuild/artifact/simplixcore-minecraft/simplixcore-minecraft-bungeecord/simplixcore-minecraft-bungeecord-plugin/target/SimplixCore-BungeeCord.jar";
 
   /**
    * Ensures that SimplixCore is installed on this server.
