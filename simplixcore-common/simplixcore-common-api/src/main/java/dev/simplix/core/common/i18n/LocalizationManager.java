@@ -38,6 +38,24 @@ public interface LocalizationManager {
   Locale fallbackLocale();
 
   /**
+   * @return The default locale
+   */
+  Locale defaultLocale();
+
+  /**
+   * @param locale default locale
+   */
+  void defaultLocale(@NonNull Locale locale);
+
+  /**
+   * Translates a string identified by its key.
+   *
+   * @param key The string key
+   * @return The localized string or if not present the fallback string
+   */
+  String localized(@NonNull String key);
+
+  /**
    * Translates a string identified by its key.
    *
    * @param key    The string key

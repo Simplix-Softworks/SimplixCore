@@ -9,7 +9,7 @@ import lombok.NonNull;
 public class SimpleLocalizationManager implements LocalizationManager {
 
   private final Map<Locale, Map<String, String>> translations;
-  private Locale fallbackLocale = Locale.ENGLISH;
+  private Locale fallbackLocale, defaultLocale = Locale.ENGLISH;
   private String fallbackString = "N/A";
 
   SimpleLocalizationManager(@NonNull Map<Locale, Map<String, String>> translations) {
@@ -34,6 +34,21 @@ public class SimpleLocalizationManager implements LocalizationManager {
   @Override
   public Locale fallbackLocale() {
     return this.fallbackLocale;
+  }
+
+  @Override
+  public Locale defaultLocale() {
+    return defaultLocale;
+  }
+
+  @Override
+  public void defaultLocale(@NonNull Locale locale) {
+    this.defaultLocale = locale;
+  }
+
+  @Override
+  public String localized(@NonNull String key) {
+    return localized(key, defaultLocale);
   }
 
   @Override
