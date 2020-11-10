@@ -40,6 +40,16 @@ public class FakeProxiedPlayer implements ProxiedPlayer {
   }
 
   @Override
+  public void sendMessage(UUID uuid, BaseComponent... baseComponents) {
+
+  }
+
+  @Override
+  public void sendMessage(UUID uuid, BaseComponent baseComponent) {
+
+  }
+
+  @Override
   public void connect(ServerInfo serverInfo) {
 
   }
