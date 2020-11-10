@@ -40,6 +40,11 @@ public final class SpigotListenerImpl implements Listener {
             asyncPlayerChatEvent.getPlayer().getUniqueId(),
             asyncPlayerChatEvent.getPlayer().getAddress().getAddress(),
             asyncPlayerChatEvent.getMessage()));
+
+    if (!chatEvent.cancelReason().isEmpty()) {
+      asyncPlayerChatEvent.getPlayer().sendMessage(chatEvent.cancelReason().replace("&", "§"));
+    }
+
     asyncPlayerChatEvent.setCancelled(chatEvent.canceled());
     asyncPlayerChatEvent.setMessage(chatEvent.message());
   }
@@ -54,14 +59,18 @@ public final class SpigotListenerImpl implements Listener {
             playerCommandPreprocessEvent.getPlayer().getUniqueId(),
             playerCommandPreprocessEvent.getPlayer().getAddress().getAddress(),
             playerCommandPreprocessEvent.getMessage()));
+
+    if (!chatEvent.cancelReason().isEmpty()) {
+      playerCommandPreprocessEvent.getPlayer()
+          .sendMessage(chatEvent.cancelReason().replace("&", "§"));
+    }
+
     playerCommandPreprocessEvent.setCancelled(chatEvent.canceled());
     playerCommandPreprocessEvent.setMessage(chatEvent.message());
   }
 
   @EventHandler
   public void quit(PlayerQuitEvent playerQuitEvent) {
-    QuitEvent quitEvent = Events
-        .call(QuitEvent.create(playerQuitEvent.getPlayer().getUniqueId()));
-
+    QuitEvent quitEvent = Events.call(QuitEvent.create(playerQuitEvent.getPlayer().getUniqueId()));
   }
 }
