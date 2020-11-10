@@ -9,8 +9,8 @@ import lombok.experimental.UtilityClass;
 public class JdbcDataSourceCreator {
 
   public final String OPTIONS =
-      "?jdbcCompliantTruncation=false&autoReconnect=true&serverTimezone=Europe/Berlin&zeroDateTimeBehavior=convertToNull"
-      + "&max_allowed_packet=512M";
+      "?jdbcCompliantTruncation=false&useUnicode=true&characterEncoding=utf8&"
+      + "autoReconnect=true&zeroDateTimeBehavior=convertToNull&max_allowed_packet=512M";
 
   public DataSource createSource(@NonNull String host, @NonNull String port, @NonNull String data) {
     MysqlDataSource mysqlDataSource = new MysqlDataSource();

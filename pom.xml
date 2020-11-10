@@ -42,7 +42,7 @@
       <artifactId>lombok</artifactId>
       <groupId>org.projectlombok</groupId>
       <scope>provided</scope>
-      <version>1.18.10</version>
+      <version>1.18.16</version>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
@@ -92,7 +92,7 @@
             <path>
               <groupId>org.projectlombok</groupId>
               <artifactId>lombok</artifactId>
-              <version>1.18.10</version>
+              <version>1.18.16</version>
             </path>
           </annotationProcessorPaths>
         </configuration>
