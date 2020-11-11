@@ -16,8 +16,16 @@ public class JdbcDataSourceCreator {
           .replace("{timezone}", Calendar.getInstance().getTimeZone().getID());
 
   public DataSource createSource(@NonNull String host, @NonNull String port, @NonNull String data) {
+    return createSource(host, port, data, OPTIONS);
+  }
+
+  public DataSource createSource(
+      @NonNull String host,
+      @NonNull String port,
+      @NonNull String data,
+      @NonNull String options) {
     MysqlDataSource mysqlDataSource = new MysqlDataSource();
-    mysqlDataSource.setUrl("jdbc:mysql://" + host + ":" + port + "/" + data + OPTIONS);
+    mysqlDataSource.setUrl("jdbc:mysql://" + host + ":" + port + "/" + data + options);
     return mysqlDataSource;
   }
 }
