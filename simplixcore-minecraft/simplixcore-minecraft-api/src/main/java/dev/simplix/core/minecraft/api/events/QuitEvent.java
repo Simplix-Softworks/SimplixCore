@@ -5,7 +5,9 @@ import java.util.UUID;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
+@Getter
+@Accessors(fluent = true)
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class QuitEvent extends AbstractEvent {
 
   public static QuitEvent create(@NonNull final UUID target) {
