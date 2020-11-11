@@ -23,6 +23,10 @@
 
   <repositories>
     <repository>
+      <id>bungeecord-repo</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </repository>
+    <repository>
       <id>Exceptionflug</id>
       <url>https://mvn.exceptionflug.de/repository/exceptionflug-public/</url>
     </repository>
