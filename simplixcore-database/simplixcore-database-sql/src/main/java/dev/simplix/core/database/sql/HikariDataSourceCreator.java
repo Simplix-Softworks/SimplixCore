@@ -14,11 +14,11 @@ public class HikariDataSourceCreator {
       @NonNull String port,
       @NonNull String database,
       @NonNull String user,
-      @NonNull String pass) {
+      @NonNull String password) {
     HikariConfig config = new HikariConfig();
-    config.setDataSource(JdbcDataSourceCreator.createSource(host, port, data));
+    config.setDataSource(JdbcDataSourceCreator.createSource(host, port, database));
     config.setUsername(user);
-    config.setPassword(pass);
+    config.setPassword(password);
     return new HikariDataSource(config);
   }
 
