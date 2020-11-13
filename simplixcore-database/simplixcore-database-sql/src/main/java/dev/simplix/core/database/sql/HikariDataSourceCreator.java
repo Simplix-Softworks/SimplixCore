@@ -12,7 +12,7 @@ public class HikariDataSourceCreator {
   public DataSource createSource(
       @NonNull String host,
       @NonNull String port,
-      @NonNull String data,
+      @NonNull String database,
       @NonNull String user,
       @NonNull String pass) {
     HikariConfig config = new HikariConfig();
