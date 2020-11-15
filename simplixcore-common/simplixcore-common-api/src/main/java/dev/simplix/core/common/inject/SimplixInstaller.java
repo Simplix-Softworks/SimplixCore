@@ -272,12 +272,6 @@ public class SimplixInstaller {
       if (this.injectorMap.containsKey(context.owner)) {
         continue;
       }
-      ApplicationPreInstallEvent event = new ApplicationPreInstallEvent(
-          context.applicationInfo,
-          context.owner);
-      Events.call(event);
-      context.applicationInfo = event.applicationInfo();
-      context.owner = event.applicationClass();
       if (!installApplication(context, new Stack<>())) {
         log.warn(SIMPLIX_BOOTSTRAP + "Failed to load application "
                  + context.applicationInfo.name());
@@ -310,6 +304,12 @@ public class SimplixInstaller {
     if (this.injectorMap.containsKey(context.owner)) {
       return true; // Application already installed
     }
+    ApplicationPreInstallEvent event = new ApplicationPreInstallEvent(
+        context.applicationInfo,
+        context.owner);
+    Events.call(event);
+    context.applicationInfo = event.applicationInfo();
+    context.owner = event.applicationClass();
     for (String dependency : context.applicationInfo.dependencies()) {
       InstallationContext depContext = this.toInstall.get(dependency);
       if (depContext == null) {

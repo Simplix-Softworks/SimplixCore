@@ -8,8 +8,10 @@ import dev.simplix.core.minecraft.bungeecord.plugin.util.PluginDescriptionUtil;
 import java.io.File;
 import java.net.URISyntaxException;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 import net.md_5.bungee.api.plugin.PluginDescription;
 
+@Slf4j
 public final class ApplicationPreInstallListener implements Listener<ApplicationPreInstallEvent> {
 
   public ApplicationPreInstallListener() {
@@ -32,6 +34,7 @@ public final class ApplicationPreInstallListener implements Listener<Application
             .getLocation()
             .toURI()));
         if(pluginDescription == null) {
+          log.warn("[Simplix] Cannot fill plugin version to application info of "+event.applicationInfo().name()+": No plugin description found");
           return;
         }
         event.applicationInfo(ApplicationInfo.builder()
