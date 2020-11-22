@@ -10,17 +10,17 @@ import org.bukkit.entity.Player;
 @AllArgsConstructor
 public class StubServer extends FakeServer {
 
-  private String name = "Mock-Server";
-  private String version = "1.0.0";
+  private final String name = "Mock-Server";
+  private final String version = "1.0.0-SNAPSHOT";
 
   @Override
   public String getName() {
-    return name;
+    return this.name;
   }
 
   @Override
   public String getVersion() {
-    return version;
+    return this.version;
   }
 
   @Override

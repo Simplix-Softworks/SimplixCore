@@ -5,7 +5,7 @@
   <parent>
     <artifactId>simplixcore-minecraft-spigot</artifactId>
     <groupId>dev.simplix.core</groupId>
-    <version>1.0.0</version>
+    <version>1.0.0-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
@@ -28,47 +28,47 @@
     <dependency>
       <groupId>dev.simplix.core</groupId>
       <artifactId>simplixcore-common-api</artifactId>
-      <version>1.0.0</version>
+      <version>1.0.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>dev.simplix.core</groupId>
       <artifactId>simplixcore-common-implementation</artifactId>
-      <version>1.0.0</version>
+      <version>1.0.0-SNAPSHOT</version>
     </dependency>
 
     <!-- Implementation of the spigot api -->
     <dependency>
       <groupId>dev.simplix.core</groupId>
       <artifactId>simplixcore-minecraft-spigot-implementation</artifactId>
-      <version>1.0.0</version>
+      <version>1.0.0-SNAPSHOT</version>
     </dependency>
 
     <!-- Auto register our Listeners -->
     <dependency>
       <groupId>dev.simplix.core</groupId>
       <artifactId>simplixcore-minecraft-spigot-dynamiclisteners</artifactId>
-      <version>1.0.0</version>
+      <version>1.0.0-SNAPSHOT</version>
     </dependency>
 
     <!-- Auto register our commands -->
     <dependency>
       <groupId>dev.simplix.core</groupId>
       <artifactId>simplixcore-minecraft-spigot-dynamiccommands</artifactId>
-      <version>1.0.0</version>
+      <version>1.0.0-SNAPSHOT</version>
     </dependency>
 
     <!-- Our SQL module -->
     <dependency>
       <groupId>dev.simplix.core</groupId>
       <artifactId>simplixcore-database-sql</artifactId>
-      <version>1.0.0</version>
+      <version>1.0.0-SNAPSHOT</version>
     </dependency>
 
     <!-- Our config module -->
     <dependency>
       <groupId>dev.simplix.core</groupId>
       <artifactId>simplixcore-config</artifactId>
-      <version>1.0.0</version>
+      <version>1.0.0-SNAPSHOT</version>
     </dependency>
 
     <!-- Simple logging face for java -->

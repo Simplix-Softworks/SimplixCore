@@ -15,10 +15,10 @@
   <parent>
     <groupId>dev.simplix.core</groupId>
     <artifactId>simplixcore-minecraft-bungeecord</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.0-SNAPSHOT</version>
   </parent>
 
   <artifactId>simplixcore-minecraft-bungeecord-slf4j</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.0-SNAPSHOT</version>
 
 </project>

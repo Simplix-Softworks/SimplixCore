@@ -11,7 +11,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-@SimplixApplication(name = "TestApplication", version = "1.0.0", authors = "SimplixSoftworks")
+@SimplixApplication(name = "TestApplication", version = "1.0.0-SNAPSHOT", authors = "SimplixSoftworks")
 class SimplixInstallerTest {
 
   @Test

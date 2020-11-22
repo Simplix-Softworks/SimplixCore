@@ -5,14 +5,14 @@
 
   <groupId>dev.simplix.core</groupId>
   <artifactId>simplixcore-http</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.0-SNAPSHOT</version>
 
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
     <artifactId>simplixcore</artifactId>
     <groupId>dev.simplix.core</groupId>
-    <version>1.0.0</version>
+    <version>1.0.0-SNAPSHOT</version>
   </parent>
 
   <dependencies>
@@ -20,7 +20,7 @@
     <dependency>
       <groupId>dev.simplix.core</groupId>
       <artifactId>simplixcore-common-api</artifactId>
-      <version>1.0.0</version>
+      <version>1.0.0-SNAPSHOT</version>
       <scope>provided</scope>
     </dependency>
 
