@@ -13,7 +13,7 @@ public class SpigotPluginLoadTest {
   @BeforeAll
   @Test
   static void setUp() {
-    if(!MockBukkit.isMocked()) {
+    if (!MockBukkit.isMocked()) {
       MockBukkit.mock();
     }
     plugin = MockBukkit.load(SimplixPlugin.class);

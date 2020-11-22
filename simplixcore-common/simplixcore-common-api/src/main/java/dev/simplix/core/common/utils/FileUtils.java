@@ -3,11 +3,11 @@ package dev.simplix.core.common.utils;
 import java.io.File;
 import java.io.IOException;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 public final class FileUtils {
 
-  private FileUtils(){}
+  private FileUtils() {
+  }
 
   public static FileContext context(File file) {
     return new FileContext(file);
@@ -22,28 +22,28 @@ public final class FileUtils {
     }
 
     public FileContext whenDirectory(Consumer<FileContext> fileConsumer) {
-      if(file.isDirectory()) {
+      if (this.file.isDirectory()) {
         fileConsumer.accept(this);
       }
       return this;
     }
 
     public FileContext whenFile(Consumer<FileContext> fileConsumer) {
-      if(file.isFile()) {
+      if (this.file.isFile()) {
         fileConsumer.accept(this);
       }
       return this;
     }
 
     public FileContext whenExists(Consumer<FileContext> fileConsumer) {
-      if(file.exists()) {
+      if (this.file.exists()) {
         fileConsumer.accept(this);
       }
       return this;
     }
 
     public FileContext whenNotExists(Consumer<FileContext> fileConsumer) {
-      if(!file.exists()) {
+      if (!this.file.exists()) {
         fileConsumer.accept(this);
       }
       return this;
@@ -57,7 +57,7 @@ public final class FileUtils {
           throw new FileContextException(e);
         }
       };
-      if(!override) {
+      if (!override) {
         return whenNotExists(consumer);
       }
       consumer.accept(this);
@@ -65,8 +65,8 @@ public final class FileUtils {
     }
 
     public FileContext subFiles(Consumer<FileContext> fileConsumer) {
-      File[] files = file.listFiles();
-      if(files == null) {
+      File[] files = this.file.listFiles();
+      if (files == null) {
         return this;
       }
       for (File file : files) {
@@ -76,19 +76,19 @@ public final class FileUtils {
     }
 
     public FileContext makeParentDirectories() {
-      File parentFile = file.getParentFile();
-      if(parentFile != null) {
+      File parentFile = this.file.getParentFile();
+      if (parentFile != null) {
         parentFile.mkdirs();
       }
       return this;
     }
 
     public FileContext subFile(String relPath) {
-      return new FileContext(new File(file, relPath));
+      return new FileContext(new File(this.file, relPath));
     }
 
     public File file() {
-      return file;
+      return this.file;
     }
 
   }

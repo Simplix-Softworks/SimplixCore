@@ -2,7 +2,7 @@
  * Copyright (c) 2004-2011 QOS.ch All rights reserved.
  * <p>
  * Permission is hereby granted, free  of charge, to any person obtaining a  copy  of this  software
- *  and  associated  documentation files  (the "Software"), to  deal in  the Software without
+ * and  associated  documentation files  (the "Software"), to  deal in  the Software without
  * restriction, including without limitation  the rights to  use, copy, modify,  merge, publish,
  * distribute,  sublicense, and/or sell  copies of  the Software,  and to permit persons to whom the
  * Software  is furnished to do so, subject to the following conditions:
@@ -31,10 +31,9 @@ import org.slf4j.helpers.MessageFormatter;
 import org.slf4j.spi.LocationAwareLogger;
 
 /**
- * A wrapper over {@link java.util.logging.Logger java.util.logging.Logger} in
- * conformity with the {@link Logger} interface. Note that the logging levels
- * mentioned in this class refer to those defined in the java.util.logging
- * package.
+ * A wrapper over {@link java.util.logging.Logger java.util.logging.Logger} in conformity with the
+ * {@link Logger} interface. Note that the logging levels mentioned in this class refer to those
+ * defined in the java.util.logging package.
  *
  * @author Ceki G&uuml;lc&uuml;
  * @author Peter Royal
@@ -57,82 +56,73 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements Loca
    *
    * @return True if this Logger is enabled for level FINEST, false otherwise.
    */
+  @Override
   public boolean isTraceEnabled() {
-    return logger.isLoggable(Level.FINEST);
+    return this.logger.isLoggable(Level.FINEST);
   }
 
   /**
    * Log a message object at level FINEST.
    *
-   * @param msg
-   *          - the message object to be logged
+   * @param msg - the message object to be logged
    */
+  @Override
   public void trace(String msg) {
-    if (logger.isLoggable(Level.FINEST)) {
+    if (this.logger.isLoggable(Level.FINEST)) {
       log(SELF, Level.FINEST, msg, null);
     }
   }
 
   /**
-   * Log a message at level FINEST according to the specified format and
-   * argument.
+   * Log a message at level FINEST according to the specified format and argument.
    *
    * <p>
-   * This form avoids superfluous object creation when the logger is disabled
-   * for level FINEST.
+   * This form avoids superfluous object creation when the logger is disabled for level FINEST.
    * </p>
    *
-   * @param format
-   *          the format string
-   * @param arg
-   *          the argument
+   * @param format the format string
+   * @param arg    the argument
    */
+  @Override
   public void trace(String format, Object arg) {
-    if (logger.isLoggable(Level.FINEST)) {
+    if (this.logger.isLoggable(Level.FINEST)) {
       FormattingTuple ft = MessageFormatter.format(format, arg);
       log(SELF, Level.FINEST, ft.getMessage(), ft.getThrowable());
     }
   }
 
   /**
-   * Log a message at level FINEST according to the specified format and
-   * arguments.
+   * Log a message at level FINEST according to the specified format and arguments.
    *
    * <p>
-   * This form avoids superfluous object creation when the logger is disabled
-   * for the FINEST level.
+   * This form avoids superfluous object creation when the logger is disabled for the FINEST level.
    * </p>
    *
-   * @param format
-   *          the format string
-   * @param arg1
-   *          the first argument
-   * @param arg2
-   *          the second argument
+   * @param format the format string
+   * @param arg1   the first argument
+   * @param arg2   the second argument
    */
+  @Override
   public void trace(String format, Object arg1, Object arg2) {
-    if (logger.isLoggable(Level.FINEST)) {
+    if (this.logger.isLoggable(Level.FINEST)) {
       FormattingTuple ft = MessageFormatter.format(format, arg1, arg2);
       log(SELF, Level.FINEST, ft.getMessage(), ft.getThrowable());
     }
   }
 
   /**
-   * Log a message at level FINEST according to the specified format and
-   * arguments.
+   * Log a message at level FINEST according to the specified format and arguments.
    *
    * <p>
-   * This form avoids superfluous object creation when the logger is disabled
-   * for the FINEST level.
+   * This form avoids superfluous object creation when the logger is disabled for the FINEST level.
    * </p>
    *
-   * @param format
-   *          the format string
-   * @param argArray
-   *          an array of arguments
+   * @param format   the format string
+   * @param argArray an array of arguments
    */
+  @Override
   public void trace(String format, Object... argArray) {
-    if (logger.isLoggable(Level.FINEST)) {
+    if (this.logger.isLoggable(Level.FINEST)) {
       FormattingTuple ft = MessageFormatter.arrayFormat(format, argArray);
       log(SELF, Level.FINEST, ft.getMessage(), ft.getThrowable());
     }
@@ -141,13 +131,12 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements Loca
   /**
    * Log an exception (throwable) at level FINEST with an accompanying message.
    *
-   * @param msg
-   *          the message accompanying the exception
-   * @param t
-   *          the exception (throwable) to log
+   * @param msg the message accompanying the exception
+   * @param t   the exception (throwable) to log
    */
+  @Override
   public void trace(String msg, Throwable t) {
-    if (logger.isLoggable(Level.FINEST)) {
+    if (this.logger.isLoggable(Level.FINEST)) {
       log(SELF, Level.FINEST, msg, t);
     }
   }
@@ -157,18 +146,19 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements Loca
    *
    * @return True if this Logger is enabled for level FINE, false otherwise.
    */
+  @Override
   public boolean isDebugEnabled() {
-    return logger.isLoggable(Level.FINE);
+    return this.logger.isLoggable(Level.FINE);
   }
 
   /**
    * Log a message object at level FINE.
    *
-   * @param msg
-   *          - the message object to be logged
+   * @param msg - the message object to be logged
    */
+  @Override
   public void debug(String msg) {
-    if (logger.isLoggable(Level.FINE)) {
+    if (this.logger.isLoggable(Level.FINE)) {
       log(SELF, Level.FINE, msg, null);
     }
   }
@@ -177,61 +167,52 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements Loca
    * Log a message at level FINE according to the specified format and argument.
    *
    * <p>
-   * This form avoids superfluous object creation when the logger is disabled
-   * for level FINE.
+   * This form avoids superfluous object creation when the logger is disabled for level FINE.
    * </p>
    *
-   * @param format
-   *          the format string
-   * @param arg
-   *          the argument
+   * @param format the format string
+   * @param arg    the argument
    */
+  @Override
   public void debug(String format, Object arg) {
-    if (logger.isLoggable(Level.FINE)) {
+    if (this.logger.isLoggable(Level.FINE)) {
       FormattingTuple ft = MessageFormatter.format(format, arg);
       log(SELF, Level.FINE, ft.getMessage(), ft.getThrowable());
     }
   }
 
   /**
-   * Log a message at level FINE according to the specified format and
-   * arguments.
+   * Log a message at level FINE according to the specified format and arguments.
    *
    * <p>
-   * This form avoids superfluous object creation when the logger is disabled
-   * for the FINE level.
+   * This form avoids superfluous object creation when the logger is disabled for the FINE level.
    * </p>
    *
-   * @param format
-   *          the format string
-   * @param arg1
-   *          the first argument
-   * @param arg2
-   *          the second argument
+   * @param format the format string
+   * @param arg1   the first argument
+   * @param arg2   the second argument
    */
+  @Override
   public void debug(String format, Object arg1, Object arg2) {
-    if (logger.isLoggable(Level.FINE)) {
+    if (this.logger.isLoggable(Level.FINE)) {
       FormattingTuple ft = MessageFormatter.format(format, arg1, arg2);
       log(SELF, Level.FINE, ft.getMessage(), ft.getThrowable());
     }
   }
 
   /**
-   * Log a message at level FINE according to the specified format and
-   * arguments.
+   * Log a message at level FINE according to the specified format and arguments.
    *
    * <p>
-   * This form avoids superfluous object creation when the logger is disabled
-   * for the FINE level.
+   * This form avoids superfluous object creation when the logger is disabled for the FINE level.
    * </p>
    *
-   * @param format
-   *          the format string
-   * @param argArray
-   *          an array of arguments
+   * @param format   the format string
+   * @param argArray an array of arguments
    */
+  @Override
   public void debug(String format, Object... argArray) {
-    if (logger.isLoggable(Level.FINE)) {
+    if (this.logger.isLoggable(Level.FINE)) {
       FormattingTuple ft = MessageFormatter.arrayFormat(format, argArray);
       log(SELF, Level.FINE, ft.getMessage(), ft.getThrowable());
     }
@@ -240,13 +221,12 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements Loca
   /**
    * Log an exception (throwable) at level FINE with an accompanying message.
    *
-   * @param msg
-   *          the message accompanying the exception
-   * @param t
-   *          the exception (throwable) to log
+   * @param msg the message accompanying the exception
+   * @param t   the exception (throwable) to log
    */
+  @Override
   public void debug(String msg, Throwable t) {
-    if (logger.isLoggable(Level.FINE)) {
+    if (this.logger.isLoggable(Level.FINE)) {
       log(SELF, Level.FINE, msg, t);
     }
   }
@@ -256,18 +236,19 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements Loca
    *
    * @return True if this Logger is enabled for the INFO level, false otherwise.
    */
+  @Override
   public boolean isInfoEnabled() {
-    return logger.isLoggable(Level.INFO);
+    return this.logger.isLoggable(Level.INFO);
   }
 
   /**
    * Log a message object at the INFO level.
    *
-   * @param msg
-   *          - the message object to be logged
+   * @param msg - the message object to be logged
    */
+  @Override
   public void info(String msg) {
-    if (logger.isLoggable(Level.INFO)) {
+    if (this.logger.isLoggable(Level.INFO)) {
       log(SELF, Level.INFO, msg, null);
     }
   }
@@ -276,77 +257,66 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements Loca
    * Log a message at level INFO according to the specified format and argument.
    *
    * <p>
-   * This form avoids superfluous object creation when the logger is disabled
-   * for the INFO level.
+   * This form avoids superfluous object creation when the logger is disabled for the INFO level.
    * </p>
    *
-   * @param format
-   *          the format string
-   * @param arg
-   *          the argument
+   * @param format the format string
+   * @param arg    the argument
    */
+  @Override
   public void info(String format, Object arg) {
-    if (logger.isLoggable(Level.INFO)) {
+    if (this.logger.isLoggable(Level.INFO)) {
       FormattingTuple ft = MessageFormatter.format(format, arg);
       log(SELF, Level.INFO, ft.getMessage(), ft.getThrowable());
     }
   }
 
   /**
-   * Log a message at the INFO level according to the specified format and
-   * arguments.
+   * Log a message at the INFO level according to the specified format and arguments.
    *
    * <p>
-   * This form avoids superfluous object creation when the logger is disabled
-   * for the INFO level.
+   * This form avoids superfluous object creation when the logger is disabled for the INFO level.
    * </p>
    *
-   * @param format
-   *          the format string
-   * @param arg1
-   *          the first argument
-   * @param arg2
-   *          the second argument
+   * @param format the format string
+   * @param arg1   the first argument
+   * @param arg2   the second argument
    */
+  @Override
   public void info(String format, Object arg1, Object arg2) {
-    if (logger.isLoggable(Level.INFO)) {
+    if (this.logger.isLoggable(Level.INFO)) {
       FormattingTuple ft = MessageFormatter.format(format, arg1, arg2);
       log(SELF, Level.INFO, ft.getMessage(), ft.getThrowable());
     }
   }
 
   /**
-   * Log a message at level INFO according to the specified format and
-   * arguments.
+   * Log a message at level INFO according to the specified format and arguments.
    *
    * <p>
-   * This form avoids superfluous object creation when the logger is disabled
-   * for the INFO level.
+   * This form avoids superfluous object creation when the logger is disabled for the INFO level.
    * </p>
    *
-   * @param format
-   *          the format string
-   * @param argArray
-   *          an array of arguments
+   * @param format   the format string
+   * @param argArray an array of arguments
    */
+  @Override
   public void info(String format, Object... argArray) {
-    if (logger.isLoggable(Level.INFO)) {
+    if (this.logger.isLoggable(Level.INFO)) {
       FormattingTuple ft = MessageFormatter.arrayFormat(format, argArray);
       log(SELF, Level.INFO, ft.getMessage(), ft.getThrowable());
     }
   }
 
   /**
-   * Log an exception (throwable) at the INFO level with an accompanying
-   * message.
+   * Log an exception (throwable) at the INFO level with an accompanying message.
    *
-   * @param msg
-   *          the message accompanying the exception
-   * @param t
-   *          the exception (throwable) to log
+   * @param msg the message accompanying the exception
+   * @param t   the exception (throwable) to log
    */
+  @Override
   public void info(String msg, Throwable t) {
-    if (logger.isLoggable(Level.INFO)) {
+    if (this.logger.isLoggable(Level.INFO)) {
       log(SELF, Level.INFO, msg, t);
     }
   }
@@ -354,101 +324,92 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements Loca
   /**
    * Is this logger instance enabled for the WARNING level?
    *
-   * @return True if this Logger is enabled for the WARNING level, false
-   *         otherwise.
+   * @return True if this Logger is enabled for the WARNING level, false otherwise.
    */
+  @Override
   public boolean isWarnEnabled() {
-    return logger.isLoggable(Level.WARNING);
+    return this.logger.isLoggable(Level.WARNING);
   }
 
   /**
    * Log a message object at the WARNING level.
    *
-   * @param msg
-   *          - the message object to be logged
+   * @param msg - the message object to be logged
    */
+  @Override
   public void warn(String msg) {
-    if (logger.isLoggable(Level.WARNING)) {
+    if (this.logger.isLoggable(Level.WARNING)) {
       log(SELF, Level.WARNING, msg, null);
     }
   }
 
   /**
-   * Log a message at the WARNING level according to the specified format and
-   * argument.
+   * Log a message at the WARNING level according to the specified format and argument.
    *
    * <p>
-   * This form avoids superfluous object creation when the logger is disabled
-   * for the WARNING level.
+   * This form avoids superfluous object creation when the logger is disabled for the WARNING
+   * level.
    * </p>
    *
-   * @param format
-   *          the format string
-   * @param arg
-   *          the argument
+   * @param format the format string
+   * @param arg    the argument
    */
+  @Override
   public void warn(String format, Object arg) {
-    if (logger.isLoggable(Level.WARNING)) {
+    if (this.logger.isLoggable(Level.WARNING)) {
       FormattingTuple ft = MessageFormatter.format(format, arg);
       log(SELF, Level.WARNING, ft.getMessage(), ft.getThrowable());
     }
   }
 
   /**
-   * Log a message at the WARNING level according to the specified format and
-   * arguments.
+   * Log a message at the WARNING level according to the specified format and arguments.
    *
    * <p>
-   * This form avoids superfluous object creation when the logger is disabled
-   * for the WARNING level.
+   * This form avoids superfluous object creation when the logger is disabled for the WARNING
+   * level.
    * </p>
    *
-   * @param format
-   *          the format string
-   * @param arg1
-   *          the first argument
-   * @param arg2
-   *          the second argument
+   * @param format the format string
+   * @param arg1   the first argument
+   * @param arg2   the second argument
    */
+  @Override
   public void warn(String format, Object arg1, Object arg2) {
-    if (logger.isLoggable(Level.WARNING)) {
+    if (this.logger.isLoggable(Level.WARNING)) {
       FormattingTuple ft = MessageFormatter.format(format, arg1, arg2);
       log(SELF, Level.WARNING, ft.getMessage(), ft.getThrowable());
     }
   }
 
   /**
-   * Log a message at level WARNING according to the specified format and
-   * arguments.
+   * Log a message at level WARNING according to the specified format and arguments.
    *
    * <p>
-   * This form avoids superfluous object creation when the logger is disabled
-   * for the WARNING level.
+   * This form avoids superfluous object creation when the logger is disabled for the WARNING
+   * level.
    * </p>
    *
-   * @param format
-   *          the format string
-   * @param argArray
-   *          an array of arguments
+   * @param format   the format string
+   * @param argArray an array of arguments
    */
+  @Override
   public void warn(String format, Object... argArray) {
-    if (logger.isLoggable(Level.WARNING)) {
+    if (this.logger.isLoggable(Level.WARNING)) {
       FormattingTuple ft = MessageFormatter.arrayFormat(format, argArray);
       log(SELF, Level.WARNING, ft.getMessage(), ft.getThrowable());
     }
   }
 
   /**
-   * Log an exception (throwable) at the WARNING level with an accompanying
-   * message.
+   * Log an exception (throwable) at the WARNING level with an accompanying message.
    *
-   * @param msg
-   *          the message accompanying the exception
-   * @param t
-   *          the exception (throwable) to log
+   * @param msg the message accompanying the exception
+   * @param t   the exception (throwable) to log
    */
+  @Override
   public void warn(String msg, Throwable t) {
-    if (logger.isLoggable(Level.WARNING)) {
+    if (this.logger.isLoggable(Level.WARNING)) {
       log(SELF, Level.WARNING, msg, t);
     }
   }
@@ -458,107 +419,95 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements Loca
    *
    * @return True if this Logger is enabled for level SEVERE, false otherwise.
    */
+  @Override
   public boolean isErrorEnabled() {
-    return logger.isLoggable(Level.SEVERE);
+    return this.logger.isLoggable(Level.SEVERE);
   }
 
   /**
    * Log a message object at the SEVERE level.
    *
-   * @param msg
-   *          - the message object to be logged
+   * @param msg - the message object to be logged
    */
+  @Override
   public void error(String msg) {
-    if (logger.isLoggable(Level.SEVERE)) {
+    if (this.logger.isLoggable(Level.SEVERE)) {
       log(SELF, Level.SEVERE, msg, null);
     }
   }
 
   /**
-   * Log a message at the SEVERE level according to the specified format and
-   * argument.
+   * Log a message at the SEVERE level according to the specified format and argument.
    *
    * <p>
-   * This form avoids superfluous object creation when the logger is disabled
-   * for the SEVERE level.
+   * This form avoids superfluous object creation when the logger is disabled for the SEVERE level.
    * </p>
    *
-   * @param format
-   *          the format string
-   * @param arg
-   *          the argument
+   * @param format the format string
+   * @param arg    the argument
    */
+  @Override
   public void error(String format, Object arg) {
-    if (logger.isLoggable(Level.SEVERE)) {
+    if (this.logger.isLoggable(Level.SEVERE)) {
       FormattingTuple ft = MessageFormatter.format(format, arg);
       log(SELF, Level.SEVERE, ft.getMessage(), ft.getThrowable());
     }
   }
 
   /**
-   * Log a message at the SEVERE level according to the specified format and
-   * arguments.
+   * Log a message at the SEVERE level according to the specified format and arguments.
    *
    * <p>
-   * This form avoids superfluous object creation when the logger is disabled
-   * for the SEVERE level.
+   * This form avoids superfluous object creation when the logger is disabled for the SEVERE level.
    * </p>
    *
-   * @param format
-   *          the format string
-   * @param arg1
-   *          the first argument
-   * @param arg2
-   *          the second argument
+   * @param format the format string
+   * @param arg1   the first argument
+   * @param arg2   the second argument
    */
+  @Override
   public void error(String format, Object arg1, Object arg2) {
-    if (logger.isLoggable(Level.SEVERE)) {
+    if (this.logger.isLoggable(Level.SEVERE)) {
       FormattingTuple ft = MessageFormatter.format(format, arg1, arg2);
       log(SELF, Level.SEVERE, ft.getMessage(), ft.getThrowable());
     }
   }
 
   /**
-   * Log a message at level SEVERE according to the specified format and
-   * arguments.
+   * Log a message at level SEVERE according to the specified format and arguments.
    *
    * <p>
-   * This form avoids superfluous object creation when the logger is disabled
-   * for the SEVERE level.
+   * This form avoids superfluous object creation when the logger is disabled for the SEVERE level.
    * </p>
    *
-   * @param format
-   *          the format string
-   * @param arguments
-   *          an array of arguments
+   * @param format    the format string
+   * @param arguments an array of arguments
    */
+  @Override
   public void error(String format, Object... arguments) {
-    if (logger.isLoggable(Level.SEVERE)) {
+    if (this.logger.isLoggable(Level.SEVERE)) {
       FormattingTuple ft = MessageFormatter.arrayFormat(format, arguments);
       log(SELF, Level.SEVERE, ft.getMessage(), ft.getThrowable());
     }
   }
 
   /**
-   * Log an exception (throwable) at the SEVERE level with an accompanying
-   * message.
+   * Log an exception (throwable) at the SEVERE level with an accompanying message.
    *
-   * @param msg
-   *          the message accompanying the exception
-   * @param t
-   *          the exception (throwable) to log
+   * @param msg the message accompanying the exception
+   * @param t   the exception (throwable) to log
    */
+  @Override
   public void error(String msg, Throwable t) {
-    if (logger.isLoggable(Level.SEVERE)) {
+    if (this.logger.isLoggable(Level.SEVERE)) {
       log(SELF, Level.SEVERE, msg, t);
     }
   }
 
   /**
-   * Log the message at the specified level with the specified throwable if any.
-   * This method creates a LogRecord and fills in caller date before calling
-   * this instance's JDK14 logger.
-   *
+   * Log the message at the specified level with the specified throwable if any. This method creates
+   * a LogRecord and fills in caller date before calling this instance's JDK14 logger.
+   * <p>
    * See bug report #13 for more details.
    *
    * @param level
@@ -573,7 +522,7 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements Loca
     // Note: parameters in record are not set because SLF4J only
     // supports a single formatting style
     fillCallerData(callerFQCN, record);
-    logger.log(record);
+    this.logger.log(record);
   }
 
   static String SELF = JDK14LoggerAdapter.class.getName();
@@ -582,8 +531,7 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements Loca
   /**
    * Fill in caller data if possible.
    *
-   * @param record
-   *          The record to update
+   * @param record The record to update
    */
   final private void fillCallerData(String callerFQCN, LogRecord record) {
     StackTraceElement[] steArray = new Throwable().getStackTrace();
@@ -615,6 +563,7 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements Loca
     }
   }
 
+  @Override
   public void log(
       Marker marker,
       String callerFQCN,
@@ -628,7 +577,7 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements Loca
     // statements. As of 2008-07-31, callers of this method
     // do not perform this check. See also
     // http://jira.qos.ch/browse/SLF4J-81
-    if (logger.isLoggable(julLevel)) {
+    if (this.logger.isLoggable(julLevel)) {
       log(callerFQCN, julLevel, message, t);
     }
   }
@@ -662,9 +611,9 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements Loca
    */
   public void log(LoggingEvent event) {
     Level julLevel = slf4jLevelIntToJULLevel(event.getLevel().toInt());
-    if (logger.isLoggable(julLevel)) {
+    if (this.logger.isLoggable(julLevel)) {
       LogRecord record = eventToRecord(event, julLevel);
-      logger.log(record);
+      this.logger.log(record);
     }
   }
 

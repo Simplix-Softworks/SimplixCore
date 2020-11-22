@@ -32,21 +32,21 @@ class BungeeCordListenerImplTest {
 
   @Test
   void chat() {
-    try{
+    try {
       bungeeCordListenerImpl.chat(new ChatEvent(
           new StubProxiedPlayer(),
           new StubProxiedPlayer(),
           "Example message"));
-    }catch(Throwable throwable){
+    } catch (Throwable throwable) {
       Assertions.fail(throwable);
     }
   }
 
   @Test
   void quit() {
-    try{
+    try {
       bungeeCordListenerImpl.quit(new PlayerDisconnectEvent(new StubProxiedPlayer()));
-    }catch(Throwable throwable){
+    } catch (Throwable throwable) {
       Assertions.fail(throwable);
     }
   }

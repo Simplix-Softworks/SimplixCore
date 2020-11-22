@@ -16,7 +16,9 @@ public final class UrlVersionFetcher implements VersionFetcher {
   private String url;
 
   @Override
-  public Version fetchLatestVersion(@NonNull ApplicationInfo applicationInfo,@NonNull  UpdatePolicy updatePolicy)
+  public Version fetchLatestVersion(
+      @NonNull ApplicationInfo applicationInfo,
+      @NonNull UpdatePolicy updatePolicy)
       throws IOException {
     URL url = new URL(this.url.replace("{name}", applicationInfo.name()));
     String latestVersion;

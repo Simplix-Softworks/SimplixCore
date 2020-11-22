@@ -37,7 +37,7 @@ public class FakeProxyServer extends ProxyServer {
 
   @Override
   public Logger getLogger() {
-    return logger ;
+    return this.logger;
   }
 
   @Override

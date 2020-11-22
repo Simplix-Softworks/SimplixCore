@@ -5,4 +5,5 @@ package dev.simplix.core.common.scanner;
  * be available at runtime and handles this gracefully.
  */
 public @interface FailureAware {
+
 }

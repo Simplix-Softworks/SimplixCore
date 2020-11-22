@@ -4,7 +4,6 @@ import dev.simplix.core.common.libloader.LibraryTypeHandler;
 import dev.simplix.core.common.libloader.SharedLibraryTypeHandler;
 import java.io.File;
 import java.util.*;
-import java.util.function.BiConsumer;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.maven.repository.internal.MavenRepositorySystemUtils;
@@ -57,7 +56,7 @@ public final class ArtifactDependencyLoader implements DependencyLoader {
           + " for dependency "
           + dependency));
     }
-    if(!handler.shouldInstall(dependency)) {
+    if (!handler.shouldInstall(dependency)) {
       return Optional.empty();
     }
 
@@ -125,7 +124,7 @@ public final class ArtifactDependencyLoader implements DependencyLoader {
   }
 
   public File localRepository() {
-    return localRepositoryFile;
+    return this.localRepositoryFile;
   }
 
 }

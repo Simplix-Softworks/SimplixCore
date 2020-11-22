@@ -46,7 +46,8 @@ class PermissionsTest {
             .registeredPermissions()
             .contains(ClassWithPermissions.EXAMPLE_PERMISSION_1),
         "Example Permission 1 must be contained");
-    Assertions.assertTrue(Permissions
+    Assertions.assertTrue(
+        Permissions
             .registeredPermissions()
             .contains(ClassWithPermissions.EXAMPLE_PERMISSION_2),
         "Example Permission 1 must be contained");

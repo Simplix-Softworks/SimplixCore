@@ -7,25 +7,25 @@
   <parent>
     <groupId>dev.simplix.core</groupId>
     <artifactId>simplixcore-common</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0</version>
   </parent>
 
   <groupId>dev.simplix.core</groupId>
   <artifactId>simplixcore-common-tests</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>1.0.0</version>
 
   <dependencies>
     <!-- Included modules -->
     <dependency>
       <groupId>dev.simplix.core</groupId>
       <artifactId>simplixcore-common-api</artifactId>
-      <version>1.0.0-SNAPSHOT</version>
+      <version>1.0.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>dev.simplix.core</groupId>
       <artifactId>simplixcore-common-implementation</artifactId>
-      <version>1.0.0-SNAPSHOT</version>
+      <version>1.0.0</version>
       <scope>test</scope>
     </dependency>
     <!-- Junit to run our tests -->

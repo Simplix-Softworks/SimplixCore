@@ -14,7 +14,7 @@ public class UrlUpdateDownloader implements UpdateDownloader {
   private String url;
 
   @Override
-  public void download(@NonNull File target,@NonNull  Version latest) throws IOException {
+  public void download(@NonNull File target, @NonNull Version latest) throws IOException {
     URL url = new URL(this.url.replace("{latest}", latest.toString()));
     target.getParentFile().mkdirs();
     URLConnection urlConnection = url.openConnection();
@@ -24,7 +24,10 @@ public class UrlUpdateDownloader implements UpdateDownloader {
         fileOutputStream.flush();
       }
     } catch (Exception exception) {
-      try { target.delete(); } catch (Exception ignored) {}
+      try {
+        target.delete();
+      } catch (Exception ignored) {
+      }
       throw exception;
     }
   }

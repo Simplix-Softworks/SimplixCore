@@ -28,8 +28,7 @@ class ListenersTest {
     Assertions.assertEquals(call.cancelReason(), "Example cancel reason");
   }
 
-
-  static class ExampleEvent extends AbstractEvent{
+  static class ExampleEvent extends AbstractEvent {
 
   }
 

@@ -31,7 +31,7 @@ public final class ApplicationPreInstallListener implements Listener<Application
             .getCodeSource()
             .getLocation()
             .toURI()));
-        if(pluginDescription == null) {
+        if (pluginDescription == null) {
           return;
         }
         event.applicationInfo(ApplicationInfo.builder()

@@ -73,17 +73,19 @@ public class SimplixInstaller {
    * @throws IllegalArgumentException when the owner class is not annotated with {@link
    *                                  SimplixApplication}
    */
-  public Optional<DependencyLoadingException> register(@NonNull Class<?> owner,
+  public Optional<DependencyLoadingException> register(
+      @NonNull Class<?> owner,
       @NonNull Module... modules) {
-    return register(owner, e -> {}, modules);
+    return register(owner, e -> {
+    }, modules);
   }
 
   /**
    * This will register a class annotated with {@link SimplixApplication}.
    *
-   * @param owner   The main class of the application
+   * @param owner       The main class of the application
    * @param onException Will accept the exception if some exception occurs while installing
-   * @param modules Pre-constructed modules which shall be available in the injection context
+   * @param modules     Pre-constructed modules which shall be available in the injection context
    * @throws IllegalArgumentException when the owner class is not annotated with {@link
    *                                  SimplixApplication}
    */
@@ -163,18 +165,18 @@ public class SimplixInstaller {
   }
 
   public Optional<Injector> findInjector(@NonNull Class<?> owner) {
-    return Optional.ofNullable(injectorMap.get(owner));
+    return Optional.ofNullable(this.injectorMap.get(owner));
   }
 
   public Optional<DependencyManifest> findDependencies(@NonNull Class<?> owner) {
-    return Optional.ofNullable(dependenciesMap.get(owner));
+    return Optional.ofNullable(this.dependenciesMap.get(owner));
   }
 
   /**
    * @return The current platform.
    */
   public Platform platform() {
-    return platform;
+    return this.platform;
   }
 
   /**
@@ -318,7 +320,9 @@ public class SimplixInstaller {
                  + " of application "
                  + context.applicationInfo.name()
                  + " not found.");
-        context.onException.accept(new RuntimeException("Dependency "+dependency+" not found."));
+        context.onException.accept(new RuntimeException("Dependency "
+                                                        + dependency
+                                                        + " not found."));
         return false;
       }
       if (infoStack.contains(depContext.applicationInfo)) {
@@ -328,7 +332,8 @@ public class SimplixInstaller {
         }
         builder.append(context.applicationInfo.name()).append(" -> ").append(dependency);
         log.warn(SIMPLIX_BOOTSTRAP + "Circular dependencies detected: " + builder);
-        context.onException.accept(new RuntimeException("Circular dependencies detected: " + builder));
+        context.onException.accept(new RuntimeException("Circular dependencies detected: "
+                                                        + builder));
         return false;
       }
       infoStack.push(context.applicationInfo);
@@ -336,14 +341,18 @@ public class SimplixInstaller {
       infoStack.pop();
       if (!dependStatus) {
         log.warn(SIMPLIX_BOOTSTRAP + "Dependency " + dependency + " failed to load");
-        context.onException.accept(new RuntimeException("Dependency " + dependency + " failed to load"));
+        context.onException.accept(new RuntimeException("Dependency "
+                                                        + dependency
+                                                        + " failed to load"));
         return false;
       }
     }
     try {
       createAppInjector(context);
     } catch (Exception exception) {
-      log.error(SIMPLIX_BOOTSTRAP+" Exception occurred while creating application injector", exception);
+      log.error(
+          SIMPLIX_BOOTSTRAP + " Exception occurred while creating application injector",
+          exception);
       context.onException.accept(exception);
       return false;
     }
@@ -376,7 +385,9 @@ public class SimplixInstaller {
         inputStream,
         StandardCharsets.UTF_8);
 
-    return Optional.ofNullable(new GsonBuilder().create().fromJson(reader, DependencyManifest.class));
+    return Optional.ofNullable(new GsonBuilder()
+        .create()
+        .fromJson(reader, DependencyManifest.class));
   }
 
   private void loadUpdatePolicy(InstallationContext context) throws IOException {
@@ -407,7 +418,7 @@ public class SimplixInstaller {
     if (this.dependencyLoader == null) {
       initDependencyLoader();
     }
-    if(dependenciesMap.containsKey(appOwner)) {
+    if (this.dependenciesMap.containsKey(appOwner)) {
       return Optional.empty();
     }
 
@@ -427,11 +438,11 @@ public class SimplixInstaller {
     }
 
     DependencyManifest dependencyManifest = optionalDependencies.get();
-    dependenciesMap.put(appOwner, dependencyManifest);
+    this.dependenciesMap.put(appOwner, dependencyManifest);
 
     List<Repository> repositories = Arrays.asList(dependencyManifest.repositories());
     for (Dependency dependency : dependencyManifest.dependencies()) {
-      if(dependency.platform() != null && dependency.platform() != platform) {
+      if (dependency.platform() != null && dependency.platform() != this.platform) {
         continue;
       }
       log.info(SIMPLIX_BOOTSTRAP
@@ -691,7 +702,7 @@ public class SimplixInstaller {
     private final Reflections reflections;
     private ApplicationInfo applicationInfo;
     private final Module[] modules;
-    private Consumer<Exception> onException;
+    private final Consumer<Exception> onException;
 
   }
 

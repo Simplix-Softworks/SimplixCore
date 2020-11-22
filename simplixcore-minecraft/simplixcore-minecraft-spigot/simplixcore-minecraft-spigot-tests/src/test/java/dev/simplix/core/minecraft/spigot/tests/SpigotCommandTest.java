@@ -17,7 +17,7 @@ public class SpigotCommandTest {
   @Test
   static void setUp() {
     SIMPLIX_COMMAND = new SimplixCommand(SimplixQuickStart.SIMPLIX_DOWNLOAD_URL);
-    if(!MockBukkit.isMocked()) {
+    if (!MockBukkit.isMocked()) {
       MockBukkit.mock();
     }
     MockBukkit.load(SimplixPlugin.class);

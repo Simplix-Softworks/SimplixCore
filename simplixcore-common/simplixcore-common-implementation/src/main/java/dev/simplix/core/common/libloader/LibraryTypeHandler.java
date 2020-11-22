@@ -38,12 +38,12 @@ public class LibraryTypeHandler implements DependencyTypeHandler {
         .whenNotExists(fileContext -> fileContext.file().mkdirs())
         .subFiles(fc -> fc.whenFile(fileContext -> {
           File file = fileContext.file();
-          if(file.getName().startsWith(dependency.artifactId() + "-")
-             && !file.getName().equals(dependency.artifactId()+"-"+dependency.version())) {
+          if (file.getName().startsWith(dependency.artifactId() + "-")
+              && !file.getName().equals(dependency.artifactId() + "-" + dependency.version())) {
             file.delete();
           }
         }))
-        .subFile(dependency.artifactId()+"-"+dependency.version())
+        .subFile(dependency.artifactId() + "-" + dependency.version())
         .file().exists();
   }
 

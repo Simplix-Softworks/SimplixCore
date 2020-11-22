@@ -51,7 +51,7 @@ public class Permissions {
         continue;
       }
       boolean accessible = field.isAccessible();
-      if(!accessible) {
+      if (!accessible) {
         field.setAccessible(true);
       }
       final Permission perm = (Permission) field.get(null);
