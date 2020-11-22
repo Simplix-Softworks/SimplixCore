@@ -33,8 +33,10 @@ public final class ApplicationPreInstallListener implements Listener<Application
             .getCodeSource()
             .getLocation()
             .toURI()));
-        if(pluginDescription == null) {
-          log.warn("[Simplix] Cannot fill plugin version to application info of "+event.applicationInfo().name()+": No plugin description found");
+        if (pluginDescription == null) {
+          log.warn("[Simplix] Cannot fill plugin version to application info of " + event
+              .applicationInfo()
+              .name() + ": No plugin description found");
           return;
         }
         event.applicationInfo(ApplicationInfo.builder()

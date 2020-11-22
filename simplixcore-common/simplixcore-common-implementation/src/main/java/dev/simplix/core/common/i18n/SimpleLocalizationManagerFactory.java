@@ -149,7 +149,7 @@ public class SimpleLocalizationManagerFactory implements LocalizationManagerFact
 
   private Optional<Locale> findLocale(@NonNull String fileName) {
     try {
-      if(fileName.endsWith(".properties")) {
+      if (fileName.endsWith(".properties")) {
         return Optional.of(new Locale(fileName.substring(0, fileName.length() - 11)));
       } else {
         return Optional.of(new Locale(fileName));
