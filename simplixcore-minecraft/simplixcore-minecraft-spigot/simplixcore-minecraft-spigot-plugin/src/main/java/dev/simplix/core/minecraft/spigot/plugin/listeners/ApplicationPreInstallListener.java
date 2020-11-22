@@ -8,8 +8,10 @@ import dev.simplix.core.minecraft.spigot.plugin.util.PluginDescriptionUtil;
 import java.io.File;
 import java.net.URISyntaxException;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 import org.bukkit.plugin.PluginDescriptionFile;
 
+@Slf4j
 public final class ApplicationPreInstallListener implements Listener<ApplicationPreInstallEvent> {
 
   public ApplicationPreInstallListener() {
@@ -31,7 +33,8 @@ public final class ApplicationPreInstallListener implements Listener<Application
             .getCodeSource()
             .getLocation()
             .toURI()));
-        if (pluginDescription == null) {
+        if(pluginDescription == null) {
+          log.warn("[Simplix] Cannot fill plugin version to application info of "+event.applicationInfo().name()+": No plugin description found");
           return;
         }
         event.applicationInfo(ApplicationInfo.builder()
