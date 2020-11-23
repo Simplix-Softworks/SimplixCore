@@ -2,12 +2,8 @@ package dev.simplix.core.minecraft.spigot.tests.stub;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import org.bukkit.entity.Player;
 
-@NoArgsConstructor
-@AllArgsConstructor
 public class StubServer extends FakeServer {
 
   private final String name = "Mock-Server";
