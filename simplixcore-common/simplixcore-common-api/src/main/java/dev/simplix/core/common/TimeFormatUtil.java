@@ -34,13 +34,17 @@ public class TimeFormatUtil {
   }
 
   /**
-   * Method to parse an String like "10 days 20 hours" to an duration in milliseconds
+   * Method to parse a String like "10 days 20 hours" to a duration in milliseconds
    *
    * @return Returns the duration in milliseconds or {@link Long#MIN_VALUE} if the #humanReadable
    * had an unparsable format
    */
   public long parseToMilliseconds(@NonNull String humanReadable) {
     long ticks = 0L;
+
+    if (humanReadable.equalsIgnoreCase("empty")) {
+      return Long.MIN_VALUE;
+    }
 
     String finalHumanReadable = splitHumanToHumanReadable(humanReadable);
 
