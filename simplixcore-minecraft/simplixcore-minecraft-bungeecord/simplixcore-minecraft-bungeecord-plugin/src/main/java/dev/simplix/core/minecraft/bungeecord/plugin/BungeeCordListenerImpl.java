@@ -17,6 +17,8 @@ public class BungeeCordListenerImpl implements Listener {
     return new BungeeCordListenerImpl();
   }
 
+  private BungeeCordListenerImpl() {}
+
   @EventHandler
   public void login(@NonNull PostLoginEvent playerPostLoginEvent) {
     final JoinEvent joinEvent = Events.call(

@@ -2,6 +2,6 @@ package dev.simplix.core.common.platform;
 
 public enum Platform {
 
-  SPIGOT, BUNGEECORD, STANDALONE
+  SPIGOT, BUNGEECORD, VELOCITY, SPONGE, HYTALE, STANDALONE
 
 }
