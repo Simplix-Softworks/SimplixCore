@@ -79,6 +79,10 @@
         <directory>src/main/resources</directory>
         <filtering>true</filtering>
       </resource>
+      <resource>
+        <directory>src/main/java/dev/simplix/core/minecraft/velocity/plugin</directory>
+        <filtering>true</filtering>
+      </resource>
     </resources>
     <plugins>
       <plugin>
