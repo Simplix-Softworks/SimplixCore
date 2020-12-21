@@ -23,7 +23,7 @@ By using the SimplixCore as a plugin you can also add extra libraries for the Si
 Due to file size constraints on plugin hosting services like SpigotMC, some plugins with shaded dependencies might eventually become too large to upload. This is especially important for premium resources that require to be hosted on SpigotMC directly and not via a link to a GitHub release.
 
 Also, shading usually requires you to relocate your dependencies - If you forget to do so your plugin might clash with other ones
-```
+```json
 {
   "repositories": [
     {
