@@ -69,9 +69,9 @@ preferable to writing your own utilities. The final paragraph bears repeating:
 ## How to install
 Installation is straight forward. Download the SimplixCore plugin for your platform, start your server and you are ready to go:
 
-[SimplixCore for BungeeCord](https://ci.exceptionflug.de/job/SimplixCore/lastSuccessfulBuild/artifact/simplixcore-minecraft/simplixcore-minecraft-bungeecord/simplixcore-minecraft-bungeecord-plugin/target/SimplixCore-BungeeCord.jar)
-
-[SimplixCore for Spigot](https://ci.exceptionflug.de/job/SimplixCore/lastSuccessfulBuild/artifact/simplixcore-minecraft/simplixcore-minecraft-spigot/simplixcore-minecraft-spigot-plugin/target/SimplixCore-Spigot.jar)
+- [SimplixCore for BungeeCord](https://ci.exceptionflug.de/job/SimplixCore/lastSuccessfulBuild/artifact/simplixcore-minecraft/simplixcore-minecraft-bungeecord/simplixcore-minecraft-bungeecord-plugin/target/SimplixCore-BungeeCord.jar)
+- [SimplixCore for Velocity](https://ci.exceptionflug.de/job/SimplixCore/lastSuccessfulBuild/artifact/simplixcore-minecraft/simplixcore-minecraft-velocity/simplixcore-minecraft-velocity-plugin/target/SimplixCore-Velocity.jar)
+- [SimplixCore for Spigot](https://ci.exceptionflug.de/job/SimplixCore/lastSuccessfulBuild/artifact/simplixcore-minecraft/simplixcore-minecraft-spigot/simplixcore-minecraft-spigot-plugin/target/SimplixCore-Spigot.jar)
 
 You can find all builds from our [CI server](https://ci.exceptionflug.de/job/SimplixCore/)
 
