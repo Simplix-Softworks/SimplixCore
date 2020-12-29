@@ -16,7 +16,6 @@ By using the SimplixCore as a plugin you can also add extra libraries for the Si
 - BungeeCord
 - Velocity
 - Spigot / Paper
-- Sponge (coming soon)
 
 
 ## Library loader
