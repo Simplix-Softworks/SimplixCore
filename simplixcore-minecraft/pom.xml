@@ -18,6 +18,7 @@
     <module>simplixcore-minecraft-spigot</module>
     <module>simplixcore-minecraft-api</module>
     <module>simplixcore-minecraft-bungeecord</module>
+    <module>simplixcore-minecraft-velocity</module>
   </modules>
 
   <dependencies>

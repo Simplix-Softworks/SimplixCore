@@ -34,12 +34,7 @@ public final class SimplixCommand extends Command {
         commandSender.sendMessage("Going to install SimplixCore to your BungeeCord server!");
         try {
           download(new URL(this.downloadAddress), new File("./plugins/SimplixCore-BungeeCord.jar"));
-          commandSender.sendMessage("SimplixCore was installed. In order to work correctly, " +
-                                    "SimplixCore needs some BungeeCord.jar patching to enable " +
-                                    "full logging.");
-          commandSender.sendMessage("You can do this manually using our graphical jar patcher tool "
-                                    +
-                                    "or you can type the command §esimplix patch §rto do this automatically.");
+          commandSender.sendMessage("SimplixCore was installed successfully.");
         } catch (Exception exception) {
           commandSender.sendMessage(
               "§cException while downloading SimplixCore! Check console for details.");

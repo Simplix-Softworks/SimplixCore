@@ -15,7 +15,7 @@ class BungeeCordListenerImplTest {
 
   @BeforeAll
   static void setUp() {
-    bungeeCordListenerImpl = new BungeeCordListenerImpl();
+    bungeeCordListenerImpl = BungeeCordListenerImpl.create();
     Assertions.assertEquals(
         "dev.simplix.core.minecraft.bungeecord.plugin.ProxyListenerImpl",
         bungeeCordListenerImpl.getClass().getName());

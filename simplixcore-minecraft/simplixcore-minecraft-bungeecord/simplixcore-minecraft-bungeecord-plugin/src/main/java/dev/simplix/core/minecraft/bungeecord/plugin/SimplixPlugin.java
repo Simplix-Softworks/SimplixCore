@@ -40,7 +40,7 @@ public final class SimplixPlugin extends Plugin {
     ProxyServer
         .getInstance()
         .getPluginManager()
-        .registerListener(this, new BungeeCordListenerImpl());
+        .registerListener(this, BungeeCordListenerImpl.create());
 
     SimplixInstaller.instance().register(SimplixPlugin.class);
     ProxyServer.getInstance().getScheduler().runAsync(this, () -> {
