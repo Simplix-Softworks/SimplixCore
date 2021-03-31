@@ -110,6 +110,7 @@ public class SimplixInstaller {
         .workingDirectory(new File(application.workingDirectory()))
         .dependencies(application.dependencies())
         .build();
+
     this.toInstall.put(
         application.name(),
         new InstallationContext(owner, new Reflections(basePackages, owner.getClassLoader()),

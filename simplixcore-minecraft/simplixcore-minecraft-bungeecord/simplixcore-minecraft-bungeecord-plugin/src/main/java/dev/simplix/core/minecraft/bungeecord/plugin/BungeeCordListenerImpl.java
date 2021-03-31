@@ -46,7 +46,6 @@ public class BungeeCordListenerImpl implements Listener {
             sender.getAddress().getAddress(),
             playerChatEvent.getMessage())
     );
-
     playerChatEvent.setCancelled(chatEvent.canceled());
     playerChatEvent.setMessage(chatEvent.message());
   }
