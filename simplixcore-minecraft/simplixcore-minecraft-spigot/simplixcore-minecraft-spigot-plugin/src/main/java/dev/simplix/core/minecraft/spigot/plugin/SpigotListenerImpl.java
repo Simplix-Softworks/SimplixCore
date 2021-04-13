@@ -5,6 +5,7 @@ import dev.simplix.core.minecraft.api.events.ChatEvent;
 import dev.simplix.core.minecraft.api.events.JoinEvent;
 import dev.simplix.core.minecraft.api.events.QuitEvent;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
@@ -14,7 +15,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 public final class SpigotListenerImpl implements Listener {
 
-  @EventHandler
+  @EventHandler(priority = EventPriority.LOW)
   public void login(AsyncPlayerPreLoginEvent playerPreLoginEvent) {
 
     JoinEvent joinEvent = Events.call(
@@ -30,7 +31,7 @@ public final class SpigotListenerImpl implements Listener {
     playerPreLoginEvent.setKickMessage(joinEvent.cancelReason().replace("&", "§"));
   }
 
-  @EventHandler
+  @EventHandler(priority = EventPriority.LOW)
   public void chat(AsyncPlayerChatEvent asyncPlayerChatEvent) {
     if (asyncPlayerChatEvent.isCancelled()) {
       return;
@@ -47,7 +48,7 @@ public final class SpigotListenerImpl implements Listener {
     asyncPlayerChatEvent.setMessage(chatEvent.message());
   }
 
-  @EventHandler
+  @EventHandler(priority = EventPriority.LOW)
   public void chat2(PlayerCommandPreprocessEvent playerCommandPreprocessEvent) {
     if (playerCommandPreprocessEvent.isCancelled()) {
       return;
@@ -69,7 +70,7 @@ public final class SpigotListenerImpl implements Listener {
     playerCommandPreprocessEvent.setMessage(chatEvent.message());
   }
 
-  @EventHandler
+  @EventHandler(priority = EventPriority.LOW)
   public void quit(PlayerQuitEvent playerQuitEvent) {
     QuitEvent quitEvent = Events.call(QuitEvent.create(playerQuitEvent.getPlayer().getUniqueId()));
   }

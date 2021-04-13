@@ -10,6 +10,7 @@ import net.md_5.bungee.api.event.PlayerDisconnectEvent;
 import net.md_5.bungee.api.event.PostLoginEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
+import net.md_5.bungee.event.EventPriority;
 
 public class BungeeCordListenerImpl implements Listener {
 
@@ -20,7 +21,7 @@ public class BungeeCordListenerImpl implements Listener {
     return new BungeeCordListenerImpl();
   }
 
-  @EventHandler
+  @EventHandler(priority = EventPriority.LOW)
   public void login(@NonNull PostLoginEvent playerPostLoginEvent) {
     final JoinEvent joinEvent = Events.call(
         JoinEvent.create(
@@ -38,7 +39,7 @@ public class BungeeCordListenerImpl implements Listener {
     }
   }
 
-  @EventHandler
+  @EventHandler(priority = EventPriority.LOW)
   public void chat(@NonNull net.md_5.bungee.api.event.ChatEvent playerChatEvent) {
     final ProxiedPlayer sender = (ProxiedPlayer) playerChatEvent.getSender();
     final ChatEvent chatEvent = Events.call(
@@ -53,7 +54,7 @@ public class BungeeCordListenerImpl implements Listener {
     playerChatEvent.setMessage(chatEvent.message());
   }
 
-  @EventHandler
+  @EventHandler(priority = EventPriority.LOW)
   public void quit(@NonNull PlayerDisconnectEvent playerDisconnectEvent) {
     Events.call(QuitEvent.create(playerDisconnectEvent.getPlayer().getUniqueId()));
   }
