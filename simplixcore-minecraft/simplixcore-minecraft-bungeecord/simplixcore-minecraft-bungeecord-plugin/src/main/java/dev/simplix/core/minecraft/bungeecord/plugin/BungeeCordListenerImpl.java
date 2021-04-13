@@ -13,11 +13,12 @@ import net.md_5.bungee.event.EventHandler;
 
 public class BungeeCordListenerImpl implements Listener {
 
+  private BungeeCordListenerImpl() {
+  }
+
   public static BungeeCordListenerImpl create() {
     return new BungeeCordListenerImpl();
   }
-
-  private BungeeCordListenerImpl() {}
 
   @EventHandler
   public void login(@NonNull PostLoginEvent playerPostLoginEvent) {
@@ -46,15 +47,14 @@ public class BungeeCordListenerImpl implements Listener {
             sender.getAddress().getAddress(),
             playerChatEvent.getMessage())
     );
-    playerChatEvent.setCancelled(chatEvent.canceled());
+    if (chatEvent.canceled()) {
+      playerChatEvent.setCancelled(true);
+    }
     playerChatEvent.setMessage(chatEvent.message());
   }
 
   @EventHandler
   public void quit(@NonNull PlayerDisconnectEvent playerDisconnectEvent) {
-    final QuitEvent quitEvent =
-        Events.call(
-            QuitEvent.create(playerDisconnectEvent.getPlayer().getUniqueId())
-        );
+    Events.call(QuitEvent.create(playerDisconnectEvent.getPlayer().getUniqueId()));
   }
 }

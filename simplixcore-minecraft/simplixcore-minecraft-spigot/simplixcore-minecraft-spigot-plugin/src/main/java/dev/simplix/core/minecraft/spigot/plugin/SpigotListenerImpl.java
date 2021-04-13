@@ -41,11 +41,9 @@ public final class SpigotListenerImpl implements Listener {
             asyncPlayerChatEvent.getPlayer().getAddress().getAddress(),
             asyncPlayerChatEvent.getMessage()));
 
-    if (!chatEvent.cancelReason().isEmpty()) {
-      asyncPlayerChatEvent.getPlayer().sendMessage(chatEvent.cancelReason().replace("&", "§"));
+    if (chatEvent.canceled()) {
+      asyncPlayerChatEvent.setCancelled(true);
     }
-
-    asyncPlayerChatEvent.setCancelled(chatEvent.canceled());
     asyncPlayerChatEvent.setMessage(chatEvent.message());
   }
 
@@ -65,7 +63,9 @@ public final class SpigotListenerImpl implements Listener {
           .sendMessage(chatEvent.cancelReason().replace("&", "§"));
     }
 
-    playerCommandPreprocessEvent.setCancelled(chatEvent.canceled());
+    if (chatEvent.canceled()) {
+      playerCommandPreprocessEvent.setCancelled(true);
+    }
     playerCommandPreprocessEvent.setMessage(chatEvent.message());
   }
 
