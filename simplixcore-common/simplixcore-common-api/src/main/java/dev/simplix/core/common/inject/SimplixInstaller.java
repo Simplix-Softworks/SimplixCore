@@ -591,8 +591,17 @@ public class SimplixInstaller {
       @NonNull InstallationContext context) {
     for (Class<?> componentClass : context.reflections.getTypesAnnotatedWith(Component.class)) {
       try {
-        Component component = componentClass.getAnnotation(Component.class);
-        AbstractSimplixModule simplixModule = findAbstractSimplixModule(modules, component.value());
+
+        AbstractSimplixModule simplixModule;
+        Component component;
+        try {
+          component = componentClass.getAnnotation(Component.class);
+          simplixModule = findAbstractSimplixModule(modules, component.value());
+        } catch (Throwable throwable) {
+          component = null;
+          simplixModule = null;
+        }
+
         if (simplixModule == null) {
           if (!suppressWarning(componentClass, "moduleNotAvailable")
               || !suppressWarning(context.owner, "moduleNotAvailable")) {
