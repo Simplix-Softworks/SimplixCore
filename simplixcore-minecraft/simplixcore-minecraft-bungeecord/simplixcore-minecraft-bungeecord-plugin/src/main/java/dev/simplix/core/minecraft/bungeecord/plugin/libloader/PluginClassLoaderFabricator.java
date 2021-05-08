@@ -4,8 +4,6 @@ import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.net.URL;
-import java.util.Collections;
 import java.util.Set;
 import java.util.function.Function;
 import lombok.NonNull;
@@ -25,36 +23,36 @@ public class PluginClassLoaderFabricator implements Function<File, ClassLoader> 
 
   @Override
   public ClassLoader apply(@NonNull File file) {
+
     try {
       Class<?> classLoaderClass = Class.forName("net.md_5.bungee.api.plugin.PluginClassloader",
           false, ClassLoader.getSystemClassLoader());
       Constructor<?> constructor = classLoaderClass.getDeclaredConstructor(
           ProxyServer.class,
           PluginDescription.class,
-          URL[].class);
+          File.class,
+          ClassLoader.class
+      );
       constructor.setAccessible(true);
 
-      PluginDescription pluginDescription = new PluginDescription(
-          "Dummy",
-          "Dummy",
-          "1.0",
-          "SimplixSoftworks",
-          Collections.emptySet(),
-          Collections.emptySet(),
-          null,
-          ""
-      );
+
+
+
+      PluginDescription pluginDescription = new PluginDescription();
 
       Object loader = constructor.newInstance(
           ProxyServer.getInstance(),
           pluginDescription,
-          new URL[]{file.toURI().toURL()});
+          file,
+          ClassLoader.getSystemClassLoader()
+      );
 
       Field loadersField = classLoaderClass.getDeclaredField("allLoaders");
       loadersField.setAccessible(true);
       if (Modifier.isFinal(loadersField.getModifiers())) {
         unfinalize(loadersField);
       }
+
       Set<Object> loaders = (Set<Object>) loadersField.get(null);
       loaders.add(loader);
       loadersField.set(null, loaders);

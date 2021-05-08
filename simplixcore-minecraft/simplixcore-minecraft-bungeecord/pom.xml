@@ -27,8 +27,12 @@
       <url>https://oss.sonatype.org/content/repositories/snapshots</url>
     </repository>
     <repository>
-      <id>Exceptionflug</id>
+      <id>exceptionflug</id>
       <url>https://mvn.exceptionflug.de/repository/exceptionflug-public/</url>
+    </repository>
+    <repository>
+      <id>simplixsoft-public</id>
+      <url>https://repo.simplix.dev/repository/simplixsoft-public/</url>
     </repository>
   </repositories>
 
@@ -41,9 +45,9 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>net.md-5</groupId>
-      <artifactId>bungeecord-api</artifactId>
-      <version>1.16-R0.4-SNAPSHOT</version>
+      <groupId>dev.simplix</groupId>
+      <artifactId>bungee</artifactId>
+      <version>1.0.0</version>
       <scope>provided</scope>
     </dependency>
   </dependencies>
