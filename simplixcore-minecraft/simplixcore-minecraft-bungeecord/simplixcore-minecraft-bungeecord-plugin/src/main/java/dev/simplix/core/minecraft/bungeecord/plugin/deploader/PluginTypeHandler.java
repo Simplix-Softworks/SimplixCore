@@ -12,18 +12,20 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
 import java.util.concurrent.atomic.AtomicReference;
-import lombok.extern.slf4j.Slf4j;
+import lombok.NonNull;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.PluginDescription;
 import net.md_5.bungee.api.plugin.PluginManager;
+import org.slf4j.Logger;
 
-@Slf4j
 public class PluginTypeHandler implements DependencyTypeHandler {
 
+  private final Logger log;
   private Field toLoadField;
   private Method enable;
 
-  public PluginTypeHandler() {
+  public PluginTypeHandler(@NonNull Logger log) {
+    this.log = log;
     try {
       toLoadField = PluginManager.class.getDeclaredField("toLoad");
       toLoadField.setAccessible(true);

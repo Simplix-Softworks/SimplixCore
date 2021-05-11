@@ -20,7 +20,8 @@ public final class SimplixPlugin extends Plugin {
 
   @Override
   public void onLoad() {
-    SimplixInstaller.init(new JDK14LoggerAdapter(ProxyServer.getInstance().getLogger()));
+    final JDK14LoggerAdapter logger = new JDK14LoggerAdapter(ProxyServer.getInstance().getLogger());
+    SimplixInstaller.init(logger);
     new ApplicationPreInstallListener();
     try {
       SimplixInstaller.instance().updater().installCachedUpdates();
@@ -33,7 +34,7 @@ public final class SimplixPlugin extends Plugin {
     System.setProperty(
         "dev.simplix.core.libloader.ClassLoaderFabricator",
         "dev.simplix.core.minecraft.bungeecord.plugin.libloader.PluginClassLoaderFabricator");
-    ArtifactDependencyLoader.registerTypeHandler("plugin", new PluginTypeHandler());
+    ArtifactDependencyLoader.registerTypeHandler("plugin", new PluginTypeHandler(logger));
     SimplixInstaller.instance().libraryLoader().loadLibraries(new File("libraries"));
   }
 
