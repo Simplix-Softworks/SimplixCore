@@ -64,10 +64,6 @@ public class SimplixInstaller {
     this.log = logger;
   }
 
-  public static SimplixInstaller newInstance(org.slf4j.Logger logger) {
-    return new SimplixInstaller(logger);
-  }
-
   public static void init(org.slf4j.Logger logger) {
     if (INSTANCE == null) {
       INSTANCE = new SimplixInstaller(logger);
