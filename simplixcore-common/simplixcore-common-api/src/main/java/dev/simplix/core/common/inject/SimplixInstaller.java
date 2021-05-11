@@ -32,7 +32,6 @@ import lombok.AllArgsConstructor;
 import lombok.Cleanup;
 import lombok.NonNull;
 import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.Nullable;
 import org.reflections.Reflections;
 
@@ -41,11 +40,10 @@ import org.reflections.Reflections;
  * A {@link SimplixApplication} needs to be registered using {@link SimplixInstaller#register(Class,
  * Module...)} in order to use dependency injection in your software project.
  */
-@Slf4j
 public class SimplixInstaller {
 
   private static final String SIMPLIX_BOOTSTRAP = "[Simplix | Bootstrap] ";
-  private static final SimplixInstaller INSTANCE = new SimplixInstaller();
+  private static SimplixInstaller INSTANCE = null;
   private final Map<Class<?>, Injector> injectorMap = new HashMap<>();
   private final Map<Class<?>, DependencyManifest> dependenciesMap = new HashMap<>();
 
@@ -60,8 +58,26 @@ public class SimplixInstaller {
   private DependencyLoader dependencyLoader;
   private LibraryLoader libraryLoader;
   private Updater updater;
+  private final org.slf4j.Logger log;
+
+  public SimplixInstaller(org.slf4j.Logger logger) {
+    this.log = logger;
+  }
+
+  public static SimplixInstaller newInstance(org.slf4j.Logger logger) {
+    return new SimplixInstaller(logger);
+  }
+
+  public static void init(org.slf4j.Logger logger) {
+    if (INSTANCE == null) {
+      INSTANCE = new SimplixInstaller(logger);
+    }
+  }
 
   public static SimplixInstaller instance() {
+    if (INSTANCE == null) {
+      throw new IllegalStateException("Instance not yet set");
+    }
     return INSTANCE;
   }
 
@@ -591,7 +607,6 @@ public class SimplixInstaller {
       @NonNull InstallationContext context) {
     for (Class<?> componentClass : context.reflections.getTypesAnnotatedWith(Component.class)) {
       try {
-
         AbstractSimplixModule simplixModule;
         Component component;
         try {

@@ -17,7 +17,7 @@
  * OTHERWISE,  ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
  * IN THE SOFTWARE.
  */
-package org.slf4j.impl;
+package dev.simplix.slf4j.impl;
 
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
@@ -46,7 +46,7 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements Loca
 
   // WARN: JDK14LoggerAdapter constructor should have only package access so
   // that only JDK14LoggerFactory be able to create one.
-  JDK14LoggerAdapter(java.util.logging.Logger logger) {
+  public JDK14LoggerAdapter(java.util.logging.Logger logger) {
     this.logger = logger;
     this.name = logger.getName();
   }

@@ -5,7 +5,7 @@ import lombok.NonNull;
 import net.md_5.bungee.api.ProxyServer;
 import org.slf4j.ILoggerFactory;
 import org.slf4j.Logger;
-import org.slf4j.impl.JDK14LoggerAdapter;
+import dev.simplix.slf4j.impl.JDK14LoggerAdapter;
 
 public final class BungeeLoggerFactory implements ILoggerFactory {
 

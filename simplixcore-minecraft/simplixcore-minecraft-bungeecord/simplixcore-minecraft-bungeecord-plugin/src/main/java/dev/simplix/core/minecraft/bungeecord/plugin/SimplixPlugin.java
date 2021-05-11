@@ -7,6 +7,7 @@ import dev.simplix.core.common.inject.SimplixInstaller;
 import dev.simplix.core.common.platform.Platform;
 import dev.simplix.core.minecraft.bungeecord.plugin.deploader.PluginTypeHandler;
 import dev.simplix.core.minecraft.bungeecord.plugin.listeners.ApplicationPreInstallListener;
+import dev.simplix.slf4j.impl.JDK14LoggerAdapter;
 import java.io.File;
 import java.util.logging.Level;
 import net.md_5.bungee.api.ProxyServer;
@@ -19,6 +20,7 @@ public final class SimplixPlugin extends Plugin {
 
   @Override
   public void onLoad() {
+    SimplixInstaller.init(new JDK14LoggerAdapter(ProxyServer.getInstance().getLogger()));
     new ApplicationPreInstallListener();
     try {
       SimplixInstaller.instance().updater().installCachedUpdates();

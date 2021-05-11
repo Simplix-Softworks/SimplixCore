@@ -38,7 +38,7 @@
  * OTHERWISE,  ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
  * IN THE SOFTWARE.
  */
-package org.slf4j.impl;
+package dev.simplix.slf4j.impl;
 
 import dev.simplix.core.minecraft.bungeecord.slf4j.BungeeLoggerFactory;
 import net.md_5.bungee.api.ProxyServer;

@@ -18,6 +18,7 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.JavaPluginLoader;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.LoggerFactory;
 
 @SimplixApplication(name = "SimplixCore", authors = "Simplix Softworks",
     workingDirectory = "plugins/SimplixCore")
@@ -38,6 +39,7 @@ public final class SimplixPlugin extends JavaPlugin {
 
   @Override
   public void onLoad() {
+    SimplixInstaller.init(LoggerFactory.getLogger(SimplixInstaller.class));
     new ApplicationPreInstallListener();
     try {
       SimplixInstaller.instance().updater().installCachedUpdates();

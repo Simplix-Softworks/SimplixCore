@@ -39,7 +39,7 @@ public class PluginTypeHandler implements DependencyTypeHandler {
       log.warn("[Simplix | DependencyLoader] "
                + dependency.applicationName()
                + ": Version conflict of plugin "
-               + dependency.toString());
+               + dependency);
       log.warn("[Simplix | DependencyLoader] "
                + dependency.applicationName()
                + ": This file seems to contain another version of this dependency: "

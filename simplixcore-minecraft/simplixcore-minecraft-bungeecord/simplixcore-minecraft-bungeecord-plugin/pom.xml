@@ -22,11 +22,6 @@
   <dependencies>
     <!-- Simple logging facade for java -->
     <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
-      <version>1.7.30</version>
-    </dependency>
-    <dependency>
       <groupId>dev.simplix.core</groupId>
       <artifactId>simplixcore-minecraft-bungeecord-slf4j</artifactId>
       <version>1.0.0-SNAPSHOT</version>
