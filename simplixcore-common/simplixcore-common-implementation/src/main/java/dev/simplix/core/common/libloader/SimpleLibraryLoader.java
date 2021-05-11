@@ -17,16 +17,16 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Function;
 import lombok.NonNull;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
 
-@Slf4j
 public class SimpleLibraryLoader implements LibraryLoader {
 
+  private final Logger log;
   private final Gson gson = new GsonBuilder().create();
   private final Set<File> files = new HashSet<>();
   private Method addMethod;
-
-  {
+  public SimpleLibraryLoader(@NonNull Logger log) {
+    this.log = log;
     try {
       addMethod = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
       addMethod.setAccessible(true);

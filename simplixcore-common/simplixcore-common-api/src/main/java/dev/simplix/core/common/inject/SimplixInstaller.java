@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Constructor;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -28,10 +29,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
-import lombok.AllArgsConstructor;
-import lombok.Cleanup;
-import lombok.NonNull;
-import lombok.SneakyThrows;
+import lombok.*;
 import org.jetbrains.annotations.Nullable;
 import org.reflections.Reflections;
 
@@ -239,7 +237,8 @@ public class SimplixInstaller {
           "dev.simplix.core.common.libloader.SimpleLibraryLoader");
 
       Class<?> clazz = Class.forName(libLoaderClass);
-      this.libraryLoader = (LibraryLoader) clazz.newInstance();
+      final Constructor<?> constructor = clazz.getConstructor(org.slf4j.Logger.class);
+      this.libraryLoader = (LibraryLoader) constructor.newInstance(log);
     } catch (Exception exception) {
       throw new RuntimeException("Unable to initialize library loader", exception);
     }
