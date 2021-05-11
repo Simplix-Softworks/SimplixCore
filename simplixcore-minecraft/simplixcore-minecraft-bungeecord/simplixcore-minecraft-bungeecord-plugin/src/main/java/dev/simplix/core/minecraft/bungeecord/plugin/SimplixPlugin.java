@@ -12,6 +12,7 @@ import java.io.File;
 import java.util.logging.Level;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
+import org.reflections.Reflections;
 
 @SimplixApplication(name = "SimplixCore", authors = "Simplix Softworks",
     workingDirectory = "plugins/SimplixCore")
@@ -22,6 +23,7 @@ public final class SimplixPlugin extends Plugin {
   public void onLoad() {
     final JDK14LoggerAdapter logger = new JDK14LoggerAdapter(ProxyServer.getInstance().getLogger());
     SimplixInstaller.init(logger);
+    Reflections.log = logger;
     new ApplicationPreInstallListener();
     try {
       SimplixInstaller.instance().updater().installCachedUpdates();
