@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.slf4j.LoggerFactory;
 
 @SimplixApplication(name = "TestApplication", version = "1.0.0-SNAPSHOT", authors = "SimplixSoftworks")
 class SimplixInstallerTest {
@@ -17,6 +18,8 @@ class SimplixInstallerTest {
   @Test
   @BeforeAll
   static void instance() {
+    SimplixInstaller.init(LoggerFactory.getLogger(SimplixInstaller.class));
+
     Assertions.assertNotNull(
         SimplixInstaller.instance(),
         "SimplixInstaller instance mustn't be null");

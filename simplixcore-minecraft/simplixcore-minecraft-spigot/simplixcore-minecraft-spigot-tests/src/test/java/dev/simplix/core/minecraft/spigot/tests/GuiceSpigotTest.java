@@ -20,6 +20,7 @@ import lombok.NoArgsConstructor;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.slf4j.LoggerFactory;
 
 public class GuiceSpigotTest {
 
@@ -28,7 +29,7 @@ public class GuiceSpigotTest {
   @BeforeAll
   static void setUp() {
     // We need a new instance of the SimplixInstaller since it might already be installed by the plugin test
-    SIMPLIX_INSTALLER = new SimplixInstaller();
+    SIMPLIX_INSTALLER = new SimplixInstaller(LoggerFactory.getLogger(SimplixInstaller.class));
     if (!MockBukkit.isMocked()) {
       MockBukkit.mock();
     }

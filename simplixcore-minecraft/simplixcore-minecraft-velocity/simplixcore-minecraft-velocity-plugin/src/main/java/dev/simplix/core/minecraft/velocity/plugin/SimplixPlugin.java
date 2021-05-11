@@ -30,6 +30,7 @@ public class SimplixPlugin {
       @NonNull ProxyServer proxyServer) {
     this.proxyServer = proxyServer;
     this.logger = logger;
+    SimplixInstaller.init(logger);
     new ApplicationPreInstallListener(proxyServer);
     try {
       SimplixInstaller.instance().updater().installCachedUpdates();
