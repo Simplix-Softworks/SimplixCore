@@ -614,7 +614,7 @@ public class SimplixInstaller {
 
         if (simplixModule == null) {
           if (!suppressWarning(componentClass, "moduleNotAvailable")
-              || !suppressWarning(context.owner, "moduleNotAvailable")) {
+              && !suppressWarning(context.owner, "moduleNotAvailable")) {
             log.warn(SIMPLIX_BOOTSTRAP
                      + context.applicationInfo.name()
                      + ": Component "
