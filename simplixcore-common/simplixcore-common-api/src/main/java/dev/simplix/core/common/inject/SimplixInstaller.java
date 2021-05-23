@@ -418,7 +418,11 @@ public class SimplixInstaller {
     }
   }
 
-  public Optional<DependencyLoadingException> earlyLoadDependencies(Class<?> appClass) {
+  public Optional<DependencyLoadingException> earlyLoadDependencies(
+      @NonNull Platform platform,
+      @NonNull Class<?> appClass
+  ) {
+    this.platform = platform;
     ApplicationInfo tempInfo = new ApplicationInfo(appClass.getSimpleName(),
         "1.0", new String[0], new File("."), new String[0]);
     return processRemoteDependencies(appClass, tempInfo);
@@ -600,6 +604,8 @@ public class SimplixInstaller {
   private void detectComponents(
       @NonNull Set<Module> modules,
       @NonNull InstallationContext context) {
+
+    Reflections.log = null;
     for (Class<?> componentClass : context.reflections.getTypesAnnotatedWith(Component.class)) {
       try {
         AbstractSimplixModule simplixModule;
