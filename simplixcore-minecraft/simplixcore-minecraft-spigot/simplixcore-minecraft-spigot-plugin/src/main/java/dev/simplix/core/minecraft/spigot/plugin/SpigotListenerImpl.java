@@ -67,7 +67,10 @@ public final class SpigotListenerImpl implements Listener {
     if (chatEvent.canceled()) {
       playerCommandPreprocessEvent.setCancelled(true);
     }
-    playerCommandPreprocessEvent.setMessage(chatEvent.message());
+    
+    if (!chatEvent.message().isEmpty()) {
+      playerCommandPreprocessEvent.setMessage(chatEvent.message());
+    }
   }
 
   @EventHandler(priority = EventPriority.LOW)
