@@ -645,7 +645,7 @@ public class SimplixInstaller {
           }
         }
         simplixModule.components().put(componentClass, component);
-        log.info(SIMPLIX_BOOTSTRAP
+        log.debug(SIMPLIX_BOOTSTRAP
                  + context.applicationInfo.name()
                  + ": Detected "
                  + componentClass.getName());
