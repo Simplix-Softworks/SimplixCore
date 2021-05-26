@@ -36,38 +36,63 @@ public final class PluginClassLoaderFabricator implements Function<File, ClassLo
     try {
       injectFakeClass(file);
 
-      Class<?> classLoaderClass = Class.forName("org.bukkit.plugin.java.PluginClassLoader");
-      Constructor<?> constructor = classLoaderClass.getDeclaredConstructor(
-          JavaPluginLoader.class,
-          ClassLoader.class,
-          PluginDescriptionFile.class,
-          File.class,
-          File.class);
-      constructor.setAccessible(true);
-
       SimplixPlugin plugin = JavaPlugin.getPlugin(SimplixPlugin.class);
       PluginDescriptionFile pluginDescriptionFile = new PluginDescriptionFile(
           SimplixPlugin.class.getResourceAsStream("/fakeplugin.yml"));
-      Object loader = constructor.newInstance(
-          plugin.getPluginLoader(),
-          plugin.getClass().getClassLoader(),
-          pluginDescriptionFile,
-          plugin.getDataFolder(),
-          file);
+
+      Object loader;
+
+      try {
+        Class<?> classLoaderClass = Class.forName("org.bukkit.plugin.java.PluginClassLoader");
+        Constructor<?> constructor = classLoaderClass.getDeclaredConstructor(
+            JavaPluginLoader.class,
+            ClassLoader.class,
+            PluginDescriptionFile.class,
+            File.class,
+            File.class
+        );
+        constructor.setAccessible(true);
+        loader = constructor.newInstance(
+            plugin.getPluginLoader(),
+            plugin.getClass().getClassLoader(),
+            pluginDescriptionFile,
+            plugin.getDataFolder(),
+            file
+        );
+      } catch (Throwable throwable) { // Spigot 1.16
+        Class<?> classLoaderClass = Class.forName("org.bukkit.plugin.java.PluginClassLoader");
+        Constructor<?> constructor = classLoaderClass.getDeclaredConstructor(
+            JavaPluginLoader.class,
+            ClassLoader.class,
+            PluginDescriptionFile.class,
+            File.class,
+            File.class,
+            ClassLoader.class
+        );
+        constructor.setAccessible(true);
+        loader = constructor.newInstance(
+            plugin.getPluginLoader(),
+            plugin.getClass().getClassLoader().getParent(),
+            pluginDescriptionFile,
+            plugin.getDataFolder(),
+            file,
+            null
+        );
+      }
 
       Field loadersField = JavaPluginLoader.class.getDeclaredField("loaders");
       loadersField.setAccessible(true);
-      if (Modifier.isFinal(loadersField.getModifiers())) {
-        unfinalize(loadersField);
-      }
       if (Map.class.isAssignableFrom(loadersField.getType())) { // Spigot 1.8 - Spigot 1.10.2
+        if (Modifier.isFinal(loadersField.getModifiers())) {
+          unfinalize(loadersField);
+        }
         Map<String, Object> loaders = (Map<String, Object>) loadersField.get(plugin.getPluginLoader());
         loaders.put("SimplixBridge", loader);
         loadersField.set(plugin.getPluginLoader(), loaders);
       } else {
         List<Object> loaders = (List<Object>) loadersField.get(plugin.getPluginLoader());
         loaders.add(loader);
-        loadersField.set(plugin.getPluginLoader(), loaders);
+//        loadersField.set(plugin.getPluginLoader(), loaders);
       }
       return (ClassLoader) loader;
     } catch (Exception exception) {
