@@ -80,6 +80,7 @@ public class SimpleLibraryLoader implements LibraryLoader {
       addUrlToClassLoader((URLClassLoader) classLoader, file);
       log.info("[Simplix | LibLoader] Loaded encapsulated library " + file.getName() +
                " for application " + owner.getSimpleName());
+      checkAndLoadSimplixApplication(file, classLoader);
     } catch (Exception ex) {
       log.info("[Simplix | LibLoader] Unable to load encapsulated library " + file.getName() +
                " for application " + owner.getSimpleName(), ex);
