@@ -105,7 +105,7 @@ public class SimpleLibraryLoader implements LibraryLoader {
         Class<?> mainClass = classLoader.loadClass(libraryDescription.mainClass());
         if (mainClass.isAnnotationPresent(SimplixApplication.class)) {
           SimplixInstaller.instance().register(mainClass);
-          log.info("[Simplix | LibLoader] "
+          log.debug("[Simplix | LibLoader] "
                    + libraryDescription.name()
                    + " was registered as a SimplixApplication");
           log.debug("[Simplix | LibLoader] Application class = "
