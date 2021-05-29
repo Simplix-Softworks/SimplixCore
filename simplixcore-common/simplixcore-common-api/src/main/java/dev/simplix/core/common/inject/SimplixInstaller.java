@@ -108,7 +108,7 @@ public class SimplixInstaller {
     }
     SimplixApplication application = owner.getAnnotation(SimplixApplication.class);
     if (this.toInstall.containsKey(application.name())) {
-      log.warn(SIMPLIX_BOOTSTRAP + application.name() + " is already registered. Please check " +
+      log.debug(SIMPLIX_BOOTSTRAP + application.name() + " is already registered. Please check " +
                "for unnecessary double registration of your application.");
       return Optional.empty();
     }
@@ -461,7 +461,7 @@ public class SimplixInstaller {
       if (dependency.platform() != null && dependency.platform() != this.platform) {
         continue;
       }
-      log.info(SIMPLIX_BOOTSTRAP
+      log.debug(SIMPLIX_BOOTSTRAP
                + info.name()
                + ": Load dependency "
                + dependency
