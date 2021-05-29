@@ -29,7 +29,10 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Cleanup;
+import lombok.NonNull;
+import lombok.SneakyThrows;
 import org.jetbrains.annotations.Nullable;
 import org.reflections.Reflections;
 
@@ -51,12 +54,12 @@ public class SimplixInstaller {
       .registerTypeAdapter(UpdatePolicy.class, new UpdatePolicyDeserializer())
       .create();
   private final Timer updateTimer = new Timer("UpdateTimer");
+  private final org.slf4j.Logger log;
   private Platform platform;
   private Injector bossInjector;
   private DependencyLoader dependencyLoader;
   private LibraryLoader libraryLoader;
   private Updater updater;
-  private final org.slf4j.Logger log;
 
   public SimplixInstaller(org.slf4j.Logger logger) {
     this.log = logger;
@@ -103,13 +106,31 @@ public class SimplixInstaller {
       @NonNull Class<?> owner,
       @NonNull Consumer<Exception> onException,
       @NonNull Module... modules) {
+    return register(owner, onException, false, modules);
+  }
+
+  /**
+   * This will register a class annotated with {@link SimplixApplication}.
+   *
+   * @param owner       The main class of the application
+   * @param onException Will accept the exception if some exception occurs while installing
+   * @param isLibrary   Defines whether the application is a library or not
+   * @param modules     Pre-constructed modules which shall be available in the injection context
+   * @throws IllegalArgumentException when the owner class is not annotated with {@link
+   *                                  SimplixApplication}
+   */
+  public Optional<DependencyLoadingException> register(
+      @NonNull Class<?> owner,
+      @NonNull Consumer<Exception> onException,
+      boolean isLibrary,
+      @NonNull Module... modules) {
     if (!owner.isAnnotationPresent(SimplixApplication.class)) {
       throw new IllegalArgumentException("Owner class must be annotated with @SimplixApplication");
     }
     SimplixApplication application = owner.getAnnotation(SimplixApplication.class);
     if (this.toInstall.containsKey(application.name())) {
       log.debug(SIMPLIX_BOOTSTRAP + application.name() + " is already registered. Please check " +
-               "for unnecessary double registration of your application.");
+                "for unnecessary double registration of your application.");
       return Optional.empty();
     }
     Set<String> basePackages = determineBasePackages(owner);
@@ -126,6 +147,7 @@ public class SimplixInstaller {
         new InstallationContext(owner, new Reflections(basePackages, owner.getClassLoader()),
             info, detectReferencedModules(owner, modules, application.name()), onException));
     final Optional<DependencyLoadingException> optionalDependencyLoadingException = processRemoteDependencies(
+        isLibrary,
         owner,
         info);
     if (this.bossInjector != null) {
@@ -384,10 +406,14 @@ public class SimplixInstaller {
    * @throws JsonParseException If the dependencies.json file is formatted invalidly
    */
   @SneakyThrows
-  private Optional<DependencyManifest> loadDependencies(@NonNull Class<?> appOwner)
+  private Optional<DependencyManifest> loadDependencies(
+      boolean isLibrary,
+      @NonNull Class<?> appOwner)
       throws JsonParseException {
     @Cleanup
-    InputStream inputStream = appOwner.getResourceAsStream("/dependencies.json");
+    InputStream inputStream = isLibrary
+        ? appOwner.getResourceAsStream("/library-dependencies.json")
+        : appOwner.getResourceAsStream("/dependencies.json");
 
     if (inputStream == null) {
       return Optional.empty();
@@ -425,10 +451,11 @@ public class SimplixInstaller {
     this.platform = platform;
     ApplicationInfo tempInfo = new ApplicationInfo(appClass.getSimpleName(),
         "1.0", new String[0], new File("."), new String[0]);
-    return processRemoteDependencies(appClass, tempInfo);
+    return processRemoteDependencies(false, appClass, tempInfo);
   }
 
   private Optional<DependencyLoadingException> processRemoteDependencies(
+      boolean isLibrary,
       @NonNull Class<?> appOwner,
       @NonNull ApplicationInfo info) {
     if (this.dependencyLoader == null) {
@@ -441,7 +468,7 @@ public class SimplixInstaller {
     Optional<DependencyManifest> optionalDependencies;
 
     try {
-      optionalDependencies = loadDependencies(appOwner);
+      optionalDependencies = loadDependencies(isLibrary, appOwner);
     } catch (JsonParseException jsonParseException) {
       log.error(
           SIMPLIX_BOOTSTRAP + info.name() + ": Cannot parse dependencies.json",
@@ -462,10 +489,10 @@ public class SimplixInstaller {
         continue;
       }
       log.debug(SIMPLIX_BOOTSTRAP
-               + info.name()
-               + ": Load dependency "
-               + dependency
-               + " from repository...");
+                + info.name()
+                + ": Load dependency "
+                + dependency
+                + " from repository...");
       dependency.applicationName(info.name());
       dependency.applicationClass(appOwner);
       final Optional<DependencyLoadingException> load = this.dependencyLoader.load(
@@ -646,9 +673,9 @@ public class SimplixInstaller {
         }
         simplixModule.components().put(componentClass, component);
         log.debug(SIMPLIX_BOOTSTRAP
-                 + context.applicationInfo.name()
-                 + ": Detected "
-                 + componentClass.getName());
+                  + context.applicationInfo.name()
+                  + ": Detected "
+                  + componentClass.getName());
       } catch (Throwable throwable) {
         if (suppressWarning(componentClass, "exception:*")
             || suppressWarning(
@@ -730,6 +757,7 @@ public class SimplixInstaller {
     private ApplicationInfo applicationInfo;
     private final Module[] modules;
     private final Consumer<Exception> onException;
+
 
   }
 
