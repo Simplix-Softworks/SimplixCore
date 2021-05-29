@@ -17,6 +17,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Function;
 import lombok.NonNull;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
 public class SimpleLibraryLoader implements LibraryLoader {
@@ -25,6 +26,7 @@ public class SimpleLibraryLoader implements LibraryLoader {
   private final Gson gson = new GsonBuilder().create();
   private final Set<File> files = new HashSet<>();
   private Method addMethod;
+
   public SimpleLibraryLoader(@NonNull Logger log) {
     this.log = log;
     try {
@@ -64,7 +66,7 @@ public class SimpleLibraryLoader implements LibraryLoader {
   }
 
   @Override
-  public void loadLibraryEncapsulated(@NonNull File file, Class<?> owner) {
+  public void loadLibraryEncapsulated(@NonNull File file, @NotNull Class<?> owner) {
     try {
       if (files.contains(file)) {
         return;
@@ -77,10 +79,13 @@ public class SimpleLibraryLoader implements LibraryLoader {
         loadLibrary(file);
         return;
       }
+
       addUrlToClassLoader((URLClassLoader) classLoader, file);
+      checkAndLoadSimplixApplication(file, classLoader);
+
       log.info("[Simplix | LibLoader] Loaded encapsulated library " + file.getName() +
                " for application " + owner.getSimpleName());
-      checkAndLoadSimplixApplication(file, classLoader);
+
     } catch (Exception ex) {
       log.info("[Simplix | LibLoader] Unable to load encapsulated library " + file.getName() +
                " for application " + owner.getSimpleName(), ex);
@@ -104,10 +109,15 @@ public class SimpleLibraryLoader implements LibraryLoader {
       try {
         Class<?> mainClass = classLoader.loadClass(libraryDescription.mainClass());
         if (mainClass.isAnnotationPresent(SimplixApplication.class)) {
-          SimplixInstaller.instance().register(mainClass);
+          SimplixInstaller.instance().register(mainClass, exception -> {
+            log.error("Could not install library: "
+                      + mainClass.getSimpleName()
+                      + " due to "
+                      + exception.getMessage());
+          }, true);
           log.debug("[Simplix | LibLoader] "
-                   + libraryDescription.name()
-                   + " was registered as a SimplixApplication");
+                    + libraryDescription.name()
+                    + " was registered as a SimplixApplication");
           log.debug("[Simplix | LibLoader] Application class = "
                     + mainClass.getName()
                     + " hashCode = "
