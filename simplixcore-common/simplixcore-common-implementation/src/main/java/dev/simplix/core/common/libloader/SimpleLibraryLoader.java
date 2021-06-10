@@ -13,6 +13,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Function;
@@ -29,12 +30,6 @@ public class SimpleLibraryLoader implements LibraryLoader {
 
   public SimpleLibraryLoader(@NonNull Logger log) {
     this.log = log;
-    try {
-      addMethod = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
-      addMethod.setAccessible(true);
-    } catch (Exception exception) {
-      log.error("Cannot initialize LibraryLoader", exception);
-    }
   }
 
   @Override
@@ -59,6 +54,7 @@ public class SimpleLibraryLoader implements LibraryLoader {
         return;
       }
       log.info("[Simplix | LibLoader] Loaded library " + file.getName());
+      addUrlToClassLoader((URLClassLoader) classLoader, file);
       checkAndLoadSimplixApplication(file, classLoader);
     } catch (Exception ex) {
       log.info("[Simplix | LibLoader] Unable to load library " + file.getName(), ex);
@@ -71,7 +67,7 @@ public class SimpleLibraryLoader implements LibraryLoader {
       if (files.contains(file)) {
         return;
       }
-      ClassLoader classLoader = owner.getClassLoader();
+      ClassLoader classLoader = createClassLoader(file);
       if (!(classLoader instanceof URLClassLoader)) {
         log.warn("[Simplix | LibLoader] "
                  + owner.getSimpleName()
@@ -89,6 +85,7 @@ public class SimpleLibraryLoader implements LibraryLoader {
     } catch (Exception ex) {
       log.info("[Simplix | LibLoader] Unable to load encapsulated library " + file.getName() +
                " for application " + owner.getSimpleName(), ex);
+
     }
   }
 
@@ -131,6 +128,16 @@ public class SimpleLibraryLoader implements LibraryLoader {
 
   private void addUrlToClassLoader(URLClassLoader classLoader, File file)
       throws ReflectiveOperationException, MalformedURLException {
+
+    if (classLoader instanceof SimplixClassLoader) {
+      ((SimplixClassLoader) classLoader).addURL(file.toURI().toURL());
+      return;
+    }
+
+    if (addMethod == null) {
+      addMethod = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
+      addMethod.setAccessible(true);
+    }
     addMethod.invoke(classLoader, file.toURI().toURL());
   }
 
