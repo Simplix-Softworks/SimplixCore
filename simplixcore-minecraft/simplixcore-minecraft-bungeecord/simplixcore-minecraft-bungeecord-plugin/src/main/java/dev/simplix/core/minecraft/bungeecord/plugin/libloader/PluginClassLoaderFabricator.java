@@ -62,7 +62,6 @@ public class PluginClassLoaderFabricator implements Function<File, ClassLoader> 
           .getDeclaredMethod("loadClass0", String.class, boolean.class, boolean.class, boolean.class);
 
       loadClass0.setAccessible(true);
-      System.out.println(loadClass0);
 
       ClassLoader parentLoader = new URLClassLoader(new URL[]{
       }) {
