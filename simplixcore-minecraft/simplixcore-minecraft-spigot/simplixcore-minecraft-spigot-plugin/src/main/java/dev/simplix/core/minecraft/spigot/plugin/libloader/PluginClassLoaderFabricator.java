@@ -1,28 +1,37 @@
 package dev.simplix.core.minecraft.spigot.plugin.libloader;
 
 import com.google.common.io.ByteStreams;
+import dev.simplix.core.common.libloader.SimplixClassLoader;
 import dev.simplix.core.minecraft.spigot.plugin.SimplixPlugin;
 import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.net.URI;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginDescriptionFile;
+import org.bukkit.plugin.PluginLoader;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.JavaPluginLoader;
 
 @Slf4j
 public final class PluginClassLoaderFabricator implements Function<File, ClassLoader> {
+
+  private static ClassLoader cachedResult;
 
   private void unfinalize(@NonNull Field loadersField)
       throws NoSuchFieldException, IllegalAccessException {
@@ -33,6 +42,14 @@ public final class PluginClassLoaderFabricator implements Function<File, ClassLo
 
   @Override
   public ClassLoader apply(@NonNull File file) {
+
+    // We don't to create a SimplixClassLoader twice if on 1.16 & Java16
+    if (cachedResult != null) {
+      return cachedResult;
+    }
+
+    // Our resulting class loader. Varies from 1.8 ->  1.16 (PluginClassLoader vs SimplixClassLoader)
+    ClassLoader out;
     try {
       injectFakeClass(file);
 
@@ -40,7 +57,7 @@ public final class PluginClassLoaderFabricator implements Function<File, ClassLo
       PluginDescriptionFile pluginDescriptionFile = new PluginDescriptionFile(
           SimplixPlugin.class.getResourceAsStream("/fakeplugin.yml"));
 
-      Object loader;
+      Object pluginClassloader;
 
       try {
         Class<?> classLoaderClass = Class.forName("org.bukkit.plugin.java.PluginClassLoader");
@@ -52,14 +69,16 @@ public final class PluginClassLoaderFabricator implements Function<File, ClassLo
             File.class
         );
         constructor.setAccessible(true);
-        loader = constructor.newInstance(
+        pluginClassloader = constructor.newInstance(
             plugin.getPluginLoader(),
             plugin.getClass().getClassLoader(),
             pluginDescriptionFile,
             plugin.getDataFolder(),
             file
         );
-      } catch (Throwable throwable) { // Spigot 1.16
+        out = (ClassLoader) pluginClassloader;
+      } catch (Throwable throwable) {
+        // Spigot 1.16 - Compatible with Java16
         Class<?> classLoaderClass = Class.forName("org.bukkit.plugin.java.PluginClassLoader");
         Constructor<?> constructor = classLoaderClass.getDeclaredConstructor(
             JavaPluginLoader.class,
@@ -70,14 +89,51 @@ public final class PluginClassLoaderFabricator implements Function<File, ClassLo
             ClassLoader.class
         );
         constructor.setAccessible(true);
-        loader = constructor.newInstance(
+
+        final ClassLoader simplixCoreClassLoader = Bukkit
+            .getPluginManager()
+            .getPlugin("SimplixCore")
+            .getClass()
+            .getClassLoader();
+
+        final Method loadClass = simplixCoreClassLoader
+            .getClass()
+            .getDeclaredMethod(
+                "loadClass0",
+                String.class,
+                boolean.class,
+                boolean.class,
+                boolean.class);
+
+        ClassLoader parentLoader = new URLClassLoader(new URL[]{
+        }) {
+          @Override
+          public Class<?> loadClass(String name) throws ClassNotFoundException {
+            try {
+              return loadClassFromPluginClassLoaderEncapsulated(
+                  loadClass,
+                  simplixCoreClassLoader,
+                  name);
+            } catch (Exception exception) {
+              throw new ClassNotFoundException(name);
+            }
+          }
+        };
+
+        final SimplixClassLoader simplixClassLoader = new SimplixClassLoader(
+            new URL[0],
+            parentLoader);
+
+        pluginClassloader = constructor.newInstance(
             plugin.getPluginLoader(),
             plugin.getClass().getClassLoader().getParent(),
             pluginDescriptionFile,
             plugin.getDataFolder(),
             file,
-            null
+            simplixClassLoader
         );
+        out = simplixClassLoader;
+        cachedResult = simplixClassLoader;
       }
 
       Field loadersField = JavaPluginLoader.class.getDeclaredField("loaders");
@@ -87,18 +143,37 @@ public final class PluginClassLoaderFabricator implements Function<File, ClassLo
           unfinalize(loadersField);
         }
         Map<String, Object> loaders = (Map<String, Object>) loadersField.get(plugin.getPluginLoader());
-        loaders.put("SimplixBridge", loader);
+        loaders.put("SimplixBridge", pluginClassloader);
         loadersField.set(plugin.getPluginLoader(), loaders);
       } else {
         List<Object> loaders = (List<Object>) loadersField.get(plugin.getPluginLoader());
-        loaders.add(loader);
-//        loadersField.set(plugin.getPluginLoader(), loaders);
+        loaders.add(pluginClassloader);
       }
-      return (ClassLoader) loader;
+
+      return out;
     } catch (Exception exception) {
       log.error("[Simplix | LibLoader] Cannot fabricate PluginClassLoader", exception);
     }
     return null;
+  }
+
+  private List<ClassLoader> getAllClassLoaders(PluginLoader javaPluginLoader) throws Exception {
+    Field loadersField = JavaPluginLoader.class.getDeclaredField("loaders");
+    loadersField.setAccessible(true);
+    if (Map.class.isAssignableFrom(loadersField.getType())) { // Spigot 1.8 - Spigot 1.10.2
+      Map<String, ClassLoader> loaders = (Map<String, ClassLoader>) loadersField.get(
+          javaPluginLoader);
+      return new ArrayList<>(loaders.values());
+    } else {
+      return (List<ClassLoader>) loadersField.get(javaPluginLoader);
+    }
+  }
+
+  private Class<?> loadClassFromPluginClassLoaderEncapsulated(
+      Method toInvoke,
+      ClassLoader loader,
+      String name) throws Exception {
+    return (Class<?>) toInvoke.invoke(loader, name, false, false, false);
   }
 
   private void injectFakeClass(@NonNull File file) {
