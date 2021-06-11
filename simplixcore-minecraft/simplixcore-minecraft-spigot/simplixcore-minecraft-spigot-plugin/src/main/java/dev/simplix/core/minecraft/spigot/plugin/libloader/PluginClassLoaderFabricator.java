@@ -15,7 +15,6 @@ import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +23,6 @@ import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginDescriptionFile;
-import org.bukkit.plugin.PluginLoader;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.JavaPluginLoader;
 
@@ -96,7 +94,7 @@ public final class PluginClassLoaderFabricator implements Function<File, ClassLo
             .getClass()
             .getClassLoader();
 
-        final Method loadClass = simplixCoreClassLoader
+        final Method loadClass0 = simplixCoreClassLoader
             .getClass()
             .getDeclaredMethod(
                 "loadClass0",
@@ -110,10 +108,12 @@ public final class PluginClassLoaderFabricator implements Function<File, ClassLo
           @Override
           public Class<?> loadClass(String name) throws ClassNotFoundException {
             try {
-              return loadClassFromPluginClassLoaderEncapsulated(
-                  loadClass,
-                  simplixCoreClassLoader,
-                  name);
+              return (Class<?>) loadClass0.invoke(
+                  plugin.getPluginLoader(),
+                  name,
+                  false,
+                  true,
+                  false);
             } catch (Exception exception) {
               throw new ClassNotFoundException(name);
             }
@@ -155,25 +155,6 @@ public final class PluginClassLoaderFabricator implements Function<File, ClassLo
       log.error("[Simplix | LibLoader] Cannot fabricate PluginClassLoader", exception);
     }
     return null;
-  }
-
-  private List<ClassLoader> getAllClassLoaders(PluginLoader javaPluginLoader) throws Exception {
-    Field loadersField = JavaPluginLoader.class.getDeclaredField("loaders");
-    loadersField.setAccessible(true);
-    if (Map.class.isAssignableFrom(loadersField.getType())) { // Spigot 1.8 - Spigot 1.10.2
-      Map<String, ClassLoader> loaders = (Map<String, ClassLoader>) loadersField.get(
-          javaPluginLoader);
-      return new ArrayList<>(loaders.values());
-    } else {
-      return (List<ClassLoader>) loadersField.get(javaPluginLoader);
-    }
-  }
-
-  private Class<?> loadClassFromPluginClassLoaderEncapsulated(
-      Method toInvoke,
-      ClassLoader loader,
-      String name) throws Exception {
-    return (Class<?>) toInvoke.invoke(loader, name, false, false, false);
   }
 
   private void injectFakeClass(@NonNull File file) {
