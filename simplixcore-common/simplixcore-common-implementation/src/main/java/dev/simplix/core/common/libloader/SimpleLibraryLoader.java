@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dev.simplix.core.common.aop.SimplixApplication;
 import dev.simplix.core.common.inject.SimplixInstaller;
+import dev.simplix.core.common.updater.Version;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,7 +14,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Function;
@@ -23,6 +23,7 @@ import org.slf4j.Logger;
 
 public class SimpleLibraryLoader implements LibraryLoader {
 
+  private final Version javaVersion;
   private final Logger log;
   private final Gson gson = new GsonBuilder().create();
   private final Set<File> files = new HashSet<>();
@@ -30,6 +31,8 @@ public class SimpleLibraryLoader implements LibraryLoader {
 
   public SimpleLibraryLoader(@NonNull Logger log) {
     this.log = log;
+    javaVersion = Version.parse(System.getProperty("java.version"));
+
   }
 
   @Override
@@ -67,7 +70,14 @@ public class SimpleLibraryLoader implements LibraryLoader {
       if (files.contains(file)) {
         return;
       }
-      ClassLoader classLoader = createClassLoader(file);
+      ClassLoader classLoader;
+
+      if (javaVersion.olderThen(Version.parse("16.0.0"))) {
+        classLoader = owner.getClassLoader();
+      } else {
+        classLoader = createClassLoader(file);
+      }
+
       if (!(classLoader instanceof URLClassLoader)) {
         log.warn("[Simplix | LibLoader] "
                  + owner.getSimpleName()
