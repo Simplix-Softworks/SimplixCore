@@ -32,9 +32,19 @@ public final class ReflectionUtil {
 
   public static Class<?> getClass(String classname) throws ClassNotFoundException {
     String path = classname
-        .replace("{nms}", "net.minecraft.server." + serverVersion())
-        .replace("{obc}", "org.bukkit.craftbukkit." + serverVersion())
-        .replace("{nm}", "net.minecraft." + serverVersion());
+        .replace(
+            "{nm}",
+            "net.minecraft" + (
+                Bukkit.getBukkitVersion().startsWith("1.17")
+                    ? ""
+                    : "." + serverVersion()))
+        .replace(
+            "{nms}",
+            "net.minecraft.server" + (
+                Bukkit.getBukkitVersion().startsWith("1.17")
+                    ? ""
+                    : "." + serverVersion()))
+        .replace("{obc}", "org.bukkit.craftbukkit." + serverVersion());
     Class<?> out = CACHED_CLASSES.get(path);
     if (out == null) {
       out = Class.forName(path);

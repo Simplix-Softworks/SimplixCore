@@ -5,10 +5,7 @@ import dev.simplix.core.common.libloader.SimplixClassLoader;
 import dev.simplix.core.common.updater.Version;
 import dev.simplix.core.minecraft.spigot.plugin.SimplixPlugin;
 import java.io.File;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
+import java.lang.reflect.*;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -31,7 +28,7 @@ import org.bukkit.plugin.java.JavaPluginLoader;
 public final class PluginClassLoaderFabricator implements Function<File, ClassLoader> {
 
   private static ClassLoader cachedResult;
-  private final Version javaVersion = Version.parse(System.getProperty("os.version"));
+  private final Version javaVersion = Version.parse(System.getProperty("java.version"));
 
   private void unfinalize(@NonNull Field loadersField)
       throws NoSuchFieldException, IllegalAccessException {
@@ -42,7 +39,6 @@ public final class PluginClassLoaderFabricator implements Function<File, ClassLo
 
   @Override
   public ClassLoader apply(@NonNull File file) {
-
     // We don't to create a SimplixClassLoader twice if on 1.16 & Java16
     if (cachedResult != null) {
       return cachedResult;
@@ -79,6 +75,7 @@ public final class PluginClassLoaderFabricator implements Function<File, ClassLo
         out = (ClassLoader) pluginClassloader;
       } catch (Throwable throwable) {
         if (javaVersion.olderThen(Version.parse("16.0.0"))) {
+          log.info("Used Java11 fabricator");
           // Spigot 1.16 or newer using old reflection
           Class<?> classLoaderClass = Class.forName("org.bukkit.plugin.java.PluginClassLoader");
           Constructor<?> constructor = classLoaderClass.getDeclaredConstructor(
@@ -100,6 +97,7 @@ public final class PluginClassLoaderFabricator implements Function<File, ClassLo
           );
           out = (ClassLoader) pluginClassloader;
         } else {
+          log.info("Used Java16 fabricator");
           // Spigot 1.16 newer - Compatible with Java16
           Class<?> classLoaderClass = Class.forName("org.bukkit.plugin.java.PluginClassLoader");
           Constructor<?> constructor = classLoaderClass.getDeclaredConstructor(
@@ -127,18 +125,28 @@ public final class PluginClassLoaderFabricator implements Function<File, ClassLo
                   boolean.class,
                   boolean.class);
 
+          loadClass0.setAccessible(true);
+
           ClassLoader parentLoader = new URLClassLoader(new URL[]{
           }) {
             @Override
             public Class<?> loadClass(String name) throws ClassNotFoundException {
               try {
-                return (Class<?>) loadClass0.invoke(
-                    plugin.getPluginLoader(),
+                final Object invoke = loadClass0.invoke(
+                    simplixCoreClassLoader,
                     name,
                     false,
                     true,
                     false);
-              } catch (Exception exception) {
+                return (Class<?>) invoke;
+              } catch (IllegalAccessException reflectiveOperationException) {
+                reflectiveOperationException.printStackTrace();
+                throw new ClassNotFoundException(name);
+              } catch (InvocationTargetException invocationTargetException) {
+                if (invocationTargetException.getCause() instanceof ClassNotFoundException) {
+                  throw (ClassNotFoundException) invocationTargetException.getCause();
+                }
+                invocationTargetException.printStackTrace();
                 throw new ClassNotFoundException(name);
               }
             }

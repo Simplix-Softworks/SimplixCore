@@ -45,12 +45,11 @@ public class SimplixClassLoader extends URLClassLoader {
       throws ClassNotFoundException {
     try {
       return super.loadClass(name, resolve);
-    } catch (ClassNotFoundException ignored) {
+    } catch (Throwable ignored) {
       if (parentLoader != null && useParent) {
         try {
           return parentLoader.loadClass(name);
-        } catch (ClassNotFoundException ignored1) {
-
+        } catch (Throwable ignored1) {
         }
       }
     }

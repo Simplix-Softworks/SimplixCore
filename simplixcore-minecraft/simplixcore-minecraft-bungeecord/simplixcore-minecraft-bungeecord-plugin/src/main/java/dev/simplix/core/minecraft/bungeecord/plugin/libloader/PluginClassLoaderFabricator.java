@@ -8,13 +8,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.Arrays;
 import java.util.Set;
 import java.util.function.Function;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.plugin.PluginDescription;
 
 @Slf4j
@@ -50,16 +48,21 @@ public class PluginClassLoaderFabricator implements Function<File, ClassLoader> 
       PluginDescription pluginDescription = new PluginDescription();
       pluginDescription.setName("SimplixBridge");
 
-      final ClassLoader pluginClassloader = ProxyServer
+      final ClassLoader simplixPluginClassLoader = ProxyServer
           .getInstance()
           .getPluginManager()
           .getPlugin("SimplixCore")
           .getClass()
           .getClassLoader();
 
-      final Method loadClass0 = pluginClassloader
+      final Method loadClass0 = simplixPluginClassLoader
           .getClass()
-          .getDeclaredMethod("loadClass0", String.class, boolean.class, boolean.class, boolean.class);
+          .getDeclaredMethod(
+              "loadClass0",
+              String.class,
+              boolean.class,
+              boolean.class,
+              boolean.class);
 
       loadClass0.setAccessible(true);
 
@@ -68,8 +71,8 @@ public class PluginClassLoaderFabricator implements Function<File, ClassLoader> 
         @Override
         public Class<?> loadClass(String name) throws ClassNotFoundException {
           try {
-            return (Class<?>) loadClass0.invoke(pluginClassloader, name, false, true, false);
-          } catch (IllegalAccessException | InvocationTargetException e) {
+            return (Class<?>) loadClass0.invoke(simplixPluginClassLoader, name, false, true, false);
+          } catch (IllegalAccessException | InvocationTargetException reflectiveOperationException) {
             throw new ClassNotFoundException(name);
           }
         }
