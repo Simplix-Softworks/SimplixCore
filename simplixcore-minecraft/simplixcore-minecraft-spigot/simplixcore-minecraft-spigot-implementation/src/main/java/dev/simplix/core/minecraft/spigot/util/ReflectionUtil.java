@@ -46,6 +46,7 @@ public final class ReflectionUtil {
                     : "." + serverVersion()))
         .replace("{obc}", "org.bukkit.craftbukkit." + serverVersion());
     Class<?> out = CACHED_CLASSES.get(path);
+
     if (out == null) {
       out = Class.forName(path);
       CACHED_CLASSES.put(path, out);
