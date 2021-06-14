@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dev.simplix.core.common.aop.SimplixApplication;
 import dev.simplix.core.common.inject.SimplixInstaller;
+import dev.simplix.core.common.updater.Version;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,6 +23,7 @@ import org.slf4j.Logger;
 
 public class SimpleLibraryLoader implements LibraryLoader {
 
+  private final Version javaVersion;
   private final Logger log;
   private final Gson gson = new GsonBuilder().create();
   private final Set<File> files = new HashSet<>();
@@ -29,12 +31,8 @@ public class SimpleLibraryLoader implements LibraryLoader {
 
   public SimpleLibraryLoader(@NonNull Logger log) {
     this.log = log;
-    try {
-      addMethod = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
-      addMethod.setAccessible(true);
-    } catch (Exception exception) {
-      log.error("Cannot initialize LibraryLoader", exception);
-    }
+    javaVersion = Version.parse(System.getProperty("java.version"));
+
   }
 
   @Override
@@ -59,6 +57,7 @@ public class SimpleLibraryLoader implements LibraryLoader {
         return;
       }
       log.info("[Simplix | LibLoader] Loaded library " + file.getName());
+      addUrlToClassLoader((URLClassLoader) classLoader, file);
       checkAndLoadSimplixApplication(file, classLoader);
     } catch (Exception ex) {
       log.info("[Simplix | LibLoader] Unable to load library " + file.getName(), ex);
@@ -71,7 +70,14 @@ public class SimpleLibraryLoader implements LibraryLoader {
       if (files.contains(file)) {
         return;
       }
-      ClassLoader classLoader = owner.getClassLoader();
+      ClassLoader classLoader;
+
+      if (javaVersion.olderThen(Version.parse("16.0.0"))) {
+        classLoader = owner.getClassLoader();
+      } else {
+        classLoader = createClassLoader(file);
+      }
+
       if (!(classLoader instanceof URLClassLoader)) {
         log.warn("[Simplix | LibLoader] "
                  + owner.getSimpleName()
@@ -89,6 +95,7 @@ public class SimpleLibraryLoader implements LibraryLoader {
     } catch (Exception ex) {
       log.info("[Simplix | LibLoader] Unable to load encapsulated library " + file.getName() +
                " for application " + owner.getSimpleName(), ex);
+
     }
   }
 
@@ -131,6 +138,16 @@ public class SimpleLibraryLoader implements LibraryLoader {
 
   private void addUrlToClassLoader(URLClassLoader classLoader, File file)
       throws ReflectiveOperationException, MalformedURLException {
+
+    if (classLoader instanceof SimplixClassLoader) {
+      ((SimplixClassLoader) classLoader).addURL(file.toURI().toURL());
+      return;
+    }
+
+    if (addMethod == null) {
+      addMethod = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
+      addMethod.setAccessible(true);
+    }
     addMethod.invoke(classLoader, file.toURI().toURL());
   }
 

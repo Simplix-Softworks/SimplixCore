@@ -9,17 +9,24 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>simplixcore-minecraft-bungeecord-plugin</artifactId>
-  <version>1.0.${build.number}</version>
-
   <repositories>
     <repository>
-      <id>BungeeCord</id>
-      <url>https://oss.sonatype.org/content/groups/public/</url>
+      <id>simplixsoft-public</id>
+      <url>https://repo.simplix.dev/repository/simplixsoft-public/</url>
     </repository>
   </repositories>
 
+  <artifactId>simplixcore-minecraft-bungeecord-plugin</artifactId>
+  <version>1.0.${build.number}</version>
+
   <dependencies>
+    <dependency>
+      <groupId>dev.simplix</groupId>
+      <artifactId>bungee</artifactId>
+      <version>1.0.0</version>
+      <scope>provided</scope>
+    </dependency>
+
     <!-- Simple logging facade for java -->
     <dependency>
       <groupId>dev.simplix.core</groupId>
