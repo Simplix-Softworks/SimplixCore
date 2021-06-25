@@ -90,13 +90,15 @@ public final class PluginClassLoaderFabricator implements Function<File, ClassLo
           log.error("-> New api is not (yet) present and legacy api is blocked");
           log.error("1) Upgrade to Minecraft 1.17 (Recommended)");
           log.error("2) Add: --add-opens java.base/java.net=ALL-UNNAMED as jvm flag");
-          log.error("- Example java command: java --add-opens java.base/java.net=ALL-UNNAMED -Xmx2048M -Xms2048M -jar paper-1.12.2.jar");
+          log.error(
+              "- Example java command: java --add-opens java.base/java.net=ALL-UNNAMED -Xmx2048M -Xms2048M -jar paper-1.12.2.jar");
           log.error("3) Downgrade to Java11 ");
           throw new IllegalStateException(
               "Can not fabricate ClassLoader with outdated Minecraft and Java16");
         }
 
       } catch (Throwable throwable) {
+        // 1.16.5
         if (hasClassLoaderAccess && !Bukkit.getBukkitVersion().startsWith("1.17")) {
           log.info("Used Java11 fabricator");
           // Spigot 1.16 or newer using old reflection
@@ -121,22 +123,21 @@ public final class PluginClassLoaderFabricator implements Function<File, ClassLo
           out = (ClassLoader) pluginClassloader;
 
           // Spigot 1.17 newer - Compatible with Java16
+        } else if (!hasClassLoaderAccess && !Bukkit.getBukkitVersion().startsWith("1.17")) {
+          log.error("SimplixCore can not fabricate ClassLoaders");
+          log.error(
+              "Your minecraft version contains a bug & SimplixCore can't access java.base/java.net");
+          log.error("Please see: https://hub.spigotmc.org/jira/browse/SPIGOT-6502");
+          log.error("To resolve this you can either:");
+          log.error("1) Upgrade to Minecraft 1.17 (Recommended)");
+          log.error("2) Add: --add-opens java.base/java.net=ALL-UNNAMED as jvm flag");
+          log.error(
+              "- Example java command: java --add-opens java.base/java.net=ALL-UNNAMED -Xmx2048M -Xms2048M -jar paper-1.16.5.jar");
+          log.error("3) Downgrade to Java11");
+          throw new IllegalStateException(
+              "Can not fabricate ClassLoader with outdated Minecraft and Java16");
         } else {
 
-          if (!hasClassLoaderAccess) {
-            log.error("SimplixCore can not fabricate ClassLoaders");
-            log.error(
-                "Your minecraft version contains a bug & SimplixCore can't access java.base/java.net");
-            log.error("Please see: https://hub.spigotmc.org/jira/browse/SPIGOT-6502");
-            log.error("To resolve this you can either:");
-            log.error("1) Upgrade to Minecraft 1.17 (Recommended)");
-            log.error("2) Add: --add-opens java.base/java.net=ALL-UNNAMED as jvm flag");
-            log.error(
-                "- Example java command: java --add-opens java.base/java.net=ALL-UNNAMED -Xmx2048M -Xms2048M -jar paper-1.16.5.jar");
-            log.error("3) Downgrade to Java11");
-            throw new IllegalStateException(
-                "Can not fabricate ClassLoader with outdated Minecraft and Java16");
-          }
           log.info("Used Java16 fabricator");
           Class<?> classLoaderClass = Class.forName("org.bukkit.plugin.java.PluginClassLoader");
           Constructor<?> constructor = classLoaderClass.getDeclaredConstructor(
