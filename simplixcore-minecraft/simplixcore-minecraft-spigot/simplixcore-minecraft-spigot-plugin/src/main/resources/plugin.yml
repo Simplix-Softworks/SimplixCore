@@ -2,3 +2,5 @@ name: SimplixCore
 main: dev.simplix.core.minecraft.spigot.plugin.SimplixPlugin
 version: '${project.version}'
 author: SimplixSoftworks
+softdepend:
+  - SimplixBridge

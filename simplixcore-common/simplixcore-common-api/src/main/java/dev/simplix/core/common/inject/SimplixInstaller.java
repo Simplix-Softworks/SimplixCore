@@ -454,6 +454,53 @@ public class SimplixInstaller {
     return processRemoteDependencies(false, appClass, tempInfo);
   }
 
+  public Optional<DependencyLoadingException> earlyLoadDependencies(
+      @NonNull Platform platform,
+      @NonNull Class<?> appClass,
+      @NonNull DependencyManifest dependencyManifest
+  ) {
+    this.platform = platform;
+    ApplicationInfo tempInfo = new ApplicationInfo(appClass.getSimpleName(),
+        "1.0", new String[0], new File("."), new String[0]);
+    return processRemoteDependencies(false, appClass, dependencyManifest, tempInfo);
+  }
+
+
+  private Optional<DependencyLoadingException> processRemoteDependencies(
+      boolean isLibrary,
+      @NonNull Class<?> appOwner,
+      @NonNull DependencyManifest dependencyManifest,
+      @NonNull ApplicationInfo info) {
+    if (this.dependencyLoader == null) {
+      initDependencyLoader();
+    }
+
+    this.dependenciesMap.put(appOwner, dependencyManifest);
+
+    List<Repository> repositories = Arrays.asList(dependencyManifest.repositories());
+    for (Dependency dependency : dependencyManifest.dependencies()) {
+      if (dependency.platform() != null && dependency.platform() != this.platform) {
+        continue;
+      }
+      log.debug(SIMPLIX_BOOTSTRAP
+                + info.name()
+                + ": Load dependency "
+                + dependency
+                + " from repository...");
+      dependency.applicationName(info.name());
+      dependency.applicationClass(appOwner);
+      final Optional<DependencyLoadingException> load = this.dependencyLoader.load(
+          dependency,
+          repositories);
+      if (load.isPresent()) {
+        log.error(SIMPLIX_BOOTSTRAP
+                  + info.name() + ": Unable to load dependency " + dependency);
+        return load;
+      }
+    }
+    return Optional.empty();
+  }
+
   private Optional<DependencyLoadingException> processRemoteDependencies(
       boolean isLibrary,
       @NonNull Class<?> appOwner,
@@ -480,31 +527,7 @@ public class SimplixInstaller {
       return Optional.empty();
     }
 
-    DependencyManifest dependencyManifest = optionalDependencies.get();
-    this.dependenciesMap.put(appOwner, dependencyManifest);
-
-    List<Repository> repositories = Arrays.asList(dependencyManifest.repositories());
-    for (Dependency dependency : dependencyManifest.dependencies()) {
-      if (dependency.platform() != null && dependency.platform() != this.platform) {
-        continue;
-      }
-      log.debug(SIMPLIX_BOOTSTRAP
-                + info.name()
-                + ": Load dependency "
-                + dependency
-                + " from repository...");
-      dependency.applicationName(info.name());
-      dependency.applicationClass(appOwner);
-      final Optional<DependencyLoadingException> load = this.dependencyLoader.load(
-          dependency,
-          repositories);
-      if (load.isPresent()) {
-        log.error(SIMPLIX_BOOTSTRAP
-                  + info.name() + ": Unable to load dependency " + dependency);
-        return load;
-      }
-    }
-    return Optional.empty();
+    return processRemoteDependencies(isLibrary, appOwner, optionalDependencies.get(), info);
   }
 
   private void initDependencyLoader() {
@@ -544,7 +567,7 @@ public class SimplixInstaller {
                + " by "
                + Arrays
                    .toString(context.applicationInfo.authors()));
-    } catch (CreationException exception) {
+    } catch (Exception exception) {
       log.error(SIMPLIX_BOOTSTRAP + "Cannot create injector for application "
                 + context.applicationInfo.name(), exception);
       context.onException.accept(exception);
