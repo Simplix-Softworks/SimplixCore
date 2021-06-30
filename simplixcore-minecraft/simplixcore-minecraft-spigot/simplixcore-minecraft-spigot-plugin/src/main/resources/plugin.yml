@@ -4,3 +4,5 @@ version: '${project.version}'
 author: SimplixSoftworks
 softdepend:
   - SimplixBridge
+
+api-version: 1.16
