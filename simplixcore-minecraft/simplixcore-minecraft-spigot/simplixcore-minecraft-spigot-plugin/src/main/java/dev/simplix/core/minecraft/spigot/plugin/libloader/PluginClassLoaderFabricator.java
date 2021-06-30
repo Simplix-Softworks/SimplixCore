@@ -174,7 +174,7 @@ public final class PluginClassLoaderFabricator implements Function<File, ClassLo
                     simplixCoreClassLoader,
                     name,
                     false,
-                    true,
+                    false,
                     false);
                 return (Class<?>) invoke;
               } catch (IllegalAccessException reflectiveOperationException) {
