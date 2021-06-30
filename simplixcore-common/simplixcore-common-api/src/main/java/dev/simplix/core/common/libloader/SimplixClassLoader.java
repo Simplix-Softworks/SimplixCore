@@ -3,7 +3,9 @@ package dev.simplix.core.common.libloader;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.net.URLStreamHandlerFactory;
+import lombok.ToString;
 
+@ToString()
 public class SimplixClassLoader extends URLClassLoader {
 
   private final ClassLoader parentLoader;
