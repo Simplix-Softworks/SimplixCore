@@ -3,9 +3,6 @@ package dev.simplix.core.minecraft.spigot.plugin;
 import dev.simplix.core.common.aop.ScanComponents;
 import dev.simplix.core.common.aop.SimplixApplication;
 import dev.simplix.core.common.deploader.ArtifactDependencyLoader;
-import dev.simplix.core.common.deploader.Dependency;
-import dev.simplix.core.common.deploader.DependencyManifest;
-import dev.simplix.core.common.deploader.Repository;
 import dev.simplix.core.common.inject.SimplixInstaller;
 import dev.simplix.core.common.platform.Platform;
 import dev.simplix.core.minecraft.spigot.dynamiclisteners.DynamicListenersSimplixModule;
@@ -56,49 +53,7 @@ public final class SimplixPlugin extends JavaPlugin {
         "dev.simplix.core.libloader.ClassLoaderFabricator",
         "dev.simplix.core.minecraft.spigot.plugin.libloader.PluginClassLoaderFabricator");
     ArtifactDependencyLoader.registerTypeHandler("plugin", new PluginTypeHandler());
-
-    SimplixInstaller.instance().earlyLoadDependencies(
-        Platform.SPIGOT,
-        getClass(),
-        generateDependencyManifest()
-    );
-
     SimplixInstaller.instance().libraryLoader().loadLibraries(new File("libraries"));
-  }
-
-  private DependencyManifest generateDependencyManifest() {
-    final String bukkitVersion = Bukkit.getBukkitVersion();
-
-    String guiceVersion;
-    if (
-        bukkitVersion.startsWith("1.8") ||
-        bukkitVersion.startsWith("1.9") ||
-        bukkitVersion.startsWith("1.10") ||
-        bukkitVersion.startsWith("1.11")
-    ) {
-      guiceVersion = "4.1.0";
-    } else {
-      guiceVersion = "5.0.1";
-    }
-
-    // Legacy
-    final DependencyManifest dependencyManifest = new DependencyManifest();
-    final Dependency dependency = new Dependency();
-    dependency.artifactId("guice");
-    dependency.groupId("com.google.inject");
-    dependency.version(guiceVersion);
-    dependencyManifest.dependencies(new Dependency[]{
-        dependency
-    });
-    final Repository repository = new Repository();
-    repository.id("central");
-    repository.url("https://repo1.maven.org/maven2/");
-
-    dependencyManifest.repositories(new Repository[]{
-        repository
-    });
-
-    return dependencyManifest;
   }
 
   @Override

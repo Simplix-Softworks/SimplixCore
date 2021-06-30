@@ -124,7 +124,6 @@
               <artifactSet>
                 <excludes>
                   <exclude>com.google.guava:guava*</exclude>
-                  <exclude>com.google.inject:guice*</exclude>
                   <exclude>org.apache.logging.log4j:log4j-api</exclude>
                   <exclude>org.jetbrains:annotations</exclude>
                   <exclude>com.google.code.findbugs:annotations</exclude>
