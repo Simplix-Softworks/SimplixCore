@@ -178,14 +178,12 @@ public final class PluginClassLoaderFabricator implements Function<File, ClassLo
                     false);
                 return (Class<?>) invoke;
               } catch (IllegalAccessException reflectiveOperationException) {
-                reflectiveOperationException.printStackTrace();
-                throw new ClassNotFoundException(name);
+                throw new ClassNotFoundException(name, reflectiveOperationException);
               } catch (InvocationTargetException invocationTargetException) {
                 if (invocationTargetException.getCause() instanceof ClassNotFoundException) {
                   throw (ClassNotFoundException) invocationTargetException.getCause();
                 }
-                invocationTargetException.printStackTrace();
-                throw new ClassNotFoundException(name);
+                throw new ClassNotFoundException(name, invocationTargetException);
               }
             }
           };
