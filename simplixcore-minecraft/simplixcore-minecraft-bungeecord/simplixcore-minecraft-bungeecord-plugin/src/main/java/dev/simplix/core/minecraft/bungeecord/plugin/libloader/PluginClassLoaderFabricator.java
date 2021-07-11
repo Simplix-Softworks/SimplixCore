@@ -71,7 +71,7 @@ public class PluginClassLoaderFabricator implements Function<File, ClassLoader> 
         @Override
         public Class<?> loadClass(String name) throws ClassNotFoundException {
           try {
-            return (Class<?>) loadClass0.invoke(simplixPluginClassLoader, name, false, true, false);
+            return (Class<?>) loadClass0.invoke(simplixPluginClassLoader, name, false, false, false);
           } catch (IllegalAccessException | InvocationTargetException reflectiveOperationException) {
             throw new ClassNotFoundException(name);
           }
