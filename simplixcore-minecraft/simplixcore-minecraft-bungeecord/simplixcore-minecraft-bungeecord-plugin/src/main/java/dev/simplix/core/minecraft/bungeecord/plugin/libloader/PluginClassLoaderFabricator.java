@@ -8,6 +8,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 import lombok.NonNull;
@@ -19,6 +21,12 @@ import net.md_5.bungee.api.plugin.PluginDescription;
 public class PluginClassLoaderFabricator implements Function<File, ClassLoader> {
 
   private static ClassLoader result = null;
+  private static List<String> WHITELIST = Arrays.asList(
+      "de.leonhard",
+      "de.exceptionflug",
+      "dev.simplix",
+      "net.querz"
+  );
 
 //  private void unfinalize(@NonNull Field loadersField)
 //      throws NoSuchFieldException, IllegalAccessException {
@@ -70,8 +78,17 @@ public class PluginClassLoaderFabricator implements Function<File, ClassLoader> 
       }) {
         @Override
         public Class<?> loadClass(String name) throws ClassNotFoundException {
+
+          boolean checkOthers = false;
+
+          for (String whitelisted : WHITELIST) {
+            if (name.startsWith(whitelisted)) {
+              checkOthers = true;
+            }
+          }
+
           try {
-            return (Class<?>) loadClass0.invoke(simplixPluginClassLoader, name, false, false, false);
+            return (Class<?>) loadClass0.invoke(simplixPluginClassLoader, name, false, checkOthers, false);
           } catch (IllegalAccessException | InvocationTargetException reflectiveOperationException) {
             throw new ClassNotFoundException(name);
           }
