@@ -79,7 +79,7 @@ public class SimpleLibraryLoader implements LibraryLoader {
       }
 
       if (!(classLoader instanceof URLClassLoader)) {
-        log.warn("[Simplix | LibLoader] "
+        log.warn("[Simplix | LibLoader] with classloader: " + classLoader.getClass().getName()
                  + owner.getSimpleName()
                  + " is not supporting library encapsulation. Loading as shared library...");
         loadLibrary(file);
@@ -162,7 +162,11 @@ public class SimpleLibraryLoader implements LibraryLoader {
         "dev.simplix.core.common.libloader.StandaloneClassLoaderFabricator");
     Class<? extends Function<File, ClassLoader>> clazz = (Class<? extends Function<File, ClassLoader>>) Class
         .forName(classLoaderFabricator);
-    return clazz.newInstance().apply(file);
+    final ClassLoader out =  clazz.newInstance().apply(file);
+    if (out == null) {
+      throw new IllegalStateException("Created Classloader can not be null: " + classLoaderFabricator);
+    }
+    return out;
   }
 
 }
