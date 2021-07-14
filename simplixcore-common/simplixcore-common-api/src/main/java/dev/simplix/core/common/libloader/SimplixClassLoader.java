@@ -3,6 +3,7 @@ package dev.simplix.core.common.libloader;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.net.URLStreamHandlerFactory;
+import java.util.Optional;
 import lombok.ToString;
 
 @ToString()
@@ -20,12 +21,21 @@ public class SimplixClassLoader extends URLClassLoader {
     this.parentLoader = null;
   }
 
+  /**
+   * @param urls         the URLs from which to load classes and resources
+   * @param parentLoader Parent classloader: Not passed on to the super constructor!
+   * @param factory      the URLStreamHandlerFactory to use when creating URLs
+   */
   public SimplixClassLoader(
       URL[] urls,
-      ClassLoader parent,
+      ClassLoader parentLoader,
       URLStreamHandlerFactory factory) {
     super(urls, null, factory);
-    this.parentLoader = parent;
+    this.parentLoader = parentLoader;
+  }
+
+  public Optional<ClassLoader> parent() {
+    return Optional.ofNullable(parentLoader);
   }
 
   @Override
