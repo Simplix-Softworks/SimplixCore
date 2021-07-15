@@ -84,6 +84,7 @@ public class PluginClassLoaderFabricator implements Function<File, ClassLoader> 
           for (String whitelisted : WHITELIST) {
             if (name.startsWith(whitelisted)) {
               checkOthers = true;
+              break;
             }
           }
 
