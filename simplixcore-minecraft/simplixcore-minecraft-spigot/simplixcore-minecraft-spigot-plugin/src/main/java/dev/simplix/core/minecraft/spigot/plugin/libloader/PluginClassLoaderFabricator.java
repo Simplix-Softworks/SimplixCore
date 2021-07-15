@@ -122,8 +122,8 @@ public final class PluginClassLoaderFabricator implements Function<File, ClassLo
           );
           out = (ClassLoader) pluginClassloader;
 
-          // Spigot 1.17 newer - Compatible with Java16
-        } else if (!hasClassLoaderAccess && !Bukkit.getBukkitVersion().startsWith("1.17")) {
+
+        } else if (!hasClassLoaderAccess && Bukkit.getBukkitVersion().startsWith("1.16")) {
           log.error("SimplixCore can not fabricate ClassLoaders");
           log.error(
               "Your minecraft version contains a bug & SimplixCore can't access java.base/java.net");
@@ -137,7 +137,7 @@ public final class PluginClassLoaderFabricator implements Function<File, ClassLo
           throw new IllegalStateException(
               "Can not fabricate ClassLoader with outdated Minecraft and Java16");
         } else {
-
+          // Spigot 1.17 newer - Compatible with Java16
           log.info("Used Java16 fabricator");
           Class<?> classLoaderClass = Class.forName("org.bukkit.plugin.java.PluginClassLoader");
           Constructor<?> constructor = classLoaderClass.getDeclaredConstructor(
