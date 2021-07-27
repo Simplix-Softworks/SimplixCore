@@ -11,10 +11,10 @@ import dev.simplix.core.common.inject.SimplixInstaller;
 import dev.simplix.core.common.platform.Platform;
 import dev.simplix.core.minecraft.velocity.plugin.deploader.PluginTypeHandler;
 import dev.simplix.core.minecraft.velocity.plugin.listeners.ApplicationPreInstallListener;
+import java.io.File;
+import javax.inject.Inject;
 import lombok.NonNull;
 import org.slf4j.Logger;
-import javax.inject.Inject;
-import java.io.File;
 
 @SimplixApplication(name = "SimplixCore", authors = "Simplix Softworks",
     workingDirectory = "plugins/SimplixCore")
@@ -46,25 +46,13 @@ public class SimplixPlugin {
 
   @Subscribe
   public void onProxyInitialization(@NonNull ProxyInitializeEvent event) {
-    logger.warn(
+    this.logger.warn(
         "[Simplix] You are running a development build of SimplixCore. Please be aware that thing may break!");
-    proxyServer.getEventManager().register(this, VelocityListenerImpl.create());
+    this.proxyServer.getEventManager().register(this, VelocityListenerImpl.create());
     SimplixInstaller.instance().register(SimplixPlugin.class);
-    proxyServer.getScheduler().buildTask(this, () -> {
+    this.proxyServer.getScheduler().buildTask(this, () -> {
       long started = System.currentTimeMillis();
-      String blockingApp;
-      while ((blockingApp = waitForRegistration()) != null) {
-        if (System.currentTimeMillis() - started > 5000) {
-          logger.error(
-              "[Simplix] The following plugin takes to long for application registration: "
-              + blockingApp);
-          logger.error(
-              "[Simplix] Don't forget to call SimplixInstaller#register(owner: Class<?>): void in your ProxyInitializeEvent handler.");
-          logger.error(
-              "[Simplix] SimplixCore will not wait any longer. Begin with installation...");
-          break;
-        }
-
+      while (System.currentTimeMillis() - started < 5000) {
         try {
           Thread.sleep(10);
         } catch (InterruptedException interruptedException) {
@@ -76,7 +64,7 @@ public class SimplixPlugin {
   }
 
   private String waitForRegistration() {
-    for (PluginContainer plugin : proxyServer.getPluginManager().getPlugins()) {
+    for (PluginContainer plugin : this.proxyServer.getPluginManager().getPlugins()) {
       if (plugin.getInstance().isPresent()) {
         if (plugin.getInstance().get().getClass().isAnnotationPresent(SimplixApplication.class)) {
           SimplixApplication simplixApplication = plugin.getInstance().get()

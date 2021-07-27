@@ -65,18 +65,7 @@ public final class SimplixPlugin extends JavaPlugin {
 
     Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
       long started = System.currentTimeMillis();
-      String blockingApp;
-      while ((blockingApp = waitForRegistration()) != null) {
-        if (System.currentTimeMillis() - started > 5000) {
-          getLogger().severe(
-              "[Simplix] The following plugin takes to long for application registration: "
-              + blockingApp);
-          getLogger().severe(
-              "[Simplix] Don't forget to call SimplixInstaller#register(owner: Class<?>): void in your onEnable method.");
-          getLogger().severe(
-              "[Simplix] SimplixCore will not wait any longer. Begin with installation...");
-          break;
-        }
+      while (System.currentTimeMillis() - started < 5000) {
         try {
           Thread.sleep(10);
         } catch (InterruptedException e) {
