@@ -505,9 +505,6 @@ public class SimplixInstaller {
       boolean isLibrary,
       @NonNull Class<?> appOwner,
       @NonNull ApplicationInfo info) {
-    if (this.dependencyLoader == null) {
-      initDependencyLoader();
-    }
     if (this.dependenciesMap.containsKey(appOwner)) {
       return Optional.empty();
     }
@@ -525,6 +522,10 @@ public class SimplixInstaller {
 
     if (!optionalDependencies.isPresent()) {
       return Optional.empty();
+    }
+
+    if (this.dependencyLoader == null) {
+      initDependencyLoader();
     }
 
     return processRemoteDependencies(isLibrary, appOwner, optionalDependencies.get(), info);
