@@ -35,6 +35,7 @@ import lombok.NonNull;
 import lombok.SneakyThrows;
 import org.jetbrains.annotations.Nullable;
 import org.reflections.Reflections;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class is used to install the Guice injectors for all registered {@link SimplixApplication}s.
@@ -73,7 +74,7 @@ public class SimplixInstaller {
 
   public static SimplixInstaller instance() {
     if (INSTANCE == null) {
-      throw new IllegalStateException("Instance not yet set");
+      INSTANCE = new SimplixInstaller(LoggerFactory.getLogger(SimplixInstaller.class));
     }
     return INSTANCE;
   }
