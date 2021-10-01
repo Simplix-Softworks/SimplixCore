@@ -11,6 +11,9 @@ For Minecraft server implementations & Proxies SimplixCore works as a plugin.
 You don't have to shade any parts of the SimplixCore (it's also very discouraged to do so on Spigot/BungeeCord!) 
 By using the SimplixCore as a plugin you can also add extra libraries for the SimplixCore, that can be used for your own plugin as well.
 
+## Hacktoberfest 2021
+Our repository also participates in this years [Hacktoberfest](https://hacktoberfest.digitalocean.com/). Sign up and submit at least **four pull requests**. If they are merged or the "hacktoberfest-accepted" label is assigned, they'll be counted towards your participation. The first **50,000** participants can earn a **T-shirt** or **plant a free**.
+
 ## Platforms
 - Standalone
 - BungeeCord
