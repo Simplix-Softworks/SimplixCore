@@ -13,6 +13,18 @@
 
   <version>1.0.0-SNAPSHOT</version>
 
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
   <properties>
     <aetherVersion>1.1.0</aetherVersion>
     <mavenVersion>3.3.3</mavenVersion>

@@ -9,7 +9,6 @@
     <module>simplixcore-common-implementation</module>
     <module>simplixcore-common-tests</module>
   </modules>
-  <groupId>dev.simplix.core</groupId>
 
   <modelVersion>4.0.0</modelVersion>
   <parent>
