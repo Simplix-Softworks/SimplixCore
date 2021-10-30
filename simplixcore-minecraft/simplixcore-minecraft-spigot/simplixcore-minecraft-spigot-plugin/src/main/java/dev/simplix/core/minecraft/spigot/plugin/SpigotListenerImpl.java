@@ -4,6 +4,7 @@ import dev.simplix.core.common.event.Events;
 import dev.simplix.core.minecraft.api.events.ChatEvent;
 import dev.simplix.core.minecraft.api.events.JoinEvent;
 import dev.simplix.core.minecraft.api.events.QuitEvent;
+import lombok.extern.slf4j.Slf4j;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -13,6 +14,7 @@ import org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+@Slf4j
 public final class SpigotListenerImpl implements Listener {
 
   @EventHandler(priority = EventPriority.LOW)
@@ -67,7 +69,7 @@ public final class SpigotListenerImpl implements Listener {
     if (chatEvent.canceled()) {
       playerCommandPreprocessEvent.setCancelled(true);
     }
-    
+
     if (!chatEvent.message().isEmpty()) {
       playerCommandPreprocessEvent.setMessage(chatEvent.message());
     }

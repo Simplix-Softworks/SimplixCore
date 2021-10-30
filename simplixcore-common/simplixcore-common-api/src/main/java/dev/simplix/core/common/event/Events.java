@@ -7,11 +7,13 @@ import java.util.Collections;
 import java.util.List;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Central utility class for handling events
  */
 @UtilityClass
+@Slf4j
 public class Events {
 
   private final List<Event> knownEvents = new ArrayList<>();
@@ -37,6 +39,9 @@ public class Events {
         continue;
       }
       ((Listener<T>) listener).handleEvent(event);
+      log.info("Called listener " + listener.getClass().getName() + " and type: " + listener
+          .type()
+          .getSimpleName());
       // Don't call further Listeners if the event was already canceled
       if (event.canceled()) {
         return event;

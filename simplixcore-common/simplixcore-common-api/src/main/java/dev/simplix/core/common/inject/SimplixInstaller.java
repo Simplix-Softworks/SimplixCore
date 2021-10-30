@@ -89,7 +89,7 @@ public class SimplixInstaller {
    */
   public Optional<DependencyLoadingException> register(
       @NonNull Class<?> owner,
-      @NonNull Module... modules) {
+      @NonNull com.google.inject.Module... modules) {
     return register(owner, e -> {
     }, modules);
   }
@@ -106,7 +106,7 @@ public class SimplixInstaller {
   public Optional<DependencyLoadingException> register(
       @NonNull Class<?> owner,
       @NonNull Consumer<Exception> onException,
-      @NonNull Module... modules) {
+      @NonNull com.google.inject.Module... modules) {
     return register(owner, onException, false, modules);
   }
 
@@ -124,7 +124,7 @@ public class SimplixInstaller {
       @NonNull Class<?> owner,
       @NonNull Consumer<Exception> onException,
       boolean isLibrary,
-      @NonNull Module... modules) {
+      @NonNull com.google.inject.Module... modules) {
     if (!owner.isAnnotationPresent(SimplixApplication.class)) {
       throw new IllegalArgumentException("Owner class must be annotated with @SimplixApplication");
     }
@@ -159,12 +159,12 @@ public class SimplixInstaller {
     return optionalDependencyLoadingException;
   }
 
-  private Module[] detectReferencedModules(Class<?> owner, Module[] modules, String appName) {
+  private com.google.inject.Module[] detectReferencedModules(Class<?> owner, com.google.inject.Module[] modules, String appName) {
     if (!owner.isAnnotationPresent(RequireModules.class)) {
       return modules;
     }
     RequireModules requireModules = owner.getAnnotation(RequireModules.class);
-    Set<Module> out = new HashSet<>(Arrays.asList(modules));
+    Set<com.google.inject.Module> out = new HashSet<>(Arrays.asList(modules));
     try {
       Supplier<AbstractSimplixModule[]> supplier = requireModules.value().newInstance();
       out.addAll(Arrays.asList(supplier.get()));
@@ -174,7 +174,7 @@ public class SimplixInstaller {
                 + ": Cannot construct module supplier. Please make sure the default constructor is accessible. "
                 + requireModules.value().getName(), e);
     }
-    return out.toArray(new Module[0]);
+    return out.toArray(new com.google.inject.Module[0]);
   }
 
   /**
@@ -546,7 +546,7 @@ public class SimplixInstaller {
   }
 
   private void createAppInjector(@NonNull InstallationContext context) {
-    Set<Module> modules = new HashSet<>();
+    Set<com.google.inject.Module> modules = new HashSet<>();
     modules.add(binder -> binder.bind(ApplicationInfo.class).toInstance(context.applicationInfo));
     modules.add(createModuleBridge(context));
     modules.addAll(Arrays.asList(context.modules));
@@ -576,10 +576,10 @@ public class SimplixInstaller {
     }
   }
 
-  private void filterPlatformDependentModules(Set<Module> modules, String appName) {
-    Iterator<Module> moduleIterator = modules.iterator();
+  private void filterPlatformDependentModules(Set<com.google.inject.Module> modules, String appName) {
+    Iterator<com.google.inject.Module> moduleIterator = modules.iterator();
     while (moduleIterator.hasNext()) {
-      Module module = moduleIterator.next();
+      com.google.inject.Module module = moduleIterator.next();
       if (module.getClass().isAnnotationPresent(PlatformDependent.class)) {
         PlatformDependent platform = module.getClass().getAnnotation(PlatformDependent.class);
         if (platform.value() != this.platform) {
@@ -601,7 +601,7 @@ public class SimplixInstaller {
   }
 
   private void processAlwaysConstruct(
-      @NonNull Set<Module> modules,
+      @NonNull Set<com.google.inject.Module> modules,
       @NonNull InstallationContext context,
       @NonNull Injector injector) {
     for (Class<?> componentClass : context.reflections.getTypesAnnotatedWith(AlwaysConstruct.class)) {
@@ -618,7 +618,7 @@ public class SimplixInstaller {
     }
   }
 
-  private Module createModuleBridge(@NonNull InstallationContext context) {
+  private com.google.inject.Module createModuleBridge(@NonNull InstallationContext context) {
     return binder -> {
       Set<Key<?>> bound = new HashSet<>();
       for (String dependency : context.applicationInfo.dependencies()) {
@@ -654,7 +654,7 @@ public class SimplixInstaller {
   }
 
   private void detectComponents(
-      @NonNull Set<Module> modules,
+      @NonNull Set<com.google.inject.Module> modules,
       @NonNull InstallationContext context) {
 
     Reflections.log = null;
@@ -673,14 +673,14 @@ public class SimplixInstaller {
         if (simplixModule == null) {
           if (!suppressWarning(componentClass, "moduleNotAvailable")
               && !suppressWarning(context.owner, "moduleNotAvailable")) {
-            log.warn(SIMPLIX_BOOTSTRAP
+            log.debug(SIMPLIX_BOOTSTRAP
                      + context.applicationInfo.name()
                      + ": Component "
                      + componentClass.getName()
                      + " referenced module "
                      + component.value().getName()
                      + " which is not available in this context.");
-            log.warn(SIMPLIX_BOOTSTRAP
+            log.debug(SIMPLIX_BOOTSTRAP
                      + context.applicationInfo.name()
                      + ": Available modules in this context: "
                      + modules);
@@ -734,9 +734,9 @@ public class SimplixInstaller {
 
   @Nullable
   private AbstractSimplixModule findAbstractSimplixModule(
-      @NonNull Set<Module> modules,
+      @NonNull Set<com.google.inject.Module> modules,
       @NonNull Class<? extends AbstractSimplixModule> clazz) {
-    for (Module module : modules) {
+    for (com.google.inject.Module module : modules) {
       if (module.getClass().equals(clazz)) {
         return (AbstractSimplixModule) module;
       }
@@ -744,7 +744,7 @@ public class SimplixInstaller {
     return null;
   }
 
-  private void detectModules(@NonNull Set<Module> modules, @NonNull InstallationContext ctx) {
+  private void detectModules(@NonNull Set<com.google.inject.Module> modules, @NonNull InstallationContext ctx) {
     for (Class<?> moduleClass : ctx.reflections.getTypesAnnotatedWith(ApplicationModule.class)) {
       try {
         ApplicationModule module = moduleClass.getAnnotation(ApplicationModule.class);
@@ -752,7 +752,7 @@ public class SimplixInstaller {
           continue;
         }
         Object instance = moduleClass.newInstance();
-        modules.add((Module) instance);
+        modules.add((com.google.inject.Module) instance);
         log.info(SIMPLIX_BOOTSTRAP
                  + ctx.applicationInfo.name()
                  + ": Registered module "
@@ -780,7 +780,7 @@ public class SimplixInstaller {
     private Class<?> owner;
     private final Reflections reflections;
     private ApplicationInfo applicationInfo;
-    private final Module[] modules;
+    private final com.google.inject.Module[] modules;
     private final Consumer<Exception> onException;
 
 

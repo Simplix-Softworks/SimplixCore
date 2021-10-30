@@ -17,7 +17,7 @@ import org.jetbrains.annotations.Nullable;
  */
 @NoArgsConstructor
 @SuppressWarnings({"rawtypes", "unchecked"})
-public abstract class AbstractSimplixModule implements Module {
+public abstract class AbstractSimplixModule implements com.google.inject.Module {
 
   private final Map<Class, Component> components = new HashMap<>();
   private final Map<Class<?>, ComponentInterceptor> interceptorMap = new HashMap<>();
