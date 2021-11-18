@@ -31,7 +31,7 @@ public class SimpleLibraryLoader implements LibraryLoader {
 
   public SimpleLibraryLoader(@NonNull Logger log) {
     this.log = log;
-    javaVersion = Version.parse(System.getProperty("java.version"));
+    this.javaVersion = Version.parse(System.getProperty("java.version"));
 
   }
 
@@ -49,39 +49,39 @@ public class SimpleLibraryLoader implements LibraryLoader {
   @Override
   public void loadLibrary(File file) {
     try {
-      if (files.contains(file)) {
+      if (this.files.contains(file)) {
         return;
       }
       ClassLoader classLoader = createClassLoader(file);
       if (classLoader == null) {
         return;
       }
-      log.info("[Simplix | LibLoader] Loaded library " + file.getName());
+      this.log.info("[Simplix | LibLoader] Loaded library " + file.getName());
       addUrlToClassLoader((URLClassLoader) classLoader, file);
       checkAndLoadSimplixApplication(file, classLoader);
     } catch (Exception ex) {
-      log.info("[Simplix | LibLoader] Unable to load library " + file.getName(), ex);
+      this.log.info("[Simplix | LibLoader] Unable to load library " + file.getName(), ex);
     }
   }
 
   @Override
   public void loadLibraryEncapsulated(@NonNull File file, @NotNull Class<?> owner) {
     try {
-      if (files.contains(file)) {
+      if (this.files.contains(file)) {
         return;
       }
       ClassLoader classLoader;
 
-      if (javaVersion.olderThen(Version.parse("16.0.0"))) {
+      if (this.javaVersion.olderThen(Version.parse("16.0.0"))) {
         classLoader = owner.getClassLoader();
       } else {
         classLoader = createClassLoader(file);
       }
 
       if (!(classLoader instanceof URLClassLoader)) {
-        log.warn("[Simplix | LibLoader] with classloader: " + classLoader.getClass().getName()
-                 + owner.getSimpleName()
-                 + " is not supporting library encapsulation. Loading as shared library...");
+        this.log.warn("[Simplix | LibLoader] with classloader: " + classLoader.getClass().getName()
+                      + owner.getSimpleName()
+                      + " is not supporting library encapsulation. Loading as shared library...");
         loadLibrary(file);
         return;
       }
@@ -89,19 +89,19 @@ public class SimpleLibraryLoader implements LibraryLoader {
       addUrlToClassLoader((URLClassLoader) classLoader, file);
       checkAndLoadSimplixApplication(file, classLoader);
 
-      log.info("[Simplix | LibLoader] Loaded encapsulated library " + file.getName() +
-               " for application " + owner.getSimpleName());
+      this.log.debug("[Simplix | LibLoader] Loaded encapsulated library " + file.getName() +
+                    " for application " + owner.getSimpleName());
 
     } catch (Exception ex) {
-      log.info("[Simplix | LibLoader] Unable to load encapsulated library " + file.getName() +
-               " for application " + owner.getSimpleName(), ex);
+      this.log.info("[Simplix | LibLoader] Unable to load encapsulated library " + file.getName() +
+                    " for application " + owner.getSimpleName(), ex);
 
     }
   }
 
   private void checkAndLoadSimplixApplication(@NonNull File file, ClassLoader classLoader)
       throws IOException {
-    files.add(file);
+    this.files.add(file);
     InputStream stream = classLoader.getResourceAsStream("library.json");
     if (stream == null) {
       return;
@@ -117,18 +117,18 @@ public class SimpleLibraryLoader implements LibraryLoader {
         Class<?> mainClass = classLoader.loadClass(libraryDescription.mainClass());
         if (mainClass.isAnnotationPresent(SimplixApplication.class)) {
           SimplixInstaller.instance().register(mainClass, exception -> {
-            log.error("Could not install library: "
-                      + mainClass.getSimpleName()
-                      + " due to "
-                      + exception.getMessage());
+            this.log.error("Could not install library: "
+                           + mainClass.getSimpleName()
+                           + " due to "
+                           + exception.getMessage());
           }, true);
-          log.debug("[Simplix | LibLoader] "
-                    + libraryDescription.name()
-                    + " was registered as a SimplixApplication");
-          log.debug("[Simplix | LibLoader] Application class = "
-                    + mainClass.getName()
-                    + " hashCode = "
-                    + mainClass.hashCode());
+          this.log.debug("[Simplix | LibLoader] "
+                         + libraryDescription.name()
+                         + " was registered as a SimplixApplication");
+          this.log.debug("[Simplix | LibLoader] Application class = "
+                         + mainClass.getName()
+                         + " hashCode = "
+                         + mainClass.hashCode());
         }
       } catch (ClassNotFoundException exception) {
         throw new RuntimeException("Cannot find library main class", exception);
@@ -144,16 +144,16 @@ public class SimpleLibraryLoader implements LibraryLoader {
       return;
     }
 
-    if (addMethod == null) {
-      addMethod = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
-      addMethod.setAccessible(true);
+    if (this.addMethod == null) {
+      this.addMethod = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
+      this.addMethod.setAccessible(true);
     }
-    addMethod.invoke(classLoader, file.toURI().toURL());
+    this.addMethod.invoke(classLoader, file.toURI().toURL());
   }
 
   @Override
   public Set<File> loadedLibraries() {
-    return files;
+    return this.files;
   }
 
   private ClassLoader createClassLoader(File file) throws ReflectiveOperationException {
@@ -162,9 +162,10 @@ public class SimpleLibraryLoader implements LibraryLoader {
         "dev.simplix.core.common.libloader.StandaloneClassLoaderFabricator");
     Class<? extends Function<File, ClassLoader>> clazz = (Class<? extends Function<File, ClassLoader>>) Class
         .forName(classLoaderFabricator);
-    final ClassLoader out =  clazz.newInstance().apply(file);
+    final ClassLoader out = clazz.newInstance().apply(file);
     if (out == null) {
-      throw new IllegalStateException("Created Classloader can not be null: " + classLoaderFabricator);
+      throw new IllegalStateException("Created Classloader can not be null: "
+                                      + classLoaderFabricator);
     }
     return out;
   }

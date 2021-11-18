@@ -45,6 +45,7 @@ import org.slf4j.LoggerFactory;
 public class SimplixInstaller {
 
   private static final String SIMPLIX_BOOTSTRAP = "[Simplix | Bootstrap] ";
+  public static boolean INFO_ENABLED = true;
   private static SimplixInstaller INSTANCE = null;
   private final Map<Class<?>, Injector> injectorMap = new HashMap<>();
   private final Map<Class<?>, DependencyManifest> dependenciesMap = new HashMap<>();
@@ -92,6 +93,13 @@ public class SimplixInstaller {
       @NonNull com.google.inject.Module... modules) {
     return register(owner, e -> {
     }, modules);
+  }
+
+  private void info(@NonNull String message) {
+    if (!INFO_ENABLED) {
+      return;
+    }
+    this.info(message);
   }
 
   /**
@@ -153,7 +161,7 @@ public class SimplixInstaller {
         info);
     if (this.bossInjector != null) {
       // YOU ARE TOO LATE
-      log.info(SIMPLIX_BOOTSTRAP + "Late install " + application.name() + "...");
+      this.info(SIMPLIX_BOOTSTRAP + "Late install " + application.name() + "...");
       installApplication(this.toInstall.get(application.name()), new Stack<>());
     }
     return optionalDependencyLoadingException;
@@ -515,7 +523,7 @@ public class SimplixInstaller {
     try {
       optionalDependencies = loadDependencies(isLibrary, appOwner);
     } catch (JsonParseException jsonParseException) {
-      log.error(
+      this.log.error(
           SIMPLIX_BOOTSTRAP + info.name() + ": Cannot parse dependencies.json",
           jsonParseException);
       optionalDependencies = Optional.empty();
@@ -568,7 +576,13 @@ public class SimplixInstaller {
                + context.applicationInfo.version()
                + " by "
                + Arrays
-                   .toString(context.applicationInfo.authors()));
+      this.info(SIMPLIX_BOOTSTRAP + "Installed application "
+                    + context.applicationInfo.name()
+                    + " "
+                    + context.applicationInfo.version()
+                    + " by "
+                    + Arrays
+                        .toString(context.applicationInfo.authors()));
     } catch (Exception exception) {
       log.error(SIMPLIX_BOOTSTRAP + "Cannot create injector for application "
                 + context.applicationInfo.name(), exception);
@@ -757,6 +771,10 @@ public class SimplixInstaller {
                  + ctx.applicationInfo.name()
                  + ": Registered module "
                  + moduleClass.getSimpleName());
+        this.info(SIMPLIX_BOOTSTRAP
+                      + ctx.applicationInfo.name()
+                      + ": Registered module "
+                      + moduleClass.getSimpleName());
       } catch (Throwable throwable) {
         if (suppressWarning(moduleClass, "exception:*")
             || suppressWarning(moduleClass, "exception:" + throwable.getClass().getSimpleName())) {
@@ -766,6 +784,10 @@ public class SimplixInstaller {
                  + moduleClass.getName()
                  + " for application "
                  + ctx.applicationInfo.name(), throwable);
+        this.log.warn(SIMPLIX_BOOTSTRAP + "Unable to create module "
+                      + moduleClass.getName()
+                      + " for application "
+                      + ctx.applicationInfo.name(), throwable);
       }
     }
   }
