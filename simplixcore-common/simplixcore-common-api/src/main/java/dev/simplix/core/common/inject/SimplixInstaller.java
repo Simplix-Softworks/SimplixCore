@@ -99,7 +99,7 @@ public class SimplixInstaller {
     if (!INFO_ENABLED) {
       return;
     }
-    this.info(message);
+    this.log.info(message);
   }
   
   /**
