@@ -33,6 +33,7 @@ import lombok.AllArgsConstructor;
 import lombok.Cleanup;
 import lombok.NonNull;
 import lombok.SneakyThrows;
+import lombok.experimental.Accessors;
 import org.jetbrains.annotations.Nullable;
 import org.reflections.Reflections;
 import org.slf4j.LoggerFactory;
@@ -42,6 +43,7 @@ import org.slf4j.LoggerFactory;
  * A {@link SimplixApplication} needs to be registered using {@link SimplixInstaller#register(Class,
  * Module...)} in order to use dependency injection in your software project.
  */
+@Accessors(fluent = true)
 public class SimplixInstaller {
 
   private static final String SIMPLIX_BOOTSTRAP = "[Simplix | Bootstrap] ";
@@ -50,6 +52,7 @@ public class SimplixInstaller {
   private final Map<Class<?>, Injector> injectorMap = new HashMap<>();
   private final Map<Class<?>, DependencyManifest> dependenciesMap = new HashMap<>();
 
+  @Getter
   private final Map<String, InstallationContext> toInstall = new ConcurrentHashMap<>();
   private final Map<String, UpdatePolicy> updatePolicyMap = new HashMap<>();
   private final Gson gson = new GsonBuilder()
