@@ -29,10 +29,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
-import lombok.AllArgsConstructor;
-import lombok.Cleanup;
-import lombok.NonNull;
-import lombok.SneakyThrows;
+import lombok.*;
 import lombok.experimental.Accessors;
 import org.jetbrains.annotations.Nullable;
 import org.reflections.Reflections;
@@ -691,17 +688,17 @@ public class SimplixInstaller {
         if (simplixModule == null) {
           if (!suppressWarning(componentClass, "moduleNotAvailable")
               && !suppressWarning(context.owner, "moduleNotAvailable")) {
-            this.log.debug(SIMPLIX_BOOTSTRAP
-                           + context.applicationInfo.name()
-                           + ": Component "
-                           + componentClass.getName()
-                           + " referenced module "
-                           + component.value().getName()
-                           + " which is not available in this context.");
-            this.log.debug(SIMPLIX_BOOTSTRAP
-                           + context.applicationInfo.name()
-                           + ": Available modules in this context: "
-                           + modules.stream().map(module -> module.getClass().getSimpleName()));
+//            this.log.debug(SIMPLIX_BOOTSTRAP
+//                           + context.applicationInfo.name()
+//                           + ": Component "
+//                           + componentClass.getName()
+//                           + " referenced module "
+//                           + component.value().getName()
+//                           + " which is not available in this context.");
+//            this.log.debug(SIMPLIX_BOOTSTRAP
+//                           + context.applicationInfo.name()
+//                           + ": Available modules in this context: "
+//                           + modules.stream().map(module -> module.getClass().getSimpleName()));
           }
           continue;
         } else {
